@@ -14,11 +14,12 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 ## [Unreleased]
 
 ### Hinzugefügt
-- Sprint 4 (Architecture Review, **laufend**): erste adversariale Review-Berichte unter
-  `docs/tech/review/` – `Review_Performance.md` (18 Befunde F-1…F-18 inkl.
-  Budget-Gesamtbewertung) und `Review_Wartbarkeit_Prozess.md` (17 Befunde F-01…F-17).
-  Reine Prüfberichte, keine Änderung an Bestandsdokumenten. Weitere Reviews (Sim-Kern,
-  Rendering, Daten) und der Sprint-4-Bericht folgen.
+- Sprint 4 (Architecture Review, **laufend**): fünf adversariale Review-Berichte unter
+  `docs/tech/review/` – Performance (Befunde F-1…F-18 inkl. Budget-Gesamtbewertung),
+  Wartbarkeit & Prozess (F-01…F-17), Architektur-Kohärenz & Korrektheit,
+  Multiplayer & Netcode (18 Befunde) sowie Skalierung & Systemgrenzen. Reine
+  Prüfberichte, keine Änderung an Bestandsdokumenten. Offen für den Sprint-4-Abschluss:
+  Einarbeitung kritischer Findings + Sprint-4-Bericht (dann Versionsbump auf 0.5.0).
 
 ## [0.4.0] – 2026-07-21 · Sprint 3: Technical Design
 
