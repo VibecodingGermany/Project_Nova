@@ -1,6 +1,6 @@
 # Infanterie – Einheiten-Design (24 Einheiten)
 
-**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
+**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 4
 
 ## Zweck
 

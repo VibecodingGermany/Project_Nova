@@ -1,6 +1,6 @@
 # Gesamtarchitektur
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 4
 
 ## Zweck
 
@@ -22,7 +22,7 @@ Die Architektur steht auf vier Säulen (Research-Konsens, D-033/D-035):
 1. **Strikte Simulation/View-Trennung.** Der gesamte Spielzustand lebt in der Unity-freien Assembly `Nova.Simulation`. Im Sim-Pfad sind **keine UnityEngine-APIs** erlaubt (D-033 Regel 2, D-035). Die Präsentation liest Zustand nur über Snapshots/Events, schreibt nie.
 2. **Commands als einzige State-Mutation.** Jede Änderung am Spielzustand (Bewegen, Bauen, Forschen, Feuern-Entscheidungen von Spielern und KI) geht als Command durch die Command-Pipeline (D-033 Regel 1). Direkte Zugriffe auf den Sim-State von außerhalb sind verboten.
 3. **Fester Sim-Tick, entkoppeltes Rendering.** Die Simulation läuft mit festen 10 Hz (100 ms/Tick, D-033 Regel 3). Das Rendering läuft mit Display-Framerate (Ziel 60 FPS) und interpoliert zwischen Tick-Snapshots. Framezeit hat keinen Einfluss auf Sim-Ergebnisse.
-4. **Vollständig datengetrieben.** Alle statischen Definitionen (Einheiten, Gebäude, Waffen, Tech, Karten) kommen aus der SO-Registry `GameDatabase` (Definitions-only-SOs, **kein Runtime-State in SOs**). Beim Matchstart wird ein reiner Daten-Snapshot (`DefinitionSnapshot`) erzeugt, den die Simulation ohne Unity-Referenzen nutzt.
+4. **Vollständig datengetrieben.** Alle statischen Definitionen (Einheiten, Gebäude, Waffen, Tech, Karten) kommen aus der SO-Registry `GameDatabase` (Sub-Registries pro Kategorie + generierter Master-Index, D-049; Definitions-only-SOs, **kein Runtime-State in SOs**). Beim Matchstart wird ein reiner Daten-Snapshot (`DefinitionSnapshot`) erzeugt, den die Simulation ohne Unity-Referenzen nutzt.
 
 Zusätzlich gelten aus D-033: **(4)** eigener seedbarer PRNG im Sim-Kern (kein `System.Random`, kein `UnityEngine.Random`), **(5)** vollständig serialisierbarer State (Savegame, Replay, Desync-Debugging, später Lockstep-Checksums). **Singleplayer ist ein "lokaler Server"**: SP und (später) MP benutzen denselben Codepfad, nur der Transport unterscheidet sich.
 
@@ -164,7 +164,7 @@ Vorbereitung in der MVP-Architektur (keine Beta-Funktionalität, aber keine Sack
 
 ## Offene Punkte
 
-1. **Burst/Jobs vs. SimRunner-Portabilität:** D-035 fordert Burst/Jobs auf Sim-Hotspots, D-033/D-036 fordern eine Unity-freie `Nova.Simulation`, die im reinen .NET-SimRunner läuft. Unity.Collections/Burst-Pakete sind in einer Unity-freien .NET-Konsolen-App nicht lauffähig. Vorschlag zur Prüfung (keine Entscheidung hier): reiner C#-Referenzpfad in `Nova.Simulation` + Burst-Fast-Path in `Nova.Simulation.Jobs` mit Pflicht-Paritätstests identischer Ergebnisse. Finale Festlegung nach Phase-0-Spike → eigene Entscheidung im DecisionLog.
+1. **Burst/Jobs vs. SimRunner-Portabilität (gelöst):** D-035 fordert Burst/Jobs auf Sim-Hotspots, D-033/D-036 fordern eine Unity-freie `Nova.Simulation`, die im reinen .NET-SimRunner läuft. Gelöst durch D-043 (eigene Assembly `Nova.Simulation.Burst`, nicht `.Jobs`) und D-045 (Managed-first: Auslieferungspfad ist Managed, Burst nur hinter Feature-Flag mit Toleranz-Parität ≤1e-4 statt Bit-Identität; Pflicht-Paritätstests Managed↔Burst sind CI-Pflicht, D-037). Kein offener Klärungsbedarf mehr vor Sprint 7.
 2. **Sim-Threading:** MVP-Vorschlag: Sim läuft synchron auf dem Main-Thread (10 Hz, Budget §7). Auslagerung auf Worker-Thread erst nach Messung; Auswirkung auf Event-Dispatch klären (Sprint 7).
 3. **FoW-Sicht-Tick-Frequenz:** GDD-Spanne 5–10 Hz; exakte Kopplung (jeder Tick vs. jeder 2. Tick) und Interaktion mit Sicht-basiertem Targeting offen → `FogOfWar.md` (tech).
 4. **Savegame-Format-Versionierung und Kompatibilitätsstrategie** über Patches hinweg → `GameState.md`/`Savegame`-Spezifikation.
@@ -183,3 +183,4 @@ Vorbereitung in der MVP-Architektur (keine Beta-Funktionalität, aber keine Sack
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Technical Director |
+| 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043-Topologie): kanonische Assembly-Topologie (§2) inkl. `Nova.AI`/`Nova.AI.Data`; Offene Punkte bereinigt (Burst/Jobs-Frage via D-043/D-045/D-037 gelöst, `GameDatabase`-Sharding nach D-049 nachgetragen) | Lead Technical Director |

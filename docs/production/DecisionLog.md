@@ -1,6 +1,6 @@
 # Decision Log
 
-**Version:** 1.6.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director | **Sprint:** 4
+**Version:** 1.6.1 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director | **Sprint:** 4
 
 ## Zweck
 
@@ -474,7 +474,7 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 
 ## Offene Punkte
 
-- Alle Sprint-4-Review-Befunde (~105, davon 10 kritisch): kritische durch D-043–D-052 entschieden; HOCH/MITTEL im Korrekturlauf zu dokumentieren bzw. zu terminieren.
+- Alle Sprint-4-Review-Befunde (105, davon 9 kritisch): 7 entscheidungsbedürftige kritische Befunde sind durch D-043–D-052 entschieden (Architektur-Kohärenz F-1 & Wartbarkeit F-01 → D-043; GDD↔TDD F-01 → D-047; Multiplayer-Netcode F-01 → D-046; Performance F-1 → D-044; Performance F-2 → D-045; Skalierung F-1 → D-048). Die verbleibenden 2 kritischen Befunde sind **keine** Entscheidungsfragen, sondern reine Datenmodell-Lücken zu bereits getroffenen Entscheidungen und wurden ohne eigene D-Nummer als Doku-Erweiterung in GameState.md gelöst/terminiert: GDD↔TDD F-02 (Status-Effekt-/Fähigkeiten-System ohne technisches Zuhause) und Architektur-Kohärenz F-2 (fehlende State-Felder für Capture/Keim/Mutterkristall-Ausbaustufe/Elite-Zähler/Superwaffen-Cooldown/Neutrale Lager, jeweils Ergänzung zu D-011/D-015/D-016/D-022/D-023). HOCH/MITTEL im Korrekturlauf zu dokumentieren bzw. zu terminieren.
 - Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie, Sprint 6) bleiben offen.
 - Fixed-Point-Migration (Beta): Phase-0-Spike-Scope erweitert (Fixed-Point-Pfad für ORCA/Flow-Field evaluieren, Bibliothekswahl, float-Direktfelder im GameState verbieten) – Review F-04 MP.
 
@@ -495,3 +495,4 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 | 1.4.0 | 2026-07-21 | D-033 bis D-036: Architektur-Grundentscheidungen (Sim-/MP-Modell, Pathfinding, OOP+Burst statt DOTS, Headless-SimRunner) | Lead Technical Director |
 | 1.5.0 | 2026-07-21 | D-037 bis D-042: TDD-Review-Entscheidungen (Burst/Managed-Doppelstruktur, Disconnect-Regel, Audio-Backend, Renderer/Licht, Sentry, Sim-Budget-Klärungen) | Lead Technical Director |
 | 1.6.0 | 2026-07-21 | D-043 bis D-052: Architecture-Review-Entscheidungen (Assembly-Topologie, V5-Gate, Managed-first, MP-Trust-Anchor, Reichweiten-Harmonisierung, Skalierungs-Deckel, CI-Realismus, Branching, Quantum-Fallback gestrichen, Referenzhardware) | Lead Technical Director |
+| 1.6.1 | 2026-07-21 | Korrektur „Offene Punkte": Kritisch-Zähler auf 9 (statt 10) berichtigt; präzisiert, dass F-02 (GDD↔TDD) und F-2 (Architektur-Kohärenz) als Doku-Erweiterung in GameState.md gelöst wurden statt durch D-043–D-052, da reine Datenmodell-Ergänzungen ohne eigenen Entscheidungsbedarf | Lead Technical Director |

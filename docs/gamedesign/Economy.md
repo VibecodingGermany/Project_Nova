@@ -1,6 +1,6 @@
 # Wirtschaftssystem (Economy)
 
-**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
+**Version:** 0.4.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 4
 
 ## Zweck
 
@@ -35,7 +35,7 @@ Standard-Startressourcen: **1.000 AE** (Zahlengerüst), Start-Energie 0 (erstes 
 | Ladezeit | ~8 s am Ausläufer | Spürbare Verwundbarkeit am Feld ohne Micromanagement-Frust |
 | Abladezeit | ~3 s an der Raffinerie | Raffinerie-Dock ist der Durchsatz-Engpass, nicht die Ladezeit |
 | Docks pro Raffinerie | 1 (weitere Harvester warten in kurzer Queue, max. 3) | Skalierung läuft über mehr Raffinerien/Expansionen, nicht über Dock-Upgrades (MVP-Disziplin) |
-| Harvester-Kosten | 800 AE (Fahrzeugfabrik) | Amortisation nach ~3 Fahrten; Angriffsziel mit klarer ROI-Rechnung |
+| Harvester-Kosten | je Fraktion führend in [./Vehicles.md](./Vehicles.md) (≈550–700 AE, D-047) | Amortisation nach ~2–3 Fahrten; Angriffsziel mit klarer ROI-Rechnung |
 | Sinnvolle Harvester pro Feld | 2–3 (mittleres Feld) | Deckt sich mit dem Nachwuchs-Limit in [./Resources.md](./Resources.md); mehr Harvester erzwingt Überernte |
 | Transportweg | Kein separates Konvoi-System; Harvester fahren direkt | TPD §8.4 nennt Transportweg – als reine Wegstrecke interpretiert, kein eigenes Mechanik-Layer |
 
@@ -105,13 +105,15 @@ Begründung: Mit 1.000 AE Start und ~600 AE/min ist Tier 1 sofort, Tier 2 nach ~
 | Evolvierte | Keine aktive Reparatur: Regeneration ~1 % HP/s kostenlos, doppelt so schnell auf/nahe **lebender** Aetherium-Felder (D-011; Einschränkung auf lebende Felder gemäß D-027); kein AE-Abzug – Ausgleich über langsamere Rate |
 | Verkauf | 50 % der investierten AE zurück (Basiswert, keine Reparatur-Rückerstattung); 5 s Abwickel-Phase, Gebäude in dieser Zeit verwundbar und funktionslos; Evolvierte "Rückbau" übernimmt dieselbe 50-%-Regel (Resorption) |
 
-## Fraktions-Wirtschaftsmodifier (v0.1)
+## Fraktions-Wirtschaftsmodifier (v0.2)
 
-| Fraktion | Harvester | Profil-Wirkung |
+Harvester-Kosten sind **führend in [./Vehicles.md](./Vehicles.md)** definiert (D-047, Grundsatzregel "jeder Wert existiert genau einmal") – keine Doppelpflege hier (Werte je Fraktion siehe [./Vehicles.md](./Vehicles.md)).
+
+| Fraktion | Harvester (Verweis) | Profil-Wirkung |
 |---|---|---|
-| Allianz | 900 AE, +10 % Fahrgeschwindigkeit, Schwebenantrieb (unempfindlich vs. Minen) | Teurer, effizienter; weniger Verluste |
-| Legion | 700 AE, −10 % Geschwindigkeit, +20 % HP | Günstig ersetzbar; Masse-Ökonomie |
-| Evolvierte | 800 AE "Zermahler", Regeneration, heilt sich an lebenden Feldern (D-027) | Synergie mit Feld-/Verseuchungsregeln ([./Resources.md](./Resources.md)) |
+| Allianz | siehe [./Vehicles.md](./Vehicles.md) ("Demeter") | Teurer, effizienter; weniger Verluste |
+| Legion | siehe [./Vehicles.md](./Vehicles.md) ("Schürfer") | Günstig ersetzbar; Masse-Ökonomie |
+| Evolvierte | siehe [./Vehicles.md](./Vehicles.md) ("Schlürfer"), Regeneration, heilt sich an lebenden Feldern (D-027) | Synergie mit Feld-/Verseuchungsregeln ([./Resources.md](./Resources.md)) |
 
 ## Wirtschafts-Zielkurven (20–35-min-Match, gemäß D-010)
 
@@ -153,3 +155,4 @@ Leitplanke: Gesamt-AE-Fluss pro Spieler über ein typisches 25-min-Match ≈ 25.
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Gameplay Designer |
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 2 (D-020–D-030) | Lead Gameplay Designer |
 | 0.3.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): Gebäudekosten/-energie durch Verweise auf Buildings.md ersetzt (Review F-03, D-047-Grundsatzregel); Economy.md behält nur Systemlogik (Raten, Low-Power, Lager) | Lead Gameplay Designer |
+| 0.4.0 | 2026-07-21 | F-03 vollständig geschlossen: Harvester-Kosten in der Fraktions-Wirtschaftsmodifier-Tabelle durch Verweis auf die führende Quelle [Vehicles.md](./Vehicles.md) ersetzt (D-047) – keine dritte Zahl mehr neben Vehicles.md (700/550/620 AE) | Lead Gameplay Designer |

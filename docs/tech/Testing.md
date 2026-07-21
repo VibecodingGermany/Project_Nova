@@ -1,6 +1,6 @@
 # Testing-Strategie
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead QA Engineer | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead QA Engineer | **Sprint:** 4
 
 ## Zweck
 

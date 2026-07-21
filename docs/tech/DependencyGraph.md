@@ -1,6 +1,6 @@
 # Abhängigkeitsgraph
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 4
 
 ## Zweck
 
@@ -110,7 +110,7 @@ Durchsetzung: Die Trennung wird primär über fehlende Referenzen erzwungen (Reg
 
 ## Offene Punkte
 
-1. **Burst-Brücke:** Ob `Nova.Simulation.Jobs` Ergebnisse bit-identisch zum reinen C#-Pfad liefern muss (SimRunner-Parität, D-036) oder ob der Runner bewusst den C#-Pfad nutzt, ist unentschieden → Offener Punkt 1 in [./Architecture.md](./Architecture.md), Entscheidung nach Phase-0-Spike im DecisionLog.
+1. **Burst-Brücke (gelöst):** `Nova.Simulation.Burst` (D-043, nicht `.Jobs`) liefert die Burst-Varianten der Hotspots; SimRunner und Golden-Master-Tests fahren ausschließlich den Managed-Pfad (D-045), Toleranz-Parität ≤1e-4 statt Bit-Identität ist CI-Pflicht (D-037/D-045). Damit entschieden, kein offener Punkt mehr (vgl. [./Architecture.md](./Architecture.md) §Offene Punkte 1).
 2. **SimRunner-Bezug der Sim-Assembly:** Quelltext-Sharing (Shared Project/Linked Files) vs. DLL-Referenz aus dem Unity-Build – CI-Detail, Festlegung im Sprint-7-Setup (`Testing.md`).
 3. **UI→Presentation-Referenz** (Minimap braucht FoW-Textur/Camera) erzeugt eine Kante, die bei wachsender UI zur Schichten-Unschärfe führen kann; ggf. später über Bridge-Mediatoren ersetzen – Beobachtung im Architecture Review.
 4. Test-Assembly-Strategie für `Nova.Simulation` außerhalb von Unity (reines .NET-Testprojekt vs. Unity Test Framework EditMode) offen → `Testing.md`.
@@ -126,3 +126,4 @@ Durchsetzung: Die Trennung wird primär über fehlende Referenzen erzwungen (Reg
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Technical Director |
+| 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043-Topologie): kanonische Assembly-/Referenzmatrix inkl. `Nova.AI`/`Nova.AI.Data`; Offener Punkt 1 (Burst-Brücke) via D-043/D-045/D-037 gelöst, `Nova.Simulation.Jobs`-Altname entfernt | Lead Technical Director |

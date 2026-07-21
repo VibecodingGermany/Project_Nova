@@ -1,6 +1,6 @@
 # Multiplayer- und Spielmodi
 
-**Version:** 0.4.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead UI/UX Designer | **Sprint:** 2
+**Version:** 0.4.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead UI/UX Designer | **Sprint:** 4
 
 ## Zweck
 

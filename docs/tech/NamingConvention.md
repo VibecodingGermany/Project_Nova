@@ -1,6 +1,6 @@
 # Naming Convention – Benennungsregeln für Project Nova
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 3–4
+**Version:** 0.2.1 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 4
 
 ## Zweck
 
@@ -25,7 +25,7 @@ Dieses Dokument legt die verbindlichen Benennungsregeln für Code (Namespaces, T
 | Enums + Werte | `PascalCase` | `FactionId.Allianz` |
 | Boolesche Member | Präfix `Is/Has/Can/Should` | `IsVisible`, `CanCapture` |
 
-- Abkürzungen werden wie Wörter behandelt (`FogOfWarSystem`, nicht `FOWSystem`); Ausnahme etablierter Kurzformen: `UI`, `ID`/`Id`, `AI` (als `Ai` in PascalCase-Typen: `Nova.Simulation.Ai`).
+- Abkürzungen werden wie Wörter behandelt (`FogOfWarSystem`, nicht `FOWSystem`); Ausnahme etablierter Kurzformen: `UI`, `ID`/`Id`, `AI` (als `Ai` in PascalCase-Typen, z. B. `AiPlayer` in `Nova.AI`).
 - Keine ungarische Notation, keine Unterstrich-Suffixe, keine kryptischen Kurznamen (`mgr`, `hndl`).
 - Sprache aller Identifier: Englisch (DocumentationStandard §Sprache). Fraktionsnamen bilden die dokumentierte Ausnahme (§4).
 
@@ -40,7 +40,7 @@ Namespaces spiegeln exakt die Ordnerstruktur ([./FolderStructure.md](./FolderStr
 | `Nova.Simulation.Commands` | Sim | `MoveCommand`, `AttackCommand`, `BuildCommand` |
 | `Nova.Simulation.State` | Sim | `UnitState`, `MatchState`, `PlayerState` |
 | `Nova.Simulation.Definitions` | Sim | `UnitDefinition`, `WeaponDefinition` (Unity-freie Snapshots) |
-| `Nova.Simulation.Economy` / `.Combat` / `.Movement` / `.Pathfinding` / `.FogOfWar` / `.Ai` | Sim | je ein `ISimSystem` + zugehörige Typen |
+| `Nova.Simulation.Economy` / `.Combat` / `.Movement` / `.Pathfinding` / `.FogOfWar` | Sim | je ein `ISimSystem` + zugehörige Typen |
 | `Nova.Simulation.Burst` | Burst/Jobs | Burst-Varianten der Hotspot-Jobs (D-034, nur hinter Feature-Flag, D-045) |
 | `Nova.AI` / `Nova.AI.Strategy` / `.Tactics` / `.Squads` | KI (Unity-frei, D-043) | `AiPlayer`, `StrategicDirector`, `SquadBehavior` |
 | `Nova.AI.Data` | Data (SO) | `DifficultyProfileSO`, `StrategyOptionSO`, `AiRegistrySO` |
@@ -159,3 +159,4 @@ Jede handgeschriebene `.cs`-Datei beginnt mit:
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Technical Director |
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): Nova.AI-Namespaces (D-043), Sub-Registry-/Master-Index-Benennung (D-049), Command-/CommandEnvelope-Benennung boxfrei (Review F-5), ID-Codegen als Sprint-7-Tooling-Aufgabe konkretisiert | Lead Technical Director |
+| 0.2.1 | 2026-07-21 | Restfehler behoben: Altrest `Nova.Simulation.Ai` als Sim-Namespace entfernt (D-043 – KI ist eigene Assembly `Nova.AI`/`.Strategy`/`.Tactics`/`.Squads`, kein zweiter Namespace mehr in `Nova.Simulation`) | Lead Technical Director |

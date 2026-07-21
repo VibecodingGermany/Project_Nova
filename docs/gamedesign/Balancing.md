@@ -1,6 +1,6 @@
 # Balancing-Methodik
 
-**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead QA Engineer | **Sprint:** 2
+**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead QA Engineer | **Sprint:** 4
 
 ## Zweck
 

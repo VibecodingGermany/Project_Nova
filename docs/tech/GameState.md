@@ -1,6 +1,6 @@
 # GameState – Zustandsmodell der Simulation
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 3
+**Version:** 0.2.1 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 4
 
 ## Zweck
 
@@ -150,7 +150,9 @@ public struct PlayerState
     public FactionId Faction;           // Allianz / Legion / Evolvierte
     public int Aetherium;               // einzige Währung (Start 1.000 AE, Economy.md)
     public int EnergyProduced, EnergyConsumed;  // Low-Power-Regel
-    public int SupplyUsed, SupplyCap;
+    // Kein Supply-/Pop-System (D-021): Begrenzung läuft ausschließlich über Ökonomie,
+    // Produktionszeit und den globalen Deckel `MatchState.GlobalUnitCount` (600/Match, D-048)
+    // sowie das Elite-Limit unten – kein Supply-Feld hier.
     public ushort[] EliteCounts;        // Zähler je Elite-DefId; Limit aus MatchSettings.EliteUnitLimit (D-015)
     public PlayerStatus Status;         // Active / Defeated / Disconnected (deterministische KI-Übernahme, D-038/D-046)
     public DefId CommanderDef;          // CommanderSystem.md
@@ -349,3 +351,4 @@ Leash-Verhalten und Aggro-Radien sind Definitionsdaten; im State verbleiben nur 
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Technical Director |
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): Effekt-/Fähigkeiten-State, Environment-State, MatchSettings, Munition/Buchten/Transport, Elite-/Unit-Counter, SuperweaponState, Neutrale-State, Ausbaustufe 1–3, Keim-Reifung | Lead Technical Director |
+| 0.2.1 | 2026-07-21 | Fix F-18 (GDD↔TDD): `SupplyUsed`/`SupplyCap` aus `PlayerState` entfernt (D-021 verbietet Supply-/Pop-System); Begrenzung läuft über `MatchState.GlobalUnitCount` (Deckel 600, D-048) und `EliteCounts` (D-015) | Lead Technical Director |

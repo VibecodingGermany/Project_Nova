@@ -1,6 +1,6 @@
 # Deployment & Build-Pipeline
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead DevOps Engineer | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead DevOps Engineer | **Sprint:** 4
 
 ## Zweck
 

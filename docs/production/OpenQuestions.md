@@ -1,6 +1,6 @@
 # Open Questions
 
-**Version:** 1.4.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Executive Producer | **Sprint:** 3
+**Version:** 1.5.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Executive Producer | **Sprint:** 4
 
 ## Zweck
 
@@ -18,6 +18,10 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 |---|---|---|---|---|---|
 | Q-018 | P3 | Preispunkt: 29,99 / 34,99 / 39,99 €? Markt-Research deckt das nicht ab. | Sprint-2-Review | 6 | offen |
 | Q-019 | P2 | Telemetrie-Infrastruktur (Opt-in, ab Beta, für Balancing-Stufe 5): Pflicht-Feature mit eigenem Backend oder Streichung? D-007-Offline-Positionierung beachten. | Balancing.md-Review | 6 | offen (Vorhaltung: Compile-Schaltstelle in tech/Deployment.md) |
+| Q-031 | P1 | Fähigkeiten-/Status-Effekt-System (4 Status-Effekte, ~40 Fähigkeiten mit Cooldowns/Kanälen) hat kein Sim-Modul-Zuhause – `EffectState`/`AbilityState` fehlen in GameState.md, kein Modul in ModuleOverview.md. | Review_GDD-TDD-Konsistenz F-02 | 5 (vor Sprint-7-Start) | offen |
+| Q-032 | P2 | MemoryBudget-Abgleich: Snapshot-/Grid-Layer-Größe (Serialization.md 50–150 kB vs. GameState.md-Layer-Rechnung ~1–2 MB), Flow-Field-Eviction-Policy (LRU vs. RefCount widersprüchlich), native Speicher-Baseline (macOS 8 GB ungemessen), max. Spielerzahl (6 vs. 8 uneinheitlich). | Review_Skalierung_Systemgrenzen F-2/F-4/F-5/F-12/F-13, Review_Performance F-12 | 5 (vor Phase-0-Spike) | offen |
+| Q-033 | P1 | Phase-0-Spike-Erweiterung V5-Gate: Kampf-/KI-Kostenmodell (Zielsuche mit Spatial Hash, Projektil-/AoE-Kosten, KI-Command-Verarbeitung) für Rest-Sim-Unterbudget ≤3 ms – Gate durch D-044 beschlossen, Kampf-Subsystem-TDD mit Kostenmodell noch nicht geschrieben. | D-044, Review_Performance F-1/F-4/F-5 | Phase 0 (Pflicht vor Sprint-7-Kampfmodul-Start) | offen |
+| Q-034 | P3 | Tote interne Verweise auf nicht existierende Tech-Dokumente (FogOfWar.md, CameraSystem.md, Commands.md, SimulationCore.md) – FoW-TDD hat höchste fachliche Priorität. | Review_GDD-TDD-Konsistenz F-16 | 5 | offen |
 
 ## Geschlossene Fragen
 
@@ -41,6 +45,16 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 | Q-016 | **D-007** – Premium SP/Skirmish-first, H1 C&C-Nostalgiker primär | Sprint 2 |
 | Q-017 | **D-012** – gezielte Zerstörbarkeit, keine Terrain-Deformation | Sprint 2 |
 | Q-020 | **D-036** – `Nova.SimRunner` (.NET-Konsole auf Nova.Simulation) für KI-vs-KI-CI-Läufe | Sprint 3 |
+| Q-021 | **D-043** – Kanonische Assembly-Topologie (Neusynthese `Nova.Core`/`Nova.Simulation`/`Nova.Simulation.Burst`/`Nova.AI`/`Nova.AI.Data`/…) statt drei konkurrierender Modelle | Sprint 4 |
+| Q-022 | **D-044** – Sim-Tick-Ausführungsmodell gestuft (MVP synchron, Worker-Tick ab Alpha bei P95 >6 ms) + Pflicht-Gate V5 (Kampf-/KI-Kostenmodell) | Sprint 4 |
+| Q-023 | **D-045** – Managed-first Auslieferungspfad bis Fixed-Point-Beta; Burst nur hinter Feature-Flag mit Toleranz-Parität (≤1e-4) | Sprint 4 |
+| Q-024 | **D-046** – MP-Trust-Anchor: Post-Match-Re-Simulation + Hash-Kette für Reconnect + deterministische, tick-synchrone KI-Übernahme (kein SPOF) | Sprint 4 |
+| Q-025 | **D-047** – Reichweiten-Harmonisierung GDD↔TDD: 1 Tile = 1 m, Weapons.md führend, Vehicles.md/Aircraft.md angeglichen | Sprint 4 |
+| Q-026 | **D-048** – Skalierungs-Deckel: 600 Einheiten/Match global, Survival-Abflachung ab Welle 25, `AetheriumDensity` ≤1,5 bei 5–6 Spielern | Sprint 4 |
+| Q-027 | **D-049** – Test-/CI-Realismus (Shard-Modell SimRunner-Nightly), xxHash64 durchgängig, GameDatabase-Sharding pro Kategorie | Sprint 4 |
+| Q-028 | **D-050** – Branching-Modell gestuft: `main` + Kurz-Branches bis Sprint 6, TPD-§12-Vollmodell ab Sprint 7 | Sprint 4 |
+| Q-029 | **D-051** – Photon-Quantum-Fallback gestrichen; Beta-Fallback = reduzierter MP-Scope (4 Spieler/300 Einheiten/EU-only) | Sprint 4 |
+| Q-030 | **D-052** – Windows-Referenzhardware fixiert (Ryzen 5 5600/RTX 3060 = 60-FPS-Ziel; Ryzen 3 3100/GTX 1050 Ti = 30-FPS-Ziel; Mac-Baseline M2) | Sprint 4 |
 
 ## Regeln
 
@@ -49,13 +63,15 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 
 ## Offene Punkte
 
-- Nur noch Q-018 (Preispunkt, Sprint 6) und Q-019 (Telemetrie-Infrastruktur, Sprint 6) offen.
-- Aus Research hängen vier Pflicht-Validierungen am Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86, URP GPU Resident Drawer, Animator vs. Playables, Pathfinding-CPU-Budget (Managed-Pfad, D-037).
-- Terminierte Folgepunkte aus dem TDD-Review (keine Blocker): KI-Bedrohungskarten-Auflösung, Evolvierte-Plan-Tasks, Snapshot-Größenmessung, Fixed-Point-Bibliothekswahl (Beta), Analyzer-Enforcement (Sprint 7), Windows-Referenzhardware fixieren (Sprint 4).
+- Noch offen: Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie-Infrastruktur, Sprint 6).
+- Neu aus dem Sprint-4-Korrekturlauf offen: Q-031 (Fähigkeiten-/Status-Effekt-System, vor Sprint 7), Q-032 (MemoryBudget-Abgleich, vor Phase-0-Spike), Q-033 (V5-Gate Kampf-/KI-Kostenmodell, Phase 0), Q-034 (tote Doku-Verweise, Sprint 5).
+- Aus Research hängen vier Pflicht-Validierungen am Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86 (jetzt zusätzlich Q-033-Kostenmodell), URP GPU Resident Drawer, Animator vs. Playables, Pathfinding-CPU-Budget (Managed-Pfad, D-037); Fixed-Point-Migration-Spike-Scope zusätzlich um ORCA/Flow-Field-Evaluierung, Bibliothekswahl und float-Direktfeld-Verbot im GameState erweitert (DecisionLog.md, Offene Punkte).
+- Terminierte Folgepunkte aus dem TDD-Review (keine Blocker): KI-Bedrohungskarten-Auflösung (siehe auch Q-032), Evolvierte-Plan-Tasks, Snapshot-Größenmessung (siehe auch Q-032), Fixed-Point-Bibliothekswahl (Beta), Analyzer-Enforcement (Sprint 7); Windows-Referenzhardware ist mit D-052 geschlossen.
+- Alle Sprint-4-Review-Befunde (~105, davon 9 kritisch): 7 der 9 kritischen durch D-043–D-052 entschieden (Q-021–Q-030), 2 (GDD↔TDD F-02, Architektur-Kohärenz F-2) als Datenmodell-Erweiterung in GameState.md gelöst; verbleibende HOCH/MITTEL-Befunde teils als Q-031–Q-034 registriert, Rest im Korrekturlauf terminiert.
 
 ## Nächste Schritte
 
-- Sprint 3 abschließen (Abschlussbericht), danach Sprint 4: unabhängige Architecture-Review-Agenten mit Widerspruchs-Mandat.
+- Sprint-4-Korrekturlauf abschließen (Q-031–Q-034 in die zuständigen TDD-/GDD-Dokumente einarbeiten), danach Sprint-4-Abschlussbericht und Versionsbump 0.5.0.
 
 ## Änderungsverlauf
 
@@ -66,3 +82,4 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 | 1.2.0 | 2026-07-21 | Q-001–Q-012, Q-016, Q-017 entschieden (D-007–D-030); Q-018–Q-020 neu aus Konsistenzreview | Executive Producer |
 | 1.3.0 | 2026-07-21 | Q-001–Q-012, Q-016, Q-017 formal geschlossen (Sprint-2-Abschluss, D-007–D-032) | Executive Producer |
 | 1.4.0 | 2026-07-21 | Q-013, Q-014, Q-015, Q-020 formal geschlossen (Sprint 3, D-033–D-038) | Executive Producer |
+| 1.5.0 | 2026-07-21 | Q-021–Q-030 neu und sofort geschlossen (Sprint 4, D-043–D-052); Q-031–Q-034 neu aus Review-Folgearbeit (Ability/Status-System, MemoryBudget-Abgleich, V5-Gate-Kostenmodell, tote Verweise) | Executive Producer |
