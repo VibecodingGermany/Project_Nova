@@ -1,6 +1,6 @@
 # Gebäude – alle Fraktionen
 
-**Version:** 0.4.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
+**Version:** 0.4.1 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 4
 
 ## Zweck
 
@@ -228,7 +228,7 @@ Module werden auf dem fertigen Podest installiert (nicht als separates Gebäude)
 ## Offene Punkte
 
 - **Tor-Modul (Status: Beta-Evaluierung):** Kein Tor-Gebäude im MVP – Durchlass per Segment-Verkauf (50 % Rückerstattung) ist die entschiedene MVP-Lösung. Ein Mauer-Tor-Modul (analog den Plattform-Modulen) wird frühestens zur Beta evaluiert; Entscheidung Game Director.
-- **Flak-DPS-Korridor (Status: Balancing-Pass v0.2):** Aircraft.md nennt 90 DPS gegen Luft für das Flak-Modul; die Weapons.md-Rahmenwerte (25–40 Schaden / 1,5 s, ×2,0 Luft-Multiplikator ≈ 33–53 DPS) liegen darunter. Reichweiten sind seit D-047 verbindlich in Weapons.md geführt (1 Tile = 1 m); eine verbindliche Quelle für die **Schadens**-Werte ist im Balancing-Pass festzulegen.
+- **Flak-DPS-Korridor: entschieden (D-047, Korrekturlauf Sprint 4).** [Weapons.md](./Weapons.md) ist die einzige Werte-Quelle für das Flak-Modul (Reichweite 11–12 Felder ≙ m, Schaden 25–40 pro Schuss / 1,5 s Abklingzeit, ×2,0-Multiplikator gegen Luft ≈ 33–53 DPS effektiv); [Aircraft.md](./Aircraft.md) wurde im selben Korrekturlauf auf diesen Korridor angeglichen (der frühere Wert 90 DPS ist überholt und entfällt). Punkt geschlossen.
 - **Footprints (Status: Abgleich mit Maps.md läuft):** Exakte Footprints (2×2 bis 4×4) sind Annahmen; Finalisierung mit Maps.md.
 
 Entschieden und entfernt im Korrekturlauf Sprint 4: HQ-Grundenergie (+30 führend in diesem Dokument, D-032 – war bereits als geschlossen markiert).
@@ -248,3 +248,4 @@ Entschieden und entfernt im Korrekturlauf Sprint 4: HQ-Grundenergie (+30 führen
 | 0.3.0 | 2026-07-21 | Feinschliff Sprint 2 Runde 2 (D-031) | Lead Gameplay Designer |
 | 0.3.1 | 2026-07-21 | HQ-Grundenergie +30 als führend bestätigt, Offener Punkt geschlossen (D-032) | Lead Gameplay Designer |
 | 0.4.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): als führende Quelle für Gebäudekosten/-energie/-bauzeiten festgelegt (Review F-03, D-047-Grundsatzregel); Offene Punkte bereinigt | Lead Gameplay Designer |
+| 0.4.1 | 2026-07-21 | Offener Punkt "Flak-DPS-Korridor" geschlossen: veralteter Querverweis auf Aircraft.md (90 DPS) entfernt, auf Weapons.md als einzige Werte-Quelle (25–40 Schaden/1,5 s, ×2,0 vs. Luft ≈ 33–53 DPS, D-047) umformuliert | Lead Gameplay Designer |

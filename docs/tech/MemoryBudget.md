@@ -1,6 +1,6 @@
 # Memory-Budget
 
-**Version:** 0.1.0 | **Status:** Entwurf | **Verantwortungsbereich:** Lead Performance Engineer | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Performance Engineer | **Sprint:** 4
 
 ## Zweck
 
@@ -51,11 +51,15 @@ Basis: uniformes Integer-Grid, 1-m-Tiles. Worst Case = L-Karte 256 × 256 m = 65
 | Clearance (3 Radienklassen, D-034) | 3 × u8 | 192 KB | max. passierbarer Radius pro Zelle |
 | Dynamische Belegung (Einheiten, Dirty-Flags) | u8 + Dirty-Bitset | 72 KB | pro Tick aktualisiert |
 | Aetherium-Feld (Typ, Wachstumsstufe, Überernte) | u8 | 64 KB | |
-| Aktive Flow Fields (Kosten + Richtung) | 2 Byte + 1 Byte/Zelle | ~200 KB **pro Feld** | Begrenzung über Feld-Cache nötig |
-| **Flow-Field-Cache, gedeckelt ≤ 32 aktive Felder** | | **≤ 6,5 MB** | LRU-Eviction; Ziel-Clustering reduziert Feldzahl (research/Pathfinding.md §2.2) |
-| **Summe Grid** | | **≤ 8 MB** | |
+| Aktive Flow Fields (Kosten + Richtung) | 3 Byte/Zelle (2 Byte Kosten `int16` + 1 Byte Richtung) | ~192 KB **pro Feld** (L-Karte) | Begrenzung über Feld-Cache nötig |
+| **Flow-Field-Cache, gedeckelt ≤ 96 aktive Felder (Korrekturlauf Sprint 4, D-045, tech/Pathfinding.md §1.1/§2)** | | **≈ 19 MB** (L: 3 B × 65.536 Zellen × 96 = 18.874.368 B ≈ 19 MB; M: ~10,6 MB; S: ~4,7 MB) | **RefCount-Eviction** (kein LRU – referenzierte Felder werden nie verworfen, Freigabe nur bei RefCount 0, älteste zuerst); Überlauf über Deckel hinaus fällt auf A*-Einzelsuche zurück (≤ 4 Fills/Tick, Rest `Deferred`) |
+| **Summe Grid** | | **≤ 20 MB** | statische Layer (~0,45 MB) + Flow-Field-Cache (≈19 MB), gerundet mit Sicherheitszuschlag |
 
-Falls tech/Pathfinding.md eine höhere Zellauflösung oder zusätzliche Layer (z. B. Dichtefelder, Einflusskarten für den KI-Director) festlegt, wird diese Tabelle aktualisiert – die 100-MB-Gesamtkappappe bleibt verbindlich.
+Deckel- und Policy-Herkunft: tech/Pathfinding.md §1.1 (96-Felder-Begründung: 6 Parteien × 2–4 aktive Kontrollgruppen × bis zu 3 Clearance-Klassen = 36–72 Angriffsfelder, plus 24–36 Wirtschafts-Flow-Sharing-Felder §2, Deckel 32 im 6-Spieler-Fall nachweislich unterschritten) und §2 (RefCount- statt LRU-Eviction, da ein referenziertes Feld Einheiten mitten im Pfad ohne Richtungsfeld zurückließe). Vormalige Annahme (32 Felder / ≤ 6,5 MB / LRU) ist damit ersetzt.
+
+**Gegenrechnung 100-MB-Sim-Kappe (§1):** Sim-State ≤ 25 MB (§2) + Grid ≤ 20 MB (§3, inkl. ≈19-MB-Flow-Field-Cache) + FoW ≤ 0,5 MB (§4) = **≤ 45,5 MB** – die 100-MB-Gesamtkappe für Sim-State + Grid-Infrastruktur + FoW (§1) hält mit ≥ 54 MB Reserve, auch im 96-Felder-Worst-Case.
+
+Falls tech/Pathfinding.md eine höhere Zellauflösung oder zusätzliche Layer (z. B. Dichtefelder, Einflusskarten für den KI-Director) festlegt, wird diese Tabelle aktualisiert – die 100-MB-Gesamtkappe bleibt verbindlich.
 
 ## 4. FoW-Bitmasken (research/FogOfWar.md §B)
 
@@ -97,7 +101,7 @@ namespace Nova.Performance
     public sealed class MemoryBudgetSO : ScriptableObject
     {
         public PoolCapacity[] Pools;      // z. B. { "Projectile", 2000 }, { "PathRequest", 256 }
-        public int MaxActiveFlowFields;   // 32 (Deckel §3)
+        public int MaxActiveFlowFields;   // 96 (Deckel §3, Korrekturlauf Sprint 4, D-045)
         public long ManagedHeapBudgetBytes;
     }
 
@@ -114,7 +118,7 @@ namespace Nova.Performance
 ## Offene Punkte
 
 - **Grid-Layer-Finalliste** (Dichtefelder, KI-Einflusskarten, Bauplatzierungs-Maske) hängt von tech/Pathfinding.md und dem KI-TDD ab; obige Abschätzung ist der Deckel, nicht die Finalliste.
-- **Flow-Field-Cache-Größe (32 Felder)** ist eine Annahme; der Phase-0-Spike (V4, siehe PerformanceBudget.md) muss zeigen, ob 32 aktive Ziele für reale Match-Situationen (8 Spieler × mehrere Angriffsgruppen) ausreichen.
+- **Flow-Field-Cache-Größe (96 Felder, Korrekturlauf Sprint 4)** ist die aktuelle Budgetannahme (tech/Pathfinding.md §1.1); der Phase-0-Spike (V4, Szenario „6 Parteien Vollwirtschaft + 3 Angriffe", siehe PerformanceBudget.md) muss die Eviction-Thrash-Metrik (Fills/Tick) messen und zeigen, ob 96 Felder auch bei 8 Spielern × mehreren Angriffsgruppen mit Reserve ausreichen.
 - **Fixed-Point-Umstellung (D-033, Beta)** kann Struct-Größen im Sim-State ändern; Abschätzung §2 muss dann neu vermessen werden.
 - **Replay/Spectator-Vollaufzeichnung** (research/FogOfWar.md empfiehlt serverseitige Vollaufzeichnung) würde den FoW-Verlauf zusätzlich puffern (~128 KB/Sicht-Tick × 21.000 Ticks ≈ 2,7 GB unkomprimiert) – nur mit Kompression/Delta-Kodierung machbar; Umfang der Replay-Funktion ist noch nicht entschieden (kein D-Eintrag).
 - **macOS-RAM-Verhalten** (Unified Memory, Swap-Aggressivität) auf 8-GB-Macs ist ungemessen; Mindest-RAM-Anforderung des Spiels (8 vs. 16 GB) muss nach Phase-0-Messung festgelegt werden.
@@ -131,3 +135,4 @@ namespace Nova.Performance
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Performance Engineer |
+| 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 4: Flow-Field-Deckel/Speicher/Eviction an tech/Pathfinding.md §1.1/§2 angeglichen (32→96 Felder, ≤6,5 MB→≈19 MB, LRU→RefCount), 100-MB-Sim-Kappe nachgerechnet | Lead Performance Engineer |

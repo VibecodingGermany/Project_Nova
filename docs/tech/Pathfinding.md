@@ -1,6 +1,6 @@
 # Technical Design: Pathfinding & Bewegung
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead AI Programmer | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead AI Programmer | **Sprint:** 4
 
 ## Zweck
 
@@ -29,7 +29,7 @@ Tile-Kante 1 m (D-034). Kartengrößen aus Maps.md:
 
 Statische Layer pro Tile (ungepackt 7 B): `TerrainCost` (u8, 0 = unpassierbar), `Clearance[3]` (je u8, max. passierbarer Radius in dm je Radienklasse), `Height` (u8), `Flags` (u8: Wasser, unbuildable, NoFlyZone o. ä.), `ZoneId` (u8, Biom/Aetherium-Zone).
 
-Budgetannahme (Korrekturlauf Sprint 4, Review-Befunde Performance F-4 / Skalierung F-5): **≤ 96 gleichzeitig aktive Flow Fields** (erhöht von 32). Begründung: 6 Parteien × 2–4 aktive Kontrollgruppen × bis zu 3 Clearance-Klassen = 36–72 Felder im Angriffsfall, plus Wirtschafts-Felder (§2) und KI-Squad-Felder – 32 war im 6-Spieler-Fall nachweislich unterschritten. Speicher-Neurechnung: 3 B/Tile × 65.536 Tiles × 96 Felder = 18.874.368 B ≈ **19 MB auf L-Karten** (M: ~10,6 MB; S: ~4,7 MB). Gegen die 100-MB-Sim-Kappe (MemoryBudget.md §1) unkritisch; die dortige §3-Tabelle (Deckel 32 / ≤ 6,5 MB) ist jedoch noch nicht angeglichen → Offener Punkt (Abgleich MemoryBudget.md).
+Budgetannahme (Korrekturlauf Sprint 4, Review-Befunde Performance F-4 / Skalierung F-5): **≤ 96 gleichzeitig aktive Flow Fields** (erhöht von 32). Begründung: 6 Parteien × 2–4 aktive Kontrollgruppen × bis zu 3 Clearance-Klassen = 36–72 Felder im Angriffsfall, plus Wirtschafts-Felder (§2) und KI-Squad-Felder – 32 war im 6-Spieler-Fall nachweislich unterschritten. Speicher-Neurechnung: 3 B/Tile × 65.536 Tiles × 96 Felder = 18.874.368 B ≈ **19 MB auf L-Karten** (M: ~10,6 MB; S: ~4,7 MB). Gegen die 100-MB-Sim-Kappe (MemoryBudget.md §1) unkritisch; MemoryBudget.md §3 wurde im selben Korrekturlauf angeglichen (96 Felder / ~19 MB / RefCount-Eviction).
 
 ### 1.2 Radienklassen (Clearance)
 
@@ -53,7 +53,7 @@ Weltkoordinate → Tile: `tile = floor(worldPos)` (MVP float, Fixed-Point-Umstel
 - **Algorithmus:** Dijkstra-Wellenfront vom Ziel aus über das Grid des passenden Clearance-Layers, Kosten als `int16` (Skala: 1 Tile orthogonal = 10, diagonal = 14), frühes Abbruchkriterium (alle Agenten-Tiles der Gruppe erreicht oder Kostenlimit). Danach Integration pass → Richtungsvektor pro Tile (u8 Richtungsindex in 8/16 Richtungen + Fallback auf Nachbar-Minimum).
 - **Pooling & Caching:** Felder werden aus einem Pool allokiert (kein GC im Tick), anhand von `(ZielCluster, RadienKlasse)` gecacht und wiederverwendet; Feld-RefCount über zugewiesene Gruppen. Pool-Kapazität = 96 Felder (§1.1).
 - **Wirtschafts-Flow-Sharing (Review Performance F-4):** Harvester erzeugen **keine** eigenen Felder pro Harvester. Alle Harvester, die dasselbe Aetherium-Feld anfahren, teilen sich **ein** Flow Field auf dieses Feld-Ziel (Radienklasse `Vehicle`); analog teilt die Rückkehr-Relation ein Feld auf die Raffinerie als Cluster-Anker. Cluster-Anker der Wirtschaft sind also Feld bzw. Raffinerie, nicht die Einzel-Einheit. Cache-Druck-Rechnung: 6 Parteien × ~2–3 aktive Abbaugebiete × 2 Richtungen ≈ 24–36 Wirtschafts-Felder im Maximum, typisch deutlich darunter – mit den 36–72 Angriffs-Feldern (§1.1) bleibt der Deckel 96 im Worst Case knapp, im Normalfall mit Reserve ausreichend. Eviction-Thrash-Metrik (Fills/Tick) gehört in den Budget-Monitor des V4-Spikes (Szenario „6 Parteien Vollwirtschaft + 3 Angriffe", nicht nur „500 Agenten, 1 Ziel").
-- **Eviction-Policy (Review Skalierung F-5):** ausschließlich **RefCount-basiert** – aktive Gruppen pinnen ihr Feld; freigegeben werden nur Felder mit RefCount 0 (älteste zuerst). **Kein LRU über referenzierte Felder**: Ein referenziertes Feld zu verwerfen ließe Einheiten mitten im Pfad ohne Richtungsfeld zurück. (MemoryBudget.md §3 nennt noch „LRU-Eviction" → Abgleichs-Offener-Punkt.)
+- **Eviction-Policy (Review Skalierung F-5):** ausschließlich **RefCount-basiert** – aktive Gruppen pinnen ihr Feld; freigegeben werden nur Felder mit RefCount 0 (älteste zuerst). **Kein LRU über referenzierte Felder**: Ein referenziertes Feld zu verwerfen ließe Einheiten mitten im Pfad ohne Richtungsfeld zurück. (MemoryBudget.md §3 ist auf RefCount-Eviction angeglichen.)
 - **Überlauf-Verhalten (Review Skalierung F-5):** Ist der Pool voll (96 referenzierte Felder), erhalten neue Feld-Anfragen kein Feld, sondern fallen auf **direkte A*-Einzelsuche** zurück (Hierarchical-frei, auf dem Clearance-Layer), begrenzt auf **≤ 4 A*-Fills pro Tick**; darüber hinausgehende Anfragen erhalten `PathStatus.Deferred` und werden in Folgeticks bedient. Der Fallback ist ein Command-sichtbares, deterministisches Sim-Ereignis (feste Tick-Reihenfolge, fester A*-Tiebreak), damit Lockstep und Replays identisch bleiben.
 - **Kosten-Invalidierung:** Bei Dirty-Regionen (s. §3) wird das betroffene Feld **lokal** neu gefüllt: begrenzter Dijkstra-Restart ab der Region-Grenze, kein Voll-Update. Felder ohne Referenzen werden freigegeben.
 - **Time-Slicing:** Feld-Fills laufen als Burst-Jobs und werden über Ticks amortisiert; Einheiten folgen 1–2 Ticks dem alten Feld (visuell irrelevant, Research §4.1).
@@ -178,7 +178,7 @@ Vorgemerkt, **nicht verplant** (D-034-Konsequenz): Bei nachgewiesenem Budget-Üb
 1. **Exakte Einheitenradien je Klasse** hängen von finalen Unit-Maßen ab (GDD-Detailgrad); Richtwerte in §1.2 sind Platzhalter. Abstimmung mit Game Design nötig.
 2. **Ziel-Cluster-Toleranz** für geteilte Flow Fields (wie nah müssen Ziel-Tiles beieinander liegen?) – Wert im Spike zu kalibrieren; die Wirtschafts-Anker (Feld/Raffinerie, §2) sind davon ausgenommen, sie sind feste Cluster.
 3. **Burst-Brücke im Unity-freien Sim-Kern:** D-043 (`Nova.Simulation.Burst`) und D-045 (Managed-first, Burst nur Feature-Flag) haben das Ob geklärt; offen ist nur noch das Wie der Verschaltung (Hotspot-Vertrag im Kern, Injektion der Burst-Implementierung beim Match-Setup). Abstimmung mit System Architecture (Architecture.md/DependencyGraph.md), nicht eigenmächtig entschieden.
-4. **Abgleich MemoryBudget.md (Korrekturlauf Sprint 4):** Dort stehen noch Flow-Field-Deckel 32 / ≤ 6,5 MB / „LRU-Eviction" (§3) und `MaxActiveFlowFields = 32` im Code-Kommentar – gegen die hier festgelegten 96 Felder / ~19 MB / RefCount-Policy. Die 100-MB-Sim-Kappe wird auch mit 19 MB eingehalten; der Abgleich erfolgt im MemoryBudget-Korrekturlauf, nicht hier.
+4. **Abgleich MemoryBudget.md – erledigt (Korrekturlauf Sprint 4):** MemoryBudget.md §3 ist auf 96 Felder / ~19 MB / RefCount-Policy (`MaxActiveFlowFields = 96`) nachgezogen; die 100-MB-Sim-Kappe wird auch mit ~19 MB eingehalten.
 5. **Karten > 256 m** (falls GDD später größere L-Karten definiert): Speicher- und Fill-Budget neu bewerten, ggf. HPA* vorziehen.
 
 ~~Dichtekarte als Kostenaufschlag~~ → entschieden: Alpha-Plan mit Kostenrahmen (§3).

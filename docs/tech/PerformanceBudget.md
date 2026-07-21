@@ -1,6 +1,6 @@
 # Performance-Budget (Frame & Tick)
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Performance Engineer | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Performance Engineer | **Sprint:** 4
 
 ## Zweck
 
