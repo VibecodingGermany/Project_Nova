@@ -1,6 +1,6 @@
 # Decision Log
 
-**Version:** 1.4.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director | **Sprint:** 3
+**Version:** 1.5.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director | **Sprint:** 3
 
 ## Zweck
 
@@ -343,15 +343,68 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 
 ---
 
+### D-037 | verbindlich | Sprint 3 (Burst vs. Unity-freie Simulation)
+
+**Kontext:** D-033/D-035 fordern einen 100 % Unity-freien `Nova.Simulation`-Kern und einen .NET-Konsolen-SimRunner (D-036); D-034 fordert Burst/Jobs für Pathfinding-Hotspots – `Unity.Burst`/`Unity.Jobs` laufen aber nicht in einer Unity-freien Konsolen-App. Von drei TDD-Agenten unabhängig als Spannung gemeldet.
+**Alternativen:** (a) Burst-Referenzen im Sim-Kern akzeptieren (SimRunner nicht mehr Unity-frei – bricht D-036 und die Balancing-Pipeline); (b) vollständig auf Burst verzichten (Performance-Risiko gegen D-034-Budget); (c) getrennte Assembly `Nova.Simulation.Burst` mit Managed-Referenzimplementierung und Pflicht-Hash-Parität.
+**Entscheidung:** (c) – wie in [../tech/FolderStructure.md](../tech/FolderStructure.md) und [../tech/CodingGuidelines.md](../tech/CodingGuidelines.md) ausgeführt: Sim-Kern bleibt 100 % managed und Unity-frei (`noEngineReferences`); Burst-Optimierungen leben in einer separaten Assembly hinter identischen Interfaces; SimRunner und Golden-Master-Tests fahren den Managed-Pfad; Paritäts-Hash-Tests (Managed ↔ Burst) sind CI-Pflicht.
+**Begründung:** Erhält alle drei Entscheidungen gleichzeitig; die Doppelimplementierung ist auf wenige benannte Hotspots begrenzt; Re-Evaluierung nach Phase-0-Messung – hält der Managed-Pfad das ≤2–4-ms-Budget, kann Burst ganz entfallen.
+**Konsequenzen:** CI-Paritäts-Tests in [../tech/Testing.md](../tech/Testing.md); Budget-Messung im Phase-0-Spike.
+
+### D-038 | verbindlich | Sprint 3 (Disconnect-Regel final)
+
+**Kontext:** [../tech/Networking.md](../tech/Networking.md) legte die finale Regel fest; [../gamedesign/VictoryConditions.md](../gamedesign/VictoryConditions.md) sagt "Verbindungsverlust > 120 s = Niederlage", [../gamedesign/MultiplayerModes.md](../gamedesign/MultiplayerModes.md) markiert die Regel als "vorläufig" – Bestandskonflikt.
+**Alternativen:** (a) Pause-Vote mit Wartezeit (missbrauchbar/Griefing); (b) Auto-Niederlage nach Timeout (bestraft flüchtige Netzprobleme, ruiniert Team-Matches); (c) **60-s-Grace-Period mit Reconnect-Fenster, danach KI-Übernahme; Match läuft unpausiert weiter; kein Re-Entry nach Übernahme (Maphack-Vektor).**
+**Entscheidung:** (c).
+**Begründung:** Hält Matches für Verbleibende spielbar, bestraft niemanden für Verbindungsabbrüche und schließt den Informations-Exploit; passt zur Relay-Architektur (D-033), in der Host-Migration strukturell entfällt.
+**Konsequenzen:** VictoryConditions.md und MultiplayerModes.md werden angeglichen (führend: Networking.md); KI-Übernahme nutzt das Mittel-Difficulty-Profil.
+
+### D-039 | verbindlich | Sprint 3 (Audio-Backend)
+
+**Kontext:** Research-Empfehlung [../research/Animation_Audio_UI.md](../research/Animation_Audio_UI.md) hatte noch keine Entscheidungs-ID (Verfahrenslücke, von AudioArchitecture.md gemeldet).
+**Alternativen:** (a) Unity Audio dauerhaft (kein Voice-Priorisierungs-/Stealing-System – skaliert nicht bei 500 Einheiten); (b) FMOD sofort im MVP (Integrations-Overhead vor dem ersten spielbaren Build); (c) Wwise (pro Plattform lizenziert, für diesen Scope überdimensioniert); (d) **Unity Audio im MVP hinter stabiler `IAudioService`-Abstraktion, FMOD als committed Middleware ab Alpha.**
+**Entscheidung:** (d).
+**Begründung:** Die Abstraktion macht den Middleware-Wechsel zum Nicht-Ereignis; FMOD ist unter $200k Umsatz kostenlos und löst genau das RTS-Kernproblem (hunderte Barks, adaptive Musik); Wwise-Kosten/Nutzen passt nicht.
+**Konsequenzen:** [../tech/AudioArchitecture.md](../tech/AudioArchitecture.md) führend; FMOD-Budgetpunkt in Sprint 6 aufnehmen.
+
+### D-040 | verbindlich | Sprint 3 (Renderer- und Licht-Festlegungen)
+
+**Kontext:** [../tech/Rendering.md](../tech/Rendering.md)/[../tech/Lighting.md](../tech/Lighting.md) trafen begründete Festlegungen ohne D-ID.
+**Alternativen (Renderer):** (a) Forward+ (unnötig bei kleinem dynamischem Lichtbudget ~8 Punktlichter); (b) **Forward** (ausreichend, günstiger); (c) HDRP (längst verworfen, D-006).
+**Alternativen (Licht):** (a) Lightmap-Baking (D-010-Ausbreitung und D-012-Zerstörbarkeit machen statische Bakes zur Lüge); (b) Mixed-Baking (Komplexität ohne Nutzen bei ständig ändernder Topologie); (c) **Realtime-only: ein dominantes Directional Light + Light Probes + Gradient-Ambient.**
+**Entscheidung:** (b) Forward bzw. (c) Realtime-only.
+**Begründung:** Dynamische Welt (Ausbreitung, Zerstörung, Hazards) verlangt dynamisches Licht; das Lichtbudget ist bewusst klein (VfxLightPool-Cap 8), womit Forward+ keinen Mehrwert hat.
+**Konsequenzen:** Kampagnen-Nahaufnahmen (Phase 3) dürfen Forward+ erneut evaluieren.
+
+### D-041 | verbindlich | Sprint 3 (Crash-Reporting)
+
+**Kontext:** [../tech/Deployment.md](../tech/Deployment.md) lieferte die Vergleichsvorlage (D-037-Kandidat, umbenannt).
+**Alternativen:** (a) Unity Cloud Diagnostics (komfortabel, aber Vendor-Bindung, Datenschutz-Fragen); (b) **Sentry** (Symbolik, Self-hosting-Option, Datensparsamkeit); (c) kein Crash-Reporting (widerspricht TPD §15 Stabilität).
+**Entscheidung:** (b) – Sentry, Self-hosting-Option prüfend.
+**Begründung:** Passt zur Premium-Offline-Positionierung (D-007) und Datensparsamkeit; bessere Symbolik für C#-Stacks.
+**Konsequenzen:** Integration ab Alpha-Builds; Opt-out-Hinweis in Release-Checkliste.
+
+### D-042 | verbindlich | Sprint 3 (Sim-Budget- und Detailklärungen)
+
+**Kontext:** Drei Querschnitts-Klärungen aus dem TDD-Review.
+**Entscheidungen:**
+1. **Sim-Tick-Gesamtbudget ≤8 ms** (Architecture.md führend; [../tech/PerformanceBudget.md](../tech/PerformanceBudget.md) wird angeglichen). Unterbudgets: Pathfinding ≤4 ms, FoW ≤1 ms, Rest-Sim ≤3 ms. *Löst die Spannung "D-034 ≤2–4 ms PF bei nur 4 ms Gesamt-Sim" auf.* Bei 10-Hz-Tick (100 ms Fenster) ist 8 ms unkritisch; 30-FPS-Modus degradiert nur die View, nie die Sim.
+2. **Trümmer-Persistenz:** Fade-out nach 60 s mit hartem Cap (Design-Festlegung; schützt das Dreieck-Budget aus [../tech/AssetBudget.md](../tech/AssetBudget.md), C&C-typisch).
+3. **Replay-Vollaufzeichnung (FoW-Verlauf):** nicht geplant – nur mit Delta-Kodierung machbar (~2,7 GB/Match unkomprimiert); Post-Release-Kandidat.
+**Konsequenzen:** PerformanceBudget.md-Angleichung; Rendering.md/GameState.md vermerken Trümmer-Regel.
+
+---
+
 ## Offene Punkte
 
-- Q-013, Q-014, Q-015, Q-020: entschieden (D-033–D-036); formale Schließung nach TDD-Konsistenzreview.
-- Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie-Infrastruktur, Sprint 3/6) bleiben offen.
-- Vier Pflicht-Validierungen am Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86, URP GPU Resident Drawer für bewegte Einheiten, Animator vs. Playables bei 500 Einheiten, Pathfinding-CPU-Budget ≤2–4 ms.
+- Q-013, Q-014, Q-015, Q-020: entschieden (D-033–D-036); formale Schließung im Sprint-3-Abschlussbericht.
+- Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie-Infrastruktur, Sprint 6) bleiben offen.
+- Vier Pflicht-Validierungen am Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86, URP GPU Resident Drawer, Animator vs. Playables, Pathfinding-CPU-Budget ≤2–4 ms (Managed-Pfad, D-037).
+- Verbleibende TDD-Folgepunkte (keine Blocker): KI-Bedrohungskarten-Auflösung, Evolvierte-Plan-Tasks, Snapshot-Größenmessung, Fixed-Point-Bibliothekswahl (Beta), Analyzer-Enforcement (Sprint 7).
 
 ## Nächste Schritte
 
-- TDD-Dokumente auf Basis D-033–D-036 erstellen (Scope: [sprints/Sprint02_Report.md](sprints/Sprint02_Report.md) §8), danach TDD-Konsistenzreview und Sprint-3-Abschlussbericht.
+- TDD-Detailfixes (Disconnect-Angleichung GDD, Sim-Tick-Budget, Index/CHANGELOG), dann Sprint-3-Abschlussbericht und Commit/Push (Versionsbump, freigegeben).
 
 ## Änderungsverlauf
 
@@ -364,3 +417,4 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 | 1.3.1 | 2026-07-21 | D-031: Feinschliff Runde 2 (HQ-Neuaufbau, Detektoren, Alpha-Koop, Survival-Harmonisierung, Regen-Kompensation, Plattform-Modi) | Game Director |
 | 1.3.2 | 2026-07-21 | D-032: Restpunkte Feinschliff (Burrow-Detektion bestätigt, Vernichtungs-Definition harmonisiert, HQ-Grundenergie +30) | Game Director |
 | 1.4.0 | 2026-07-21 | D-033 bis D-036: Architektur-Grundentscheidungen (Sim-/MP-Modell, Pathfinding, OOP+Burst statt DOTS, Headless-SimRunner) | Lead Technical Director |
+| 1.5.0 | 2026-07-21 | D-037 bis D-042: TDD-Review-Entscheidungen (Burst/Managed-Doppelstruktur, Disconnect-Regel, Audio-Backend, Renderer/Licht, Sentry, Sim-Budget-Klärungen) | Lead Technical Director |

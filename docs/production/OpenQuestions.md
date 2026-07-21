@@ -1,6 +1,6 @@
 # Open Questions
 
-**Version:** 1.3.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Executive Producer | **Sprint:** 2
+**Version:** 1.4.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Executive Producer | **Sprint:** 3
 
 ## Zweck
 
@@ -16,12 +16,8 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 
 | ID | Prio | Frage | Herkunft | Owner-Sprint | Status |
 |---|---|---|---|---|---|
-| Q-013 | P0 | Simulations- & Multiplayer-Modell: deterministisches Lockstep, Server-autoritativer State-Sync oder Hybrid? Folgen für Determinismus, Replays, Cheating, Architektur. | TPD §9/§15 | 3 | Research geliefert ([../research/Multiplayer_Simulation.md](../research/Multiplayer_Simulation.md)); Konflikt vorverhandelt ([sprints/Sprint01_Report.md](sprints/Sprint01_Report.md) §3); Entscheidung Sprint 3 |
-| Q-014 | P0 | Pathfinding: Grid, Flow-Field, NavMesh-Hybrid oder anderes bei 100–500+ Einheiten mit Formationen und dynamischen Hindernissen? | TPD §8.3 | 3 | Research geliefert ([../research/Pathfinding.md](../research/Pathfinding.md)); Entscheidung Sprint 3, Zahlen via Phase-0-Spike |
-| Q-015 | P0 | ECS/DOTS vs. klassisches MonoBehaviour-OOP vs. Hybrid (DOTS nur für Simulation)? | Gap-Analyse §3 | 3 | Research geliefert ([../research/Unity_ECS_DOTS.md](../research/Unity_ECS_DOTS.md)); Entscheidung Sprint 3 |
 | Q-018 | P3 | Preispunkt: 29,99 / 34,99 / 39,99 €? Markt-Research deckt das nicht ab. | Sprint-2-Review | 6 | offen |
-| Q-019 | P2 | Telemetrie-Infrastruktur (Opt-in, ab Beta, für Balancing-Stufe 5): Pflicht-Feature mit eigenem Backend oder Streichung? D-007-Offline-Positionierung beachten. | Balancing.md-Review | 3/6 | offen |
-| Q-020 | P1 | Headless-KI-Runner (KI-vs-KI-Simulationen für Balancing): Aufwand ungeschätzt; Voraussetzung für Balancing-Pipeline Stufe 2. Architektur und Aufwand klären. | Balancing.md-Review | 3 | offen |
+| Q-019 | P2 | Telemetrie-Infrastruktur (Opt-in, ab Beta, für Balancing-Stufe 5): Pflicht-Feature mit eigenem Backend oder Streichung? D-007-Offline-Positionierung beachten. | Balancing.md-Review | 6 | offen (Vorhaltung: Compile-Schaltstelle in tech/Deployment.md) |
 
 ## Geschlossene Fragen
 
@@ -39,8 +35,12 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 | Q-010 | **D-017** – Biome als Themen, Karten-Roadmap 1/4/8/12, Größen S/M/L | Sprint 2 |
 | Q-011 | **D-018 + D-025** – Modi-Staffelung; Alpha-FFA lokal vs. KI, Online ab Beta | Sprint 2 |
 | Q-012 | **D-017 + D-028** – Wetter pro Biom; Mond Strahlung, Mars Staub | Sprint 2 |
+| Q-013 | **D-033 + D-037 + D-038** – determinismus-fähige Command-Simulation (5 Regeln), Lockstep über Command-Relay ab Beta; Burst/Managed-Doppelstruktur; Disconnect-Regel final | Sprint 3 |
+| Q-014 | **D-034** – Integer-Grid 1 m + Flow Fields + lokale Vermeidung (ORCA ab Alpha), Budget ≤4 ms | Sprint 3 |
+| Q-015 | **D-035** – MonoBehaviour-OOP + SO + Burst/Jobs-Hotspots, Unity-freie `Nova.Simulation`, kein Entities im MVP | Sprint 3 |
 | Q-016 | **D-007** – Premium SP/Skirmish-first, H1 C&C-Nostalgiker primär | Sprint 2 |
 | Q-017 | **D-012** – gezielte Zerstörbarkeit, keine Terrain-Deformation | Sprint 2 |
+| Q-020 | **D-036** – `Nova.SimRunner` (.NET-Konsole auf Nova.Simulation) für KI-vs-KI-CI-Läufe | Sprint 3 |
 
 ## Regeln
 
@@ -49,14 +49,13 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 
 ## Offene Punkte
 
-- Q-013–Q-015: Research-Vorlagen liegen vor; Entscheidung in Sprint 3 (Technical Design).
-- Q-020: Architektur/Aufwand des Headless-KI-Runners in Sprint 3 klären (Voraussetzung Balancing-Pipeline Stufe 2).
-- Aus Research hängen vier Pflicht-Validierungen am Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86, Nutzen des URP GPU Resident Drawer für bewegte Einheiten, Animator vs. Playables bei 500 Einheiten, Pathfinding-CPU-Budget ≤2–4 ms.
-- Terminierte Design-Folge-Entscheidungen (keine Fragen, sondern geplante Fenster): Tor-Modul (Beta), Parasiten-Königin (Beta), Flak-DPS-Korridor (Balancing-Pass v0.2), Footprints/Grid-Tile (Sprint 3), Disconnect-Regel/Host-Migration (Sprint 3), Doktrinen (Beta), Rendersequenzen (Sprint 6).
+- Nur noch Q-018 (Preispunkt, Sprint 6) und Q-019 (Telemetrie-Infrastruktur, Sprint 6) offen.
+- Aus Research hängen vier Pflicht-Validierungen am Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86, URP GPU Resident Drawer, Animator vs. Playables, Pathfinding-CPU-Budget (Managed-Pfad, D-037).
+- Terminierte Folgepunkte aus dem TDD-Review (keine Blocker): KI-Bedrohungskarten-Auflösung, Evolvierte-Plan-Tasks, Snapshot-Größenmessung, Fixed-Point-Bibliothekswahl (Beta), Analyzer-Enforcement (Sprint 7), Windows-Referenzhardware fixieren (Sprint 4).
 
 ## Nächste Schritte
 
-- Sprint 3: Q-013, Q-014, Q-015, Q-020 entscheiden (als D-033 ff.).
+- Sprint 3 abschließen (Abschlussbericht), danach Sprint 4: unabhängige Architecture-Review-Agenten mit Widerspruchs-Mandat.
 
 ## Änderungsverlauf
 
@@ -66,3 +65,4 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 | 1.1.0 | 2026-07-21 | Q-013–Q-015 Research-Status; Q-016, Q-017 neu aus Sprint 1 | Executive Producer |
 | 1.2.0 | 2026-07-21 | Q-001–Q-012, Q-016, Q-017 entschieden (D-007–D-030); Q-018–Q-020 neu aus Konsistenzreview | Executive Producer |
 | 1.3.0 | 2026-07-21 | Q-001–Q-012, Q-016, Q-017 formal geschlossen (Sprint-2-Abschluss, D-007–D-032) | Executive Producer |
+| 1.4.0 | 2026-07-21 | Q-013, Q-014, Q-015, Q-020 formal geschlossen (Sprint 3, D-033–D-038) | Executive Producer |
