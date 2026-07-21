@@ -60,6 +60,7 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 - Gameplay-Systeme: [Pathfinding.md](tech/Pathfinding.md) · [AIArchitecture.md](tech/AIArchitecture.md)
 - Präsentation: [Rendering.md](tech/Rendering.md) · [Lighting.md](tech/Lighting.md) · [AnimationSystem.md](tech/AnimationSystem.md) · [InputSystem.md](tech/InputSystem.md) · [AudioArchitecture.md](tech/AudioArchitecture.md)
 - Budgets & Betrieb: [PerformanceBudget.md](tech/PerformanceBudget.md) · [MemoryBudget.md](tech/MemoryBudget.md) · [AssetBudget.md](tech/AssetBudget.md) · [Testing.md](tech/Testing.md) · [Deployment.md](tech/Deployment.md)
+- Architecture Review (Sprint 4): [Performance](tech/review/Review_Performance.md) · [Wartbarkeit & Prozess](tech/review/Review_Wartbarkeit_Prozess.md) · [Architektur-Kohärenz](tech/review/Review_ArchitekturKohaerenz.md) · [Multiplayer & Netcode](tech/review/Review_Multiplayer_Netcode.md) · [Skalierung & Systemgrenzen](tech/review/Review_Skalierung_Systemgrenzen.md) · [GDD↔TDD-Konsistenz](tech/review/Review_GDD-TDD-Konsistenz.md)
 
 ### Production
 - [SprintPlanning.md](production/SprintPlanning.md) – Sprint-Definitionen und Status

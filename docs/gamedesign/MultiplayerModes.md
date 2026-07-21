@@ -1,6 +1,6 @@
 # Multiplayer- und Spielmodi
 
-**Version:** 0.3.2 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead UI/UX Designer | **Sprint:** 2
+**Version:** 0.4.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead UI/UX Designer | **Sprint:** 2
 
 ## Zweck
 
@@ -40,7 +40,7 @@ Alle Einstellungen sind flache Datensätze (`MatchSettings`-ScriptableObject), i
 |---|---|---|---|
 | `StartingResourcesAE` | int, 500–10.000 (Schritt 250) | **1.000 AE** | Standard-Startressourcen laut Zahlengerüst |
 | `StartingUnits` | enum: `HarvesterOnly` / `HarvesterPlusDefense` | `HarvesterOnly` | 1 Harvester (+ 1 Verteidigungsmodul-Bausatz in Variante) |
-| `AetheriumDensity` | float, 0,5–2,0 | 1,0 | Multiplikator auf Feldgrößen/-Menge (D-010) |
+| `AetheriumDensity` | float, 0,5–2,0 | 1,0 | Multiplikator auf Feldgrößen/-Menge (D-010); **Deckel ≤1,5 bei 5–6 Spielern (D-048)** – der Lobby-Dialog begrenzt den Wertebereich spielerzahlabhängig |
 | `AetheriumSpreadRate` | float, 0,5–2,0 | 1,0 | Multiplikator Feldausbreitung (D-010) |
 | `WeatherEnabled` | bool | true | Biom-Wetter bzw. Hazards (Mond/Mars) gemäß D-017 |
 | `FogOfWar` | enum: `Standard` / `Explored` / `Off` | `Standard` | Details: [../research/FogOfWar.md](../research/FogOfWar.md) |
@@ -51,6 +51,8 @@ Alle Einstellungen sind flache Datensätze (`MatchSettings`-ScriptableObject), i
 | `AIDifficulty` | enum: `Easy`/`Normal`/`Hard` | `Normal` | pro KI-Slot separat |
 
 Siegbedingung "Vernichtung": Ein Spieler/Team ist besiegt, wenn **alle Gebäude (außer Mauern) und alle Einheiten** zerstört sind (führende Regel: [./VictoryConditions.md](./VictoryConditions.md), harmonisiert gemäß D-031.4/D-032); Rest-Einheiten werden nach 60 s ohne Gebäude auf der Karte aufgedeckt (Anti-Stall, Richtwert).
+
+**Globales Einheiten-Deckel (D-048):** Pro Match sind maximal **600 Einheiten** gleichzeitig aktiv (alle Spieler, KI und ggf. Survival-Wellen summiert). Bei Erreichen des Deckels greift ein **Produktionsstopp mit UI-Hinweis** („Maximale Armeegröße erreicht") – Aufträge bleiben in der Queue, laufen aber erst wieder, wenn Einheiten ausscheiden. Das Deckel ist performance-kalibriert, gilt in **allen Modi inkl. Survival-Endlos** (§3.5) und greift nur im Extremfall; D-021 (kein Supply-Mikromanagement) bleibt unberührt.
 
 ## 3. Modus-Regeln
 
@@ -89,11 +91,11 @@ Siegbedingung "Vernichtung": Ein Spieler/Team ist besiegt, wenn **alle Gebäude 
 | Parameter | Startwert | Begründung |
 |---|---|---|
 | Wellenintervall | 90 s (Welle 1 nach 180 s) | Bauphase am Start; danach Dauerdruck |
-| Wellenstärke | Start ≈ 8 Einheiten, +~25 %/Welle (multiplikativ) | Eskalation bis Hard-Cap durch Engine-Last (500+ Einheiten) |
+| Wellenstärke | Start ≈ 8 Einheiten, +~25 %/Welle (multiplikativ) bis Welle 25; **ab Welle 25 linear statt multiplikativ (D-048)** | Eskalation gedeckelt durch das globale Einheiten-Deckel 600 (D-048) |
 | Zusammensetzung | Welle 1–4 Infanterie, ab 5 Fahrzeuge, ab 10 Luft, ab 15 Elite-Mix | Tech-Tiers 1–3 spiegeln |
 | Bauphase | 45 s nach jeder 5. Welle (kein Angriff) | Reparatur/Umbau-Fenster |
-| Standard-Ziel | Welle 20 überstehen = Sieg | Matchdauer ≈ 35–45 Min. (Survival darf länger als D-010-Anker) |
-| Endlos-Modus | optional, Highscore (lokal) | Wiederspielwert ohne Server (D-007) |
+| Standard-Ziel | Welle 20 überstehen = Sieg (unverändert, bestätigt D-048) | Matchdauer ≈ 35–45 Min. (Survival darf länger als D-010-Anker) |
+| Endlos-Modus | optional, Highscore (lokal); **Stärke-Abflachung ab Welle 25 (linear statt multiplikativ) + Despawn älterer Wellenreste; globales Deckel 600 gilt immer (D-048)** | Wiederspielwert ohne Server (D-007); Performance-Kalibrierung statt unbegrenzter Eskalation |
 
 - Niederlage: **alle eigenen Gebäude (außer Mauern) und Einheiten des Teams zerstört** – identisch zur Standard-Vernichtungsregel in [./VictoryConditions.md](./VictoryConditions.md) (D-031.4, dort führend). Zwischen Wellen spawnen Aetherium-Nachschub-Ausläufer am Kartenrand (D-010-Mechanik als Überlebens-Ressource).
 
@@ -164,6 +166,7 @@ Technische Grundlage und Begründung: [../research/Multiplayer_Simulation.md](..
 - **Disconnect-Regel (KI-Übernahme, §3.2):** entschieden (D-038) – 60-s-Grace-Period mit Reconnect-Fenster; danach KI-Übernahme (Mittel-Difficulty-Profil); Match läuft unpausiert weiter; kein Re-Entry nach Übernahme. Führend: [../tech/Networking.md](../tech/Networking.md); §3.2 entsprechend festgelegt.
 - **Ingame-Voice-Chat:** entschieden (D-029) – kein Ingame-Voice-Chat; externe Tools decken das ab.
 - **Unentschieden-/Timeout-Wertformel:** entschieden (D-029) – PvP-Timeout-Punkteschlüssel und Unentschieden-Wertformel werden erst im Beta-Balancing festgelegt, nicht in diesem Dokument.
+- **Skalierungs-Deckel (Einheiten, Survival-Endlos, AetheriumDensity):** entschieden (D-048) – globales Einheiten-Deckel 600/Match mit Produktionsstopp und UI-Hinweis (§2); Survival-Endlos mit Stärke-Abflachung ab Welle 25 (linear) und Despawn älterer Wellenreste (§3.5); `AetheriumDensity` ≤1,5 bei 5–6 Spielern (§2).
 - **Host-Migration bei Host-Wechsel (§4):** offen – technische Machbarkeit im Lockstep-Relay mit MP-Engineering in Sprint 3 (Q-013) validieren.
 
 ## Nächste Schritte
@@ -182,3 +185,4 @@ Technische Grundlage und Begründung: [../research/Multiplayer_Simulation.md](..
 | 0.3.0 | 2026-07-21 | Feinschliff Sprint 2 Runde 2 (D-031) | Lead Gameplay Designer |
 | 0.3.1 | 2026-07-21 | Vernichtungs-Definition an VictoryConditions.md harmonisiert (D-032) | Lead Gameplay Designer |
 | 0.3.2 | 2026-07-21 | Disconnect-Regel als entschieden markiert und §3.2 auf D-038 angeglichen (60-s-Grace, KI-Übernahme, kein Re-Entry; führend tech/Networking.md) | Lead Technical Director |
+| 0.4.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): D-048 eingearbeitet – globales Einheiten-Deckel 600/Match (Produktionsstopp + UI-Hinweis), Survival-Endlos-Abflachung ab Welle 25 (linear) + Despawn, AetheriumDensity ≤1,5 bei 5–6 Spielern | Lead UI/UX Designer |

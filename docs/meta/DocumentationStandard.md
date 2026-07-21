@@ -1,6 +1,6 @@
 # Dokumentationsstandard
 
-**Version:** 1.0.0 | **Status:** verbindlich | **Verantwortungsbereich:** Technical Writer | **Sprint:** 0
+**Version:** 1.1.0 | **Status:** verbindlich | **Verantwortungsbereich:** Technical Writer | **Sprint:** 0
 
 ## Zweck
 
@@ -13,6 +13,7 @@ Definiert den verbindlichen Standard für alle Dokumente im Project-Nova-Wiki. Z
 3. **Verlinkung:** Dokumente verlinken ihre Abhängigkeiten und verwandte Dokumente relativ (`../production/DecisionLog.md`), damit das Wiki navigierbar bleibt.
 4. **Sprache:** Deutsch für alle Projektdokumente. Code, Identifier und Dateipfade bleiben englisch/technisch.
 5. **Keine Platzhalter:** Es werden keine leeren Dokumente für zukünftige Sprints angelegt (verhindert veraltete Leichen). Der Index ([../README.md](../README.md)) führt geplante Bereiche als "geplant".
+6. **Single Source of Truth für Werte:** Jeder Zahlenwert (Kosten, HP, DPS, Reichweiten, Raten, Energie u. ä.) existiert **genau einmal** im Wiki – im jeweils führenden Dokument. Alle anderen Dokumente **verweisen** auf das führende Dokument, statt den Wert zu wiederholen (Grundsatzregel gemäß [../production/DecisionLog.md](../production/DecisionLog.md), D-047). Bei Konflikten gilt das führende Dokument; doppelt gepflegte Werte gelten als Review-Befund und sind zu beseitigen.
 
 ## Pflichtabschnitte jedes Dokuments
 
@@ -62,3 +63,4 @@ Jedes Dokument enthält in dieser Reihenfolge:
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 1.0.0 | 2026-07-21 | Initialer verbindlicher Standard (Sprint 0) | Technical Writer |
+| 1.1.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): Grundprinzip 6 „Single Source of Truth für Werte" ergänzt (D-047) | Technical Writer |

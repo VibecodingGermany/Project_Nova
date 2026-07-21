@@ -1,6 +1,6 @@
 # Abhängigkeitsgraph
 
-**Version:** 0.1.0 | **Status:** Entwurf | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 3
 
 ## Zweck
 
@@ -8,7 +8,7 @@ Verbindliche Festlegung der erlaubten Abhängigkeitsrichtungen zwischen Schichte
 
 ## Abhängigkeiten
 
-- [../production/DecisionLog.md](../production/DecisionLog.md) – D-033 (Sim-Regeln), D-035 (Assembly-Struktur, kein DOTS), D-036 (SimRunner)
+- [../production/DecisionLog.md](../production/DecisionLog.md) – D-033 (Sim-Regeln), D-035 (Assembly-Struktur, kein DOTS), D-036 (SimRunner), D-037 (Burst-Trennung), D-043 (kanonische Assembly-Topologie), D-045 (Managed-first)
 - [./Architecture.md](./Architecture.md), [./ModuleOverview.md](./ModuleOverview.md)
 - [../research/Unity_BestPractices.md](../research/Unity_BestPractices.md)
 
@@ -18,64 +18,71 @@ Grundsatz: Abhängigkeiten zeigen ausschließlich **nach unten** Richtung Simula
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Nova.Tools (Editor-only)                                    │
+│ Nova.Editor · Nova.BuildTools (Editor-only)                 │
 └──────────────┬──────────────────────────────────────────────┘
                │ (Editor)
-┌──────────────▼──────────────┐   ┌───────────────────────────┐
-│ Nova.UI                     │   │ Nova.Presentation         │
-│ (HUD, Minimap; UI Toolkit)  │◄──│ (Camera, Selection,       │
-└──────────────┬──────────────┘   │  UnitsView, VFX, FoW,     │
-               │                  │  Audio)                   │
-               │                  └─────────────┬─────────────┘
-               │                                │
-┌──────────────▼────────────────────────────────▼─────────────┐
-│ Nova.Game (Bridge)                                          │
+┌──────────────▼──────────────────────────────────────────────┐
+│ Nova.UI (HUD, Minimap) · Nova.Presentation (Camera, View,   │
+│ VFX, FoW, Audio) – KEINE Direktreferenz UI↔Presentation:    │
+│ Minimap-Navigation nur über UINavigationEvent (Ausnahme §1) │
+└──────────────┬──────────────────────────────────────────────┘
+               │
+┌──────────────▼──────────────────────────────────────────────┐
+│ Nova.Gameplay (Bridge)                                      │
 │ MatchSession, IMatchTransport/LocalLoopback,                │
-│ Input→Command, Event-Dispatch                               │
-└──────────────┬───────────────────────────────┬──────────────┘
-               │                               │
-┌──────────────▼──────────────┐   ┌────────────▼──────────────┐
-│ Nova.Data (SOs,             │   │ Nova.Simulation.Jobs      │
-│ GameDatabase → Snapshot)    │   │ (Burst-Fast-Paths,        │
-└──────────────┬──────────────┘   │  NativeArray-Spiegel)     │
-               │                  └────────────┬──────────────┘
-               │                               │ (nur Datentyp-Spiegel,
-               │                               │  keine Sim-Interna-Logik)
-┌──────────────▼───────────────────────────────▼──────────────┐
+│ Input→Command, SO→DefinitionSnapshot, Event-Dispatch        │
+└───┬─────────┬──────────┬───────────────┬────────────────────┘
+    │         │          │               │
+┌───▼───────┐ ┌▼─────────┐ ┌▼────────────▼──────┐ ┌▼───────────┐
+│ Nova.Data │ │Nova.AI.  │ │Nova.Simulation.    │ │ Nova.AI    │
+│ (SOs,     │ │Data (SOs,│ │Burst (Burst-       │ │ (Unity-frei│
+│ Sub-Regis-│ │Difficulty│ │Varianten, Feature- │ │ Director/  │
+│ tries)    │ │Profile)  │ │Flag, D-045)        │ │ HTN/BT)    │
+└───┬───────┘ └┬─────────┘ └┬───────────────────┘ └┬───────────┘
+    │          │            │                      │
+┌───▼──────────▼────────────▼──────────────────────▼───────────┐
 │ Nova.Simulation (Unity-frei, reines .NET)                   │
-│ Core, Commands, Grid, Pathfinding, FoW, Economy, Combat,    │
-│ Production, Research, AI, NeutralUnits, Superweapons,       │
+│ Core-Loop, Commands, Grid, Pathfinding, FoW, Economy,       │
+│ Combat, Production, Research, NeutralUnits, Superweapons,   │
 │ Match/Session, Replay, Savegame                             │
-└──────────────────────────────▲──────────────────────────────┘
-                               │
-                  ┌────────────┴────────────┐
-                  │ Nova.SimRunner          │
-                  │ (reine .NET-Konsole,    │
-                  │  CI-Balancing, D-036)   │
-                  └─────────────────────────┘
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+┌──────────────────────────▼──────────────────────────────────┐
+│ Nova.Core (Unity-frei): Basistypen (EntityId, Tick),        │
+│ Logging, Puffer – von allen Assemblies referenziert         │
+└──────────────────────────▲──────────────────────────────────┘
+                           │
+              ┌────────────┴────────────┐
+              │ Nova.SimRunner          │
+              │ (reine .NET-Konsole:    │
+              │  Core + Simulation + AI │
+              │  CI-Balancing, D-036)   │
+              └─────────────────────────┘
 ```
 
-Erlaubt (zusammengefasst):
+Erlaubt (zusammengefasst; verbindliche Referenzmatrix in [./FolderStructure.md](./FolderStructure.md) §3):
 
-- `Nova.Game → Nova.Simulation`, `Nova.Game → Nova.Data`, `Nova.Game → Nova.Simulation.Jobs`
-- `Nova.Data → Nova.Simulation` (nur Definitions-Datentypen für den `DefinitionSnapshot`)
-- `Nova.Simulation.Jobs → Nova.Simulation` (nur öffentliche State-Datentypen; Spiegelung in NativeArrays)
-- `Nova.Presentation → Nova.Game` (öffentliche Bridge-Verträge: Events, Snapshots, `ICommandSink`), `Nova.Presentation → Nova.Data`
-- `Nova.UI → Nova.Game`, `Nova.UI → Nova.Data`, `Nova.UI → Nova.Presentation` (nur Camera/FoW-Textur)
-- `Nova.Tools → Nova.Data` (+ UnityEditor), `Nova.SimRunner → Nova.Simulation`
-- Sim-Module untereinander entlang der in [./ModuleOverview.md](./ModuleOverview.md) gelisteten Abhängigkeiten (z. B. Combat → FogOfWar, Economy → Grid); Richtung: fachlich höhere Module → Basis-Module, niemals zyklisch.
+- `Nova.Simulation → Nova.Core` (sonst nichts); `Nova.Simulation.Burst → Nova.Core, Nova.Simulation` (nur öffentliche State-Datentypen; Spiegelung in NativeArrays)
+- `Nova.AI → Nova.Core, Nova.Simulation` (nur die Client-Verträge `IAiWorldView`/`ICommandSink` und Snapshot-Typen, [./AIArchitecture.md](./AIArchitecture.md))
+- `Nova.Data → Nova.Core`; `Nova.AI.Data → Nova.Core` – SOs kennen die Simulation nicht; die Überführung in Unity-freie `DefinitionSnapshot`-/KI-Records ist Aufgabe von `Nova.Gameplay`
+- `Nova.Gameplay → Nova.Core, Nova.Simulation, Nova.Simulation.Burst, Nova.Data, Nova.AI, Nova.AI.Data` (öffentliche Verträge: Events, Snapshots, `ICommandSink`)
+- `Nova.Presentation → Nova.Core, Nova.Gameplay`; `Nova.UI → Nova.Core, Nova.Gameplay`
+- **Dokumentierte Ausnahme UI↔Presentation (Minimap-Klick→Kamera):** Es gibt **keine direkte Assembly-Referenz** zwischen `Nova.UI` und `Nova.Presentation`. Die Minimap-Navigation läuft über den Vertragstyp `UINavigationEvent` (in `Nova.Core`, damit für beide Seiten referenzierbar): Die Minimap publiziert Navigations-Intents (Klick → Weltposition), die Kamera in `Nova.Presentation` abonniert sie; umgekehrt publiziert die Kamera ihren Viewport-State für die Minimap-Viewport-Anzeige über denselben Kanal. Die Verdrahtung (Kanal-Instanz, Übergabe der Minimap-FoW-Textur) erfolgt durch `Nova.Gameplay` als Composition Root beim Match-Setup.
+- `Nova.Editor → Nova.Core, Nova.Data, Nova.Gameplay` (+ UnityEditor); `Nova.BuildTools → Nova.Core, Nova.Data, Nova.Gameplay` (+ UnityEditor)
+- `Nova.SimRunner → Nova.Core, Nova.Simulation, Nova.AI` (Quelltext-Sharing per csproj-Compile-Include, [./FolderStructure.md](./FolderStructure.md) §6)
+- Sim-Module untereinander entlang der in [./ModuleOverview.md](./ModuleOverview.md) gelisteten Abhängigkeiten (z. B. Combat → FogOfWar, Economy → Grid); Richtung: fachlich höhere Module → Basis-Module, niemals zyklisch. Production ↔ Research ist entkoppelt (siehe Verbotsliste Nr. 7).
 
 ## 2. Verbotsliste
 
 Verboten (Verstoß = Review-Blocker):
 
-1. **`Nova.Simulation → UnityEngine` / UnityEditor / URP** (D-033 Regel 2, D-035). Kein `using UnityEngine;`, kein `UnityEngine.Random`, kein `Time.*`, kein `Physics.*` im Sim-Pfad. Durchgesetzt über fehlende Assembly-Referenzen (technisch unmöglich, nicht nur Konvention).
-2. **`Nova.Simulation → Nova.Game/Data/Presentation/UI`** – die Simulation kennt keine höheren Schichten; Rückmeldung ausschließlich über View-Events/Snapshots.
-3. **`Nova.Presentation`/`Nova.UI → Nova.Simulation` direkt** – Zugriff nur über die Bridge-Verträge in `Nova.Game`; keine Sim-Interna (keine `internal`-Umgehung via `InternalsVisibleTo`, außer für Test-Assemblies).
+1. **`Nova.Core`/`Nova.Simulation`/`Nova.AI` → UnityEngine** / UnityEditor / URP (D-033 Regel 2, D-035, D-043). Kein `using UnityEngine;`, kein `UnityEngine.Random`, kein `Time.*`, kein `Physics.*` in diesen Pfaden. Durchgesetzt über `noEngineReferences = true` und fehlende Assembly-Referenzen (technisch unmöglich, nicht nur Konvention; FolderStructure.md §3).
+2. **`Nova.Simulation`/`Nova.AI` → Nova.Gameplay/Data/AI.Data/Presentation/UI** – Simulation und KI kennen keine höheren Schichten; Rückmeldung ausschließlich über View-Events/Snapshots bzw. die Client-Verträge.
+3. **`Nova.Presentation`/`Nova.UI → Nova.Simulation` direkt** – Zugriff nur über die Bridge-Verträge in `Nova.Gameplay`; keine Sim-Interna (keine `internal`-Umgehung via `InternalsVisibleTo`, außer für Test-Assemblies). Ebenso verboten: **direkte Referenz `Nova.UI ↔ Nova.Presentation`** – einzige erlaubte Interaktion ist der `UINavigationEvent`-Kanal (§1).
 4. **Direkte State-Mutation von außen** – niemand außer Commands/Modul-Ticks schreibt Sim-State (D-033 Regel 1); Bridge/View erhalten Nur-Lese-Snapshots.
 5. **Runtime-State in ScriptableObjects** – SOs sind Definitions-only; Laufzeitdaten gehören in den Sim-State (D-033 Regel 5; Vier-Säulen-Regel).
-6. **`Nova.SimRunner → Unity-*`** – der Runner referenziert ausschließlich `Nova.Simulation` (D-036); Unity-Paket-Referenzen würden die reine .NET-Lauffähigkeit brechen (siehe Offene Punkte in [./Architecture.md](./Architecture.md) zum Burst-Thema).
-7. **Zyklen zwischen Sim-Modulen** (z. B. Economy ↔ Production) – Kommunikation über Core-Mediatoren (Command/Event im selben Tick-Raster), nicht über gegenseitige Referenzen.
+6. **`Nova.SimRunner → Unity-*`** – der Runner referenziert ausschließlich `Nova.Core`, `Nova.Simulation` und `Nova.AI` (D-036, D-043); Unity-Paket-Referenzen würden die reine .NET-Lauffähigkeit brechen. Runner und Golden-Master-Tests fahren grundsätzlich den Managed-Pfad (D-045).
+7. **Zyklen zwischen Sim-Modulen** – Kommunikation über Core-Mediatoren (Command/Event im selben Tick-Raster), nicht über gegenseitige Referenzen. Der früher dokumentierte Graubereich **Production ↔ Research** ist aufgelöst (Review F-3): Research schreibt den `TechState` alleinig und publiziert `TechUnlockedEvent`; Production greift ausschließlich lesend auf `TechState.UnlockedDefs` zu – eine gegenseitige Modul-Referenz existiert nicht.
 8. **Kein Unity Entities/DOTS-Package** in irgendeiner Assembly (D-035; Re-Evaluierung nach Unity 6.4).
 
 ## 3. Assembly-Definition-Abbildung
@@ -84,16 +91,20 @@ Physische Umsetzung im Unity-Projekt (`Assets/`). Test-Assemblies (`*.Tests`, Ed
 
 | .asmdef | Referenzen (asmdef) | Unity-Referenzen | Plattform | Bemerkung |
 |---|---|---|---|---|
-| `Nova.Simulation` | – | **keine** | alle (auch Standalone-.NET) | `allowUnsafeCode` nur falls nötig; Kern aller Regeln |
-| `Nova.Simulation.Jobs` | `Nova.Simulation` | Unity.Collections, Unity.Burst, Unity.Jobs (Packages) | alle | **kein UnityEngine-API-Aufruf**, nur Packages für Burst/Jobs |
-| `Nova.Data` | `Nova.Simulation` | UnityEngine (ScriptableObject) | alle | Definitions-only-SOs, `GameDatabase` |
-| `Nova.Game` | `Nova.Simulation`, `Nova.Data`, `Nova.Simulation.Jobs` | UnityEngine | alle | Bridge/Session/Transport |
-| `Nova.Presentation` | `Nova.Game`, `Nova.Data` | UnityEngine, URP, RenderGraph | alle | volle Unity-Nutzung erlaubt (D-035) |
-| `Nova.UI` | `Nova.Game`, `Nova.Data`, `Nova.Presentation` | UnityEngine, UI Toolkit (uGUI nur World-Space) | alle | |
-| `Nova.Tools` | `Nova.Data` | UnityEngine, UnityEditor | **Editor only** | kein Runtime-Code |
-| `Nova.Simulation.Tests` | `Nova.Simulation` | – | Editor (EditMode) + .NET-Testprojekt | Paritäts-/Determinismus-Tests |
-| `Nova.Game.Tests` / `Nova.Presentation.Tests` | jeweilige Ziel-Assemblies | UnityEngine Test Framework | Editor | |
-| `Nova.SimRunner` (eigenes .NET-Projekt, außerhalb von `Assets/`) | `Nova.Simulation` (Projekt-/DLL-Referenz) | **keine** | Standalone .NET | CI-Balancing (D-036) |
+| `Nova.Core` | – | **keine** (`noEngineReferences`) | alle (auch Standalone-.NET) | Basistypen (`EntityId`, `Tick`), Logging, Puffer |
+| `Nova.Simulation` | `Nova.Core` | **keine** (`noEngineReferences`) | alle (auch Standalone-.NET) | Kern aller Regeln (D-033/D-035) |
+| `Nova.Simulation.Burst` | `Nova.Core`, `Nova.Simulation` | Unity.Collections, Unity.Burst, Unity.Jobs, Unity.Mathematics (Packages) | alle | **kein UnityEngine-API-Aufruf**; Managed-first: Auslieferung Managed, Burst nur hinter Feature-Flag mit Toleranz-Parität ≤1e-4 (D-037/D-045) |
+| `Nova.AI` | `Nova.Core`, `Nova.Simulation` | **keine** (`noEngineReferences`) | alle (auch Standalone-.NET) | KI-Entscheidungslogik, SimRunner-tauglich ([./AIArchitecture.md](./AIArchitecture.md)) |
+| `Nova.AI.Data` | `Nova.Core` | UnityEngine (ScriptableObject) | alle | Difficulty-/Plan-/Squad-SOs → Unity-freie Records |
+| `Nova.Data` | `Nova.Core` | UnityEngine (ScriptableObject) | alle | Definitions-only-SOs, Sub-Registries + Master-Index (D-049) |
+| `Nova.Gameplay` | `Nova.Core`, `Nova.Simulation`, `Nova.Simulation.Burst`, `Nova.Data`, `Nova.AI`, `Nova.AI.Data` | UnityEngine | alle | Bridge/Session/Transport, SO→`DefinitionSnapshot` |
+| `Nova.Presentation` | `Nova.Core`, `Nova.Gameplay` | UnityEngine, URP, RenderGraph | alle | volle Unity-Nutzung erlaubt (D-035) |
+| `Nova.UI` | `Nova.Core`, `Nova.Gameplay` | UnityEngine, UI Toolkit (uGUI nur World-Space) | alle | Minimap-Navigation via `UINavigationEvent` (Ausnahme §1) |
+| `Nova.Editor` | `Nova.Core`, `Nova.Data`, `Nova.Gameplay` | UnityEngine, UnityEditor | **Editor only** | kein Runtime-Code |
+| `Nova.BuildTools` | `Nova.Core`, `Nova.Data`, `Nova.Gameplay` | UnityEngine, UnityEditor | **Editor only** | Build-Pipeline-/CI-Werkzeuge (D-043) |
+| `Nova.Simulation.Tests` / `Nova.AI.Tests` | jeweilige Ziel-Assemblies | – | Editor (EditMode) + .NET-Testprojekt | Paritäts-/Determinismus-Tests |
+| `Nova.Gameplay.Tests` / `Nova.Presentation.Tests` | jeweilige Ziel-Assemblies | UnityEngine Test Framework | Editor | |
+| `Nova.SimRunner` (eigenes .NET-Projekt unter `tools/`, außerhalb von `Assets/`) | `Nova.Core`, `Nova.Simulation`, `Nova.AI` (csproj-Compile-Include derselben Quellen, FolderStructure.md §6) | **keine** | Standalone .NET | CI-Balancing (D-036) |
 
 Durchsetzung: Die Trennung wird primär über fehlende Referenzen erzwungen (Regeln 1, 3, 6 sind so technisch unmöglich). Zusätzlich werden in `Testing.md` (Sprint 7) statische Architektur-Checks definiert (Namespace-/Referenz-Scan in CI: kein `UnityEngine`-Using in `Nova.Simulation`-Quellen, keine Direktreferenz Presentation→Simulation).
 

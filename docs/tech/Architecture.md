@@ -1,6 +1,6 @@
 # Gesamtarchitektur
 
-**Version:** 0.1.0 | **Status:** Entwurf | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Technical Director | **Sprint:** 3
 
 ## Zweck
 
@@ -8,7 +8,7 @@ Verbindliche Gesamtarchitektur für Project Nova: Schichtenmodell, Command-Pipel
 
 ## Abhängigkeiten
 
-- [../production/DecisionLog.md](../production/DecisionLog.md) – insb. D-006 (Unity 6.3 LTS + URP), D-033 (Sim-/MP-Modell), D-034 (Pathfinding), D-035 (OOP+SO+Burst, kein DOTS), D-036 (SimRunner)
+- [../production/DecisionLog.md](../production/DecisionLog.md) – insb. D-006 (Unity 6.3 LTS + URP), D-033 (Sim-/MP-Modell), D-034 (Pathfinding), D-035 (OOP+SO+Burst, kein DOTS), D-036 (SimRunner), D-037 (Burst-Trennung), D-039 (Sim-Budgets), D-043 (kanonische Assembly-Topologie), D-044 (Tick-Ausführungsmodell), D-045 (Managed-first), D-046 (MP-Trust-Anchor), D-051 (Quantum-Fallback gestrichen)
 - [../research/Multiplayer_Simulation.md](../research/Multiplayer_Simulation.md)
 - [../research/Unity_ECS_DOTS.md](../research/Unity_ECS_DOTS.md)
 - [../research/Unity_BestPractices.md](../research/Unity_BestPractices.md)
@@ -30,24 +30,30 @@ Float-Arithmetik ist im MVP erlaubt; die Umstellung auf Fixed-Point ist fester B
 
 ## 2. Schichtenmodell
 
+Kanonische Assembly-Topologie gemäß D-043 (FolderStructure-Lager führend, ergänzt um `Nova.AI`/`Nova.AI.Data`):
+
 | Schicht | Assembly | Unity-Bezug | Inhalt |
 |---|---|---|---|
-| Simulation | `Nova.Simulation` | **keine** (reines .NET) | Spielregeln, State, Commands, Grid, Pathfinding, FoW, Economy, Combat, Production, Research, AI, Replay, Savegame |
-| Sim-Beschleunigung | `Nova.Simulation.Jobs` | Unity.Collections/Burst/Jobs, **kein UnityEngine** | Burst-kompilierte Hotspots (Flow Fields, FoW-Scan, Separation) auf NativeArray-Spiegeln des Sim-State (D-035) |
-| Bridge | `Nova.Game` | UnityEngine | Session-/Match-Orchestrierung, `GameDatabase`-Bindung, Input→Command, lokaler Server (Loopback-Transport), Event-Dispatch an View |
-| Daten | `Nova.Data` | UnityEngine (ScriptableObjects) | Definitions-only-SOs, `GameDatabase`-Registry, Validierung, Erzeugung des `DefinitionSnapshot` |
+| Basis | `Nova.Core` | **keine** (`noEngineReferences`) | Basistypen (`EntityId`, `Tick`), Logging, Result-Typen, Pools/Puffer – von allen Assemblies referenziert |
+| Simulation | `Nova.Simulation` | **keine** (`noEngineReferences`, reines .NET) | Spielregeln, State, Commands, Grid, Pathfinding, FoW, Economy, Combat, Production, Research, NeutralUnits, Superweapons, Match/Session, Replay, Savegame |
+| Sim-Beschleunigung | `Nova.Simulation.Burst` | Unity.Collections/Burst/Jobs, **kein UnityEngine** | Burst-Varianten der Hotspots (Flow Fields, FoW-Scan, Separation) hinter identischen Interfaces auf NativeArray-Spiegeln (D-037). **Managed-first (D-045):** Auslieferungspfad ist Managed; Burst nur hinter Feature-Flag mit Toleranz-Parität |
+| KI | `Nova.AI` | **keine** (reines .NET) | KI-Entscheidungslogik (Utility-Director, HTN-light, Squad-BT) als Client der Simulation über `IAiWorldView`/`ICommandSink`; SimRunner-tauglich ([./AIArchitecture.md](./AIArchitecture.md)) |
+| KI-Daten | `Nova.AI.Data` | UnityEngine (ScriptableObjects) | `DifficultyProfileSO`/`StrategyOptionSO`/`TaskPlanSO`/`SquadBehaviorSO`; Übersetzung in Unity-freie Records beim Match-Start |
+| Daten | `Nova.Data` | UnityEngine (ScriptableObjects) | Definitions-only-SOs, `GameDatabase` als Sub-Registries pro Kategorie + generierter Master-Index (D-049), Validierung |
+| Bridge | `Nova.Gameplay` | UnityEngine | Session-/Match-Orchestrierung, SO→`DefinitionSnapshot`-Überführung, Input→Command, lokaler Server (Loopback-Transport), Event-Dispatch an View |
 | Präsentation | `Nova.Presentation` | UnityEngine + URP | Kamera, Selektion, Units-/Buildings-View, Interpolation, VFX, FoW-Rendering (Full Screen Pass), Healthbars, Audio-Service |
-| UI | `Nova.UI` | UnityEngine (UI Toolkit) | HUD, Menüs, Minimap; uGUI nur World-Space |
-| Tools | `Nova.Tools` | Unity Editor only | Karten-/Daten-Validierung, Bake-Tools |
-| Headless | `Nova.SimRunner` | **keine** (reines .NET) | Konsolen-Runner auf `Nova.Simulation` für CI-Balancing-Läufe (D-036) |
+| UI | `Nova.UI` | UnityEngine (UI Toolkit) | HUD, Menüs, Minimap; uGUI nur World-Space; Minimap-Navigation über `UINavigationEvent` (dokumentierte Ausnahme, [./DependencyGraph.md](./DependencyGraph.md) §1) |
+| Editor | `Nova.Editor` | Unity Editor only | Karten-/Daten-Validierung, Custom Inspectors, Bake-Tools |
+| Build | `Nova.BuildTools` | Unity Editor only | Build-Pipeline-/CI-Werkzeuge (BuildPipeline-API, Skripte unter `ci/`) |
+| Headless | `Nova.SimRunner` | **keine** (reines .NET, außerhalb von `Assets/` unter `tools/`) | Konsolen-Runner auf `Nova.Core` + `Nova.Simulation` + `Nova.AI` für CI-Balancing-Läufe (D-036) |
 
-Regeln: Abhängigkeiten zeigen nur nach unten in dieser Tabelle (Details und Verbotsliste: [./DependencyGraph.md](./DependencyGraph.md)). `Nova.Simulation` kennt keine der anderen Schichten. Die Präsentation darf Unity-APIs voll nutzen (D-035), aber niemals Sim-Interna.
+Regeln: Abhängigkeiten zeigen nur nach unten in dieser Tabelle (Details und Verbotsliste: [./DependencyGraph.md](./DependencyGraph.md); Referenzmatrix verbindlich in [./FolderStructure.md](./FolderStructure.md) §3). `Nova.Simulation` kennt keine der anderen Schichten. Die Präsentation darf Unity-APIs voll nutzen (D-035), aber niemals Sim-Interna.
 
 ## 3. Command-Pipeline
 
 Fluss: **Eingabe → Command → Tick-Ausführung → State-Mutation → View-Events → Präsentation.**
 
-1. **Eingabe (Bridge):** UI/Selektion/Hotkeys erzeugen Intent-Aufrufe auf `ICommandSink`. Auch die KI (Sim-intern) und später Netzwerk-Peers speisen ausschließlich über Commands ein.
+1. **Eingabe (Bridge):** UI/Selektion/Hotkeys erzeugen Intent-Aufrufe auf `ICommandSink`. Auch die KI (Unity-freie Assembly `Nova.AI`, Client der Sim) und später Netzwerk-Peers speisen ausschließlich über Commands ein.
 2. **Pufferung:** Commands werden dem nächsten Tick zugeordnet (`TargetTick = CurrentTick + InputDelay`, MVP: 2 Ticks = 200 ms, Lockstep-kompatibel). Pro Tick entsteht ein deterministisch sortierter `CommandBatch` (Sortierschlüssel: `PlayerId`, dann `Sequence`).
 3. **Tick-Ausführung:** Der `SimulationKernel` führt pro Tick nacheinander aus: Command-Anwendung → Modul-Ticks in fester Reihenfolge (Economy → Production → Research → Combat → Movement/Pathfinding → FoW → AI-Strategie → Match/Victory) → View-Event-Sammlung.
 4. **State-Mutation:** Nur Commands und die daraus folgenden Modul-Ticks ändern State (Regel 1/2). Der PRNG wird ausschließlich aus dem Sim-Pfad bedient, pro Tick deterministisch weitergeschaltet.
@@ -109,7 +115,7 @@ namespace Nova.Simulation.Events
 Die Bridge kapselt den Transport hinter `IMatchTransport`. Im MVP existiert genau eine Implementierung: `LocalLoopbackTransport`, die Command-Batches verzögert (Input-Delay) an den eigenen Kernel zurückliefert. Session-Aufbau, Slot-Verwaltung (Mensch + KI), Start-Seed und Match-Konfiguration laufen über `MatchSession` in der Bridge – identisch zum späteren Online-Pfad.
 
 ```csharp
-namespace Nova.Game.Session
+namespace Nova.Gameplay.Session
 {
     public interface IMatchTransport
     {
@@ -118,7 +124,7 @@ namespace Nova.Game.Session
     }
 
     public sealed class LocalLoopbackTransport : IMatchTransport { /* MVP: lokaler Server */ }
-    // Beta: LockstepRelayTransport (Eigenbau-UDP primär, Photon Quantum 3 Fallback) – D-033
+    // Beta: LockstepRelayTransport (Eigenbau-UDP; Fallback = reduzierter MP-Scope, D-051) – D-033
 
     public sealed class MatchSession
     {
@@ -132,7 +138,7 @@ Konsequenz: Es gibt keinen separaten "Singleplayer-Code". Alle Modi (Skirmish vs
 
 ## 5. Erweiterungspfad: deterministisches Lockstep-Relay ab Beta (D-033)
 
-Zielarchitektur ab Beta: deterministisches Lockstep über einem **autoritativen Command-Relay-Server** (Eigenbau-UDP primär, Photon Quantum 3 dokumentierter Fallback). Der Relay validiert und sortiert Command-Batches pro Tick, verteilt sie an alle Clients und entscheidet das Match-Ergebnis. Clients simulieren identisch.
+Zielarchitektur ab Beta: deterministisches Lockstep über einem **autoritativen Command-Relay-Server** (Eigenbau-UDP; der früher erwähnte Photon-Quantum-3-Fallback ist gestrichen – Ersatz-Fallback bei Scheitern des Eigenbau-Relay ist ein reduzierter MP-Scope, D-051). Der Relay validiert und sortiert Command-Batches pro Tick und verteilt sie an alle Clients; das Match-Ergebnis validiert der Server per Post-Match-Re-Simulation des Command-Logs (SimRunner-basiert, on-demand, D-046). Clients simulieren identisch.
 
 Vorbereitung in der MVP-Architektur (keine Beta-Funktionalität, aber keine Sackgassen):
 

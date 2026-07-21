@@ -1,6 +1,6 @@
 # Testing-Strategie
 
-**Version:** 0.1.0 | **Status:** Entwurf | **Verantwortungsbereich:** Lead QA Engineer | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead QA Engineer | **Sprint:** 3
 
 ## Zweck
 
@@ -8,7 +8,7 @@ Definiert die Test-Strategie von Project Nova: Test-Pyramide, Determinismus- und
 
 ## Abhängigkeiten
 
-- [../production/DecisionLog.md](../production/DecisionLog.md) – D-006 (Unity 6.3 LTS), D-033 (Sim-/MP-Modell, 5 Regeln), D-034 (Pathfinding), D-035 (OOP + Burst, `Nova.Simulation`), D-036 (`Nova.SimRunner`)
+- [../production/DecisionLog.md](../production/DecisionLog.md) – D-006 (Unity 6.3 LTS), D-033 (Sim-/MP-Modell, 5 Regeln), D-034 (Pathfinding), D-035 (OOP + Burst, `Nova.Simulation`), D-036 (`Nova.SimRunner`), D-044 (Pflicht-Gate V5: Combat-/KI-Kostenmodell), D-045 (Managed als einziger Auslieferungs-/CI-Messpfad bis Fixed-Point-Beta), D-049 (CI-Realismus: Nightly-Umfang, Sharding, xxHash64, ≤60 s/Match), D-050 (Branching: main + Feature-Branches bis Sprint 6, develop ab Sprint 7)
 - [../research/Multiplayer_Simulation.md](../research/Multiplayer_Simulation.md) – Lockstep-/Desync-Grundlagen
 - [../research/KI_Architektur.md](../research/KI_Architektur.md) – KI-Schichten, DifficultyProfileSO
 - [../gamedesign/Balancing.md](../gamedesign/Balancing.md) – Messpipeline Stufe 1/2 (Metriken, Kadenz, Wertesets)
@@ -37,7 +37,7 @@ Begründung der Verteilung: Der fachliche Kern liegt in `Nova.Simulation` (D-035
 
 - Vollständige Matches headless über denselben Host wie der `Nova.SimRunner` (D-036): zwei KI-Instanzen (Mittel-Schwierigkeit, unverrauscht – Balancing.md), fester Seed, beschleunigter Tick.
 - Prüfen fachliche Invarianten über ganze Matches: kein negatives AE-Konto, Elite-Limits (D-015), Superwaffen-Limit (D-023), Vernichtungs-Regel (D-031.4/D-032.2), Match-Terminierung spätestens bei Zeitlimit.
-- Ziel-Laufzeit pro Match-Test < 10 s (Sim ohne Rendering), damit die Suite PR-tauglich bleibt.
+- Ziel-Laufzeit pro Match-Test **≤ 60 s (Managed-Pfad, D-049)** – Sim ohne Rendering. Die frühere Vorgabe „< 10 s" war rechnerisch nicht einlösbar; 60 s/Match hält die Suite bei Sharding PR-tauglich.
 
 ### Ebene 3: Golden-Master-Replay-Tests (Determinismus-Wächter)
 
@@ -69,6 +69,8 @@ namespace Nova.Simulation.Testing
 ```
 
 - Fixture-Pflege: Bei jeder bewussten Sim-Änderung (Balancing-Werteset, Regel-Fix) werden Fixtures neu aufgezeichnet und der Hash-Stand im selben PR committed; unbeabsichtigte Hash-Abweichung = Test-Rot = Regressions-Befund.
+- **Hash-Breite (D-049):** Verbindlich **xxHash64 überall** – Golden-Master-Hashes, Desync-Probe, Savegame-Verifikation. (64 bit halbieren die Kollisionswahrscheinlichkeit bei langen Replay-Serien; frühere xxHash32-Annahmen sind damit hinfällig.)
+- **Messpfad = Auslieferungspfad (D-045):** Golden-Master-Hashes und alle Sim-CI-Messungen laufen auf dem **Managed-Pfad**, der bis zur Fixed-Point-Beta der einzige Auslieferungspfad ist. Burst-Vergleichsläufe sind nur diagnostisch (Feature-Flag); **Toleranz-Parität:** relative Abweichung ≤ 1e-4 im Hash-Vergleich löst Alarm aus, blockiert aber nicht.
 - Fixture-Matrix: mindestens 1× Ökonomie, 1× Kampf mit Konter, 1× FoW/Detektion, 1× Aetherium-Ausbreitung/Überernte, 1× volles Match bis Sieg; je Kartengröße S/M/L (128/192/256) mindestens eine Fixture.
 - **Bekannte Einschränkung MVP:** Mit Float-Arithmetik (D-033: Float im MVP erlaubt) sind Hashes nur auf derselben Plattform/Compiler-Konfiguration stabil. Cross-Plattform-Hash-Vergleich (ARM macOS ↔ x86 Windows) wird erst mit der Fixed-Point-Umstellung (Beta) Pflicht – bis dahin dokumentiert der Test seine Plattform.
 
@@ -80,13 +82,14 @@ namespace Nova.Simulation.Testing
 ### Ebene 5: Performance-Regressionstests
 
 - Sim-Benchmarks headless: Tick-Dauer bei 500 Einheiten (Ziel: 60 FPS-Budget, Sim-Tick 10 Hz), Pathfinding-Budget ≤ 2–4 ms (D-034), FoW-Sicht-Tick (5–10 Hz) – jeweils mit Warn-/Fail-Schwellen gegen Baseline.
+- **V5-Pflicht-Gate (Phase-0-Spike, D-044): Combat-/KI-Kostenmodell** – die Messung belegt das Rest-Sim-Unterbudget ≤ 3 ms ([./PerformanceBudget.md](./PerformanceBudget.md) §2, bis V5 unbelegt) mit: Targeting über **Spatial-Hash** (Pflichtbestand des Kampfmoduls, kein O(n²)-Scan über alle Einheiten), **FoW-Filter** bei der Zielsuche und **KI-Command-Verarbeitung** (Utility-Director + HTN + Squad-BTs). Ohne bestandenes V5 **kein Sprint-7-Start des Kampfmoduls**. Gemessen wird auf dem Managed-Pfad (D-045); ein P95 > 6 ms des Sim-Ticks ist gleichzeitig der Trigger für den Worker-Tick-Wechsel ab Alpha (D-044).
 - Rendering-Budgets (GPU, Batches) laufen auf dem self-hosted Runner als Nightly-Mess-Szene; Schwellen als Trend-Warnung, nicht als harter PR-Blocker (GPU-Messungen sind umgebungsabhängig).
 
 ## KI-vs-KI-Nachtläufe (Balancing-Pipeline Stufe 2)
 
 Der `Nova.SimRunner` (D-036) ist Pflicht-Träger der Balancing-Messpipeline Stufe 2 ([../gamedesign/Balancing.md](../gamedesign/Balancing.md)): seeded, command-basiert, ohne Renderer.
 
-- **Kadenz/Umfang:** Nightly in CI, ≥ 200 Matches je Matchup-Cluster (Balancing.md), Schwierigkeit Mittel, gespiegelte Startpositionen zur Halbierung des Map-Bias.
+- **Kadenz/Umfang (D-049):** Nightly in CI: **6 Matchup-Cluster × 20 Matches**, parallelisiert auf **8 Shards** (seriell wären die früher geplanten ≥ 200 Matches/Cluster pro Nacht rechnerisch unmöglich); **200-Match-Vollläufe je Cluster wöchentlich**. Schwierigkeit Mittel, gespiegelte Startpositionen zur Halbierung des Map-Bias. Zielvorgabe **≤ 60 s/Match (Managed-Pfad, D-045/D-049)**.
 - **Auswertung:** Der Runner aggregiert je Lauf die `MatchResult`-Struktur ([../gamedesign/VictoryConditions.md](../gamedesign/VictoryConditions.md)) plus Stufe-2-Metriken: Winrate je Matchup (Zielband 45–55 %), Matchdauer-Median (Korridor 20–35 min, D-010), Zeit bis erster Angriff, Strategiearchetyp-Verteilung, First-Expansion-Zeit.
 
 ```csharp
@@ -102,7 +105,7 @@ namespace Nova.SimRunner
 }
 ```
 
-- Reports werden als CI-Artefakt abgelegt und im Balance-Changelog (`BAL-xxx`, Balancing.md) als Datenquelle referenziert. Wertänderungen > ±10–15 % erfordern Simulations-Begründung aus ≥ 200 Matches (Balancing.md) – der Nachtlauf liefert genau diese Evidenz.
+- Reports werden als CI-Artefakt abgelegt und im Balance-Changelog (`BAL-xxx`, Balancing.md) als Datenquelle referenziert. Wertänderungen > ±10–15 % erfordern Simulations-Begründung aus ≥ 200 Matches (Balancing.md) – die **wöchentlichen 200-Match-Vollläufe** (D-049) liefern genau diese Evidenz.
 - Jede Fixture/Report-Versionierung folgt dem Werteset: Ein Report ist nur zusammen mit seiner `balance-v0.x`-Version interpretierbar.
 
 ## Desync-Test-Strategie (ab Beta, D-033-Zielarchitektur)
@@ -121,7 +124,7 @@ namespace Nova.SimRunner
 | View/Präsentation, UI | kein Coverage-Ziel; Smoke-Tests (Ebene 4) | – |
 | Third-Party/Asset-Store-Code | ausgenommen | – |
 
-Coverage ist PR-Gate nur für `Nova.Simulation`; Verschlechterung > 2 Prozentpunkte gegen `develop` ist reviewpflichtig.
+Coverage ist PR-Gate nur für `Nova.Simulation`; Verschlechterung > 2 Prozentpunkte gegen `main` ist reviewpflichtig (Baseline `develop` erst ab Sprint 7, D-050).
 
 ## Testdaten (SO-Fixtures)
 
@@ -134,13 +137,14 @@ Coverage ist PR-Gate nur für `Nova.Simulation`; Verschlechterung > 2 Prozentpun
 
 | Job | Trigger | Inhalt | Laufzeit-Budget |
 |---|---|---|---|
-| `editmode-tests` | PR + push auf main/develop | Sim-Unit-Tests, Lint Stufe 1, Coverage-Gate Sim-Core | < 15 min |
-| `replay-tests` | PR + push | Golden-Master-Matrix (Ebene 3), plattformgleich | < 10 min |
+| `editmode-tests` | PR + push auf `main` (Doku-Phase, D-050; `develop` erst ab Sprint 7) | Sim-Unit-Tests, Lint Stufe 1, Coverage-Gate Sim-Core | < 15 min |
+| `replay-tests` | PR + push | Golden-Master-Matrix (Ebene 3), plattformgleich, xxHash64 (D-049) | < 10 min |
 | `integration-tests` | PR (label-abhängig) + Nightly | Sim-Integrationstests (Ebene 2) | < 30 min |
-| `simrunner-nightly` | Nightly | KI-vs-KI ≥ 200 Matches/Cluster, Report-Artefakt | < 4 h |
+| `simrunner-nightly` | Nightly | KI-vs-KI: **6 Matchup-Cluster × 20 Matches auf 8 Shards** (D-049), Report-Artefakt | < 4 h |
+| `simrunner-weekly` | Wöchentlich | **200-Match-Vollläufe je Cluster** (Balancing-Evidenz, D-049), Report-Artefakt | < 6 h |
 | `playmode-ui` | Nightly | Ebene 4 auf self-hosted Runner | < 45 min |
-| `performance` | Nightly | Ebene 5, Trend-Report | < 1 h |
-| `build-matrix` | PR (ausgewählte) + Release-Branches | Windows + macOS Builds (Details: [./Deployment.md](./Deployment.md)) | < 1 h |
+| `performance` | Nightly | Ebene 5, Trend-Report (Managed-Pfad, D-045) | < 1 h |
+| `build-matrix` | PR (ausgewählte) + Release-Branches (ab Sprint 7, D-050) | Windows + macOS Builds (Details: [./Deployment.md](./Deployment.md)) | < 1 h |
 
 - EditMode-Tests auf `Nova.Simulation` laufen zusätzlich als reine `dotnet test`-Ausführung ohne Unity-Editor (D-036-Nebenprodukt) – schnellstes Feedback (< 3 min) und Lizenz-unabhängig.
 - Flaky-Policy: Ein Test, der 2× in Folge nicht reproduzierbar fehlschlägt, wird quarantäniert (Issue mit Label `flaky`), blockiert aber nicht dauerhaft den Merge; Quarantäne-Tests haben eine 2-Sprint-Frist zur Behebung oder Löschung.
@@ -163,7 +167,7 @@ Coverage ist PR-Gate nur für `Nova.Simulation`; Verschlechterung > 2 Prozentpun
 - **Coverage-Tooling:** Unity Code Coverage Package vs. externe .NET-Coverage (z. B. coverlet) für die Unity-freie `Nova.Simulation`-Assembly – Tool-Wahl in Sprint 7 am lauffähigen Setup entscheiden.
 - **PlayMode-UI-Testframework:** Unity Test Framework allein vs. Ergänzung um ein UI-Toolkit-Test-Hilfspaket – nach erstem UI-Toolkit-Prototyp (Sprint 7) bewerten; bis dahin Ebene 4 minimal halten.
 - **Float-Hash-Stabilität:** Ob Ebene-3-Hashes im MVP bereits editorübergreifend (Windows/macOS-CI) stabil sind, ist empirisch unklar; der Phase-0-Spike (Fixed-Point-Validierung ARM↔x86) liefert die Daten. Bis dahin sind Cross-Plattform-Hash-Jobs nur diagnostisch (s. Desync-Strategie).
-- **Performance-Baselines:** Schwellen für Ebene 5 (Sim-Tick-Budget bei 500 Einheiten, FoW-Tick) können erst am Phase-0-Spike-/Sprint-7-Messstand final kalibriert werden; vorläufige Anker: Pathfinding ≤ 2–4 ms (D-034), 60 FPS Gesamtbudget.
+- **Performance-Baselines:** Schwellen für Ebene 5 (Sim-Tick-Budget bei 500 Einheiten, FoW-Tick) können erst am Phase-0-Spike-/Sprint-7-Messstand final kalibriert werden; vorläufige Anker: Pathfinding ≤ 2–4 ms (D-034), 60 FPS Gesamtbudget, ≤ 60 s/Match Managed (D-049). Das Rest-Sim-Unterbudget ≤ 3 ms bleibt bis Pflicht-Gate V5 (D-044) unbelegt.
 - **Desync-Probe-Protokoll:** Intervall N und Hash-Transport im Command-Relay werden erst mit Networking.md/Replication.md (D-033-Konsequenz) final definiert.
 
 ## Nächste Schritte
@@ -178,3 +182,4 @@ Coverage ist PR-Gate nur für `Nova.Simulation`; Verschlechterung > 2 Prozentpun
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead QA Engineer |
+| 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings) | Lead QA Engineer |

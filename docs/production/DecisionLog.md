@@ -1,6 +1,6 @@
 # Decision Log
 
-**Version:** 1.5.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director | **Sprint:** 3
+**Version:** 1.6.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director | **Sprint:** 4
 
 ## Zweck
 
@@ -395,16 +395,92 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 
 ---
 
+### D-043 | verbindlich | Sprint 4 (Kanonische Assembly-Topologie)
+
+**Kontext:** Review-Befund (3× unabhängig: Architektur-Kohärenz F-1, Wartbarkeit F-01, GDD↔TDD F-10): Drei konkurrierende Assembly-/Namensarchitekturen koexistieren im TDD – Architecture/ModuleOverview/DependencyGraph (`Nova.Game`, `Nova.UI`, `Nova.Tools`, `Nova.Simulation.Jobs`) vs. FolderStructure/CodingGuidelines/NamingConvention (`Nova.Core`, `Nova.Gameplay`, `Nova.Editor`, `Nova.Simulation.Burst`) vs. AIArchitecture (`Nova.AI`, `Nova.AI.Data`).
+**Alternativen:** (a) Architecture-Lager; (b) FolderStructure-Lager; (c) Neusynthese.
+**Entscheidung:** (c) – kanonische Topologie: `Nova.Core`, `Nova.Simulation` (Unity-frei), `Nova.Simulation.Burst` (D-037), `Nova.AI` (Unity-frei, SimRunner-tauglich), `Nova.AI.Data` (SOs), `Nova.Data` (SOs), `Nova.Gameplay` (Bridge), `Nova.Presentation`, `Nova.UI`, `Nova.Editor`, `Nova.SimRunner` (externes .NET-Projekt), `Nova.BuildTools`. FolderStructure-Lager führend, ergänzt um `Nova.AI`/`Nova.AI.Data`.
+**Begründung:** D-037 verlangt die Burst-Trennung, D-036 den SimRunner-Bezug, die KI-Architektur begründet ihre Unity-Freiheit überzeugend (Records statt SOs im Entscheidungspfad); nur eine Neusynthese erfüllt alle drei.
+**Konsequenzen:** Architecture.md, ModuleOverview.md, DependencyGraph.md werden angeglichen; Assembly-Name steht im Datei-Header jeder .cs-Datei (Fehlwahl = codebase-weites Rewrite, daher vor Sprint 7 verbindlich).
+
+### D-044 | verbindlich | Sprint 4 (Sim-Tick-Ausführungsmodell + Validierungs-Gate V5)
+
+**Kontext:** Performance-Review F-1/F-7: Rest-Sim-Unterbudget ≤3 ms (Kampf, Wirtschaft, KI) ist unbelegt; synchrones Ausführungsmodell erzeugt Mikro-Ruckler (13,5 ms seriell im Worst Case); Zielsuche ohne Spatial-Struktur wäre O(n²).
+**Alternativen:** (a) synchron im Main-Thread; (b) Worker-Tick, View rendert Snapshot n−1; (c) gestuft.
+**Entscheidung:** (c) – **MVP synchron** (einfach, 100-ms-Tick-Fenster, MVP-Last 100 Einheiten unkritisch); **Wechsel auf Worker-Tick ab Alpha, falls die P95-Messung >6 ms zeigt** (D-033 bereitet das vor). Zusätzlich **Pflicht-Gate V5 im Phase-0-Spike: Combat-/KI-Kostenmodell** (Targeting mit Spatial-Hash als Pflichtbestand des Kampfmoduls, FoW-Filter, KI-Command-Verarbeitung) – ohne V5 kein Sprint-7-Start des Kampfmoduls.
+**Konsequenzen:** PerformanceBudget.md (V5-Gate, Ausführungsmodell), Testing.md (V5-Kriterien), Architecture.md (Worker-Tick-Vorhaltung).
+
+### D-045 | verbindlich | Sprint 4 (Auslieferungspfad Managed-first – D-037 präzisiert)
+
+**Kontext:** Performance-Review F-2 und Wartbarkeit F-03: Bit-Parität Managed↔Burst ist im Float-Regime nicht garantiert; CI misst Managed, das Spiel liefe auf Burst – Messblindheit und Desync-Risiko bei grüner CI.
+**Alternativen:** (a) Burst als Primärpfad mit Bit-Paritätsgebot (nicht einlösbar); (b) **Managed als einziger Auslieferungspfad bis zur Fixed-Point-Beta; Burst nur hinter Feature-Flag mit Toleranz-Parität**; (c) Burst komplett streichen.
+**Entscheidung:** (b). Toleranz-Parität: relative Abweichung ≤1e-4 im Hash-Vergleich löst Alarm aus, blockiert aber nicht; Bit-Parität wird erst mit Fixed-Point (Beta) relevant und dann neu bewertet.
+**Begründung:** CI/Golden-Master und Auslieferung messen denselben Pfad; Burst bleibt als Beschleunigungsoption erhalten, ohne die Determinismus-Kette zu gefährden.
+**Konsequenzen:** CodingGuidelines.md/Testing.md/PerformanceBudget.md angleichen; D-037 bleibt gültig, wird durch D-045 präzisiert.
+
+### D-046 | verbindlich | Sprint 4 (MP-Trust-Anchor & deterministische KI-Übernahme)
+
+**Kontext:** Multiplayer-Review F-01/F-03/F-06: Relay ohne eigene Sim hat keinen Trust-Anchor (1v1-Ergebniskonflikt unlösbar, Client-Upload-Snapshot = Manipulationsvektor); Desync-Arbitration im 1v1 unmöglich; Ausführungsort der D-038-Übernahme-KI undefiniert (SPOF).
+**Alternativen:** (a) Server-seitige Vollsimulation (Hosting-Kosten, zweite Sim als Desync-Quelle); (b) Client-Mehrheitsvotum (1v1 unlösbar, Kollusion); (c) **Post-Match-Re-Sim + Hash-Kette + deterministische KI-Übernahme.**
+**Entscheidung:** (c) – (1) Der Server validiert Match-Ergebnis und schlichtet Desync-/Ergebniskonflikte per **Post-Match-Re-Simulation des Command-Logs** (SimRunner-basiert, on-demand, nicht dauerhaft); (2) Reconnect-Snapshots werden gegen die **Pre-Disconnect-Hash-Historie** des betreffenden Clients geprüft (Upload nur mit lückenloser Hash-Kette); (3) die D-038-KI-Übernahme ist ein **deterministisches Sim-Ereignis**: alle Clients schalten den Slot tick-synchron auf die Ersatz-KI (Mittel-Profil) – kein Server-Prozess, kein SPOF.
+**Begründung:** Nutzt die vorhandene Lockstep-/SimRunner-Architektur (D-033/D-036), ohne laufende Server-Sim-Kosten; macht "Server autoritativ über Match-Ergebnis" (TPD §9) einlösbar.
+**Konsequenzen:** Networking.md/Replication.md nachschärfen (Beta-Scope); Reconnect- und Desync-Flows finalisieren.
+
+### D-047 | verbindlich | Sprint 4 (Einheiten & Reichweiten – GDD-Harmonisierung)
+
+**Kontext:** GDD↔TDD-Review F-01 (KRITISCH): Weapons.md definiert Reichweiten in Grid-Feldern (Flak 11–12, Artillerie 18–24), Vehicles.md/Aircraft.md in Metern mit dem 2,5–4-fachen Wert (Flak 55 m, Artillerie 80–85 m), FoW-Sichtweiten 8–18 m – ohne führende Quelle nicht implementierbar.
+**Alternativen:** (a) Vehicles/Aircraft führend (Flak 55 m) – würde Weapons.md und das Grid-Konzept brechen; (b) Weapons.md führend, 1 Feld = 1 m – Vehicles/Aircraft angleichen; (c) FoW-Sichtweiten hochskalieren – bricht das Scouting-Prinzip.
+**Entscheidung:** (b) – **1 Tile = 1 m** (D-034 bestätigt); führende Quelle für Waffenreichweiten ist Weapons.md; Vehicles.md/Aircraft.md werden angeglichen. **Angriffsreichweite > Sichtweite ist Design-Prinzip** (Scouting/Spotter, C&C-konform), kein Fehler: Sichtklassen aus FogOfWar.md bleiben unverändert.
+**Konsequenzen:** GDD-Korrekturlauf (Vehicles.md, Aircraft.md, Querverweise); Grundsatzregel "jeder Wert existiert genau einmal, alles andere sind Verweise" wird im DocumentationStandard ergänzt.
+
+### D-048 | verbindlich | Sprint 4 (Skalierungs-Deckel: Einheiten, Survival, Density)
+
+**Kontext:** Skalierungs-Review F-1/F-2 (KRITISCH/HOCH): Die Kalibrierung "500 Einheiten" wird nirgends erzwungen; Survival-Endlos (+25 %/Welle) erreicht Welle 20 ≈ 555 Einheiten allein in einer Welle; FFA-6 mit Density 2,0 sprengt jedes Budget.
+**Alternativen:** (a) unbegrenzt (Engine-Bruch absehbar); (b) hartes Pop-Limit pro Spieler (widerspricht D-021-Geist); (c) **globale, performance-kalibrierte Deckel mit lesbaren Regeln.**
+**Entscheidung:** (c) – (1) **Globales Einheiten-Deckel 600/Match:** bei Erreichen Produktionsstopp mit UI-Hinweis ("Maximale Armeegröße erreicht"); (2) **Survival:** Welle 20 = Standardsieg (unverändert); Endlos-Modus mit Stärke-Abflachung ab Welle 25 (linear statt multiplikativ) und Despawn älterer Wellenreste – Deckel 600 gilt immer; (3) **MatchSettings `AetheriumDensity` ≤1,5 bei 5–6 Spielern.**
+**Begründung:** Macht die 500-Einheiten-Kalibrierung erzwungen statt angenommen; behält D-021 (kein Supply-Mikromanagement), weil der Deckel nur im Extremfall greift.
+**Konsequenzen:** MultiplayerModes.md, GameState.md (UnitCounter), PerformanceBudget.md, Balancing.md angleichen.
+
+### D-049 | verbindlich | Sprint 4 (Test-/CI-Realismus, Hash-Breite, Registry-Sharding)
+
+**Kontext:** Skalierungs-Review F-3 (SimRunner-Nightly rechnerisch unmöglich: 22–43 h seriell), Wartbarkeit F-05 (GameDatabase als Single-File = Merge-Konflikt-Magnet), GDD↔TDD-Review (Hash-Breiten-Inkonsistenz xxHash32 vs. xxHash64).
+**Entscheidungen:** (1) **SimRunner-CI:** Nightly = 6 Matchup-Cluster × 20 Matches auf 8 parallele Shards; 200-Match-Vollläufe wöchentlich; Zielvorgabe ≤60 s/Match (Managed) statt "<10 s". (2) **xxHash64 überall** (Serialization.md angleichen). (3) **GameDatabase-Sharding:** Sub-Registries pro Kategorie (Units, Buildings, Weapons, Tech, Factions, Maps, Biomes, AI) + generierte Master-Index-Datei statt eines einzelnen Registry-Assets.
+**Begründung:** CI muss über Nacht laufen; parallele Agenten-Arbeit (Worktrees, TPD §12) verträgt keine Single-File-Registry; 64-bit-Hashes halbieren die Kollisionswahrscheinlichkeit bei langen Replay-Serien.
+**Konsequenzen:** Testing.md, Deployment.md, Serialization.md, FolderStructure.md, NamingConvention.md angleichen.
+
+### D-050 | verbindlich | Sprint 4 (Branching-Modell)
+
+**Kontext:** Wartbarkeit F-07: AGENTS.md (PR→main) vs. Deployment.md/Testing.md (develop-Integration) – zwei Branching-Modelle aktiv; TPD §12 definiert develop.
+**Alternativen:** (a) TPD-Modell mit develop sofort; (b) trunk-based main-only dauerhaft; (c) gestuft.
+**Entscheidung:** (c) – **Doku-Phase (bis Sprint 6): `main` + kurze Feature-/Sprint-Branches mit PR**; **ab Sprint 7 (Code-Phase): TPD §12 vollständig** (`main`/`develop`/`feature`/`fix`/`art`/`release`).
+**Begründung:** develop-Overhead lohnt erst bei parallelisiertem Code; die Doku-Phase profitiert von trunk-basierter Einfachheit; TPD-Modell bleibt das Zielbild für Code.
+**Konsequenzen:** AGENTS.md, Deployment.md, Testing.md angleichen.
+
+### D-051 | verbindlich | Sprint 4 (Quantum-Fallback gestrichen)
+
+**Kontext:** Multiplayer-Review F-05: Photon Quantum 3 als "Fallback" wäre faktisch ein Rewrite (Gameplay-Code in Quantum-DSL/ECS), kein Fallback; alle drei Trigger-Kriterien waren nicht messbar.
+**Alternativen:** (a) Quantum-Fallback behalten (Schein-Sicherheit); (b) **Fallback = eigenes Relay mit reduziertem Scope**; (c) gar kein Fallback-Konzept.
+**Entscheidung:** (b) – Quantum-Fallback gestrichen. Neuer Beta-Fallback bei Scheitern des Eigenbau-Relay: **Reduzierter MP-Scope** (max 4 Spieler, 300 Einheiten, EU-only). Ein vollständiger Strategiewechsel (Quantum o. ä.) wäre eine neue Grundsatzentscheidung nach totalem Scheitern, kein "Fallback".
+**Konsequenzen:** Networking.md/Replication.md angleichen; R-12-Risikoregister aktualisieren.
+
+### D-052 | verbindlich | Sprint 4 (Windows-Referenzhardware)
+
+**Kontext:** Offener Punkt aus Sprint 3 (PerformanceBudget): Referenzhardware für alle P95-Messungen fixieren.
+**Alternativen (Klasse):** (a) High-End (messwert-fern der Zielgruppe); (b) **Mittelklasse der H1-Zielgruppe**; (c) Minimum-Spec als Referenz (zu pessimistisch für 60-FPS-Ziel).
+**Entscheidung:** (b) – **Referenz (60-FPS-Ziel): Ryzen 5 5600 / RTX 3060 / 16 GB / NVMe-SSD**; **Minimum (30-FPS-Ziel): Ryzen 3 3100 / GTX 1050 Ti / 8 GB**; **Mac-Baseline: Apple M2** (Entwicklungs- und Qualitätsplattform, D-006).
+**Konsequenzen:** PerformanceBudget.md; Beschaffung in Sprint-6-Planung; Messungen auf Standalone-Builds (nie Editor).
+
+---
+
 ## Offene Punkte
 
-- Q-013, Q-014, Q-015, Q-020: entschieden (D-033–D-036); formale Schließung im Sprint-3-Abschlussbericht.
-- Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie-Infrastruktur, Sprint 6) bleiben offen.
-- Vier Pflicht-Validierungen am Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86, URP GPU Resident Drawer, Animator vs. Playables, Pathfinding-CPU-Budget ≤2–4 ms (Managed-Pfad, D-037).
-- Verbleibende TDD-Folgepunkte (keine Blocker): KI-Bedrohungskarten-Auflösung, Evolvierte-Plan-Tasks, Snapshot-Größenmessung, Fixed-Point-Bibliothekswahl (Beta), Analyzer-Enforcement (Sprint 7).
+- Alle Sprint-4-Review-Befunde (~105, davon 10 kritisch): kritische durch D-043–D-052 entschieden; HOCH/MITTEL im Korrekturlauf zu dokumentieren bzw. zu terminieren.
+- Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie, Sprint 6) bleiben offen.
+- Fixed-Point-Migration (Beta): Phase-0-Spike-Scope erweitert (Fixed-Point-Pfad für ORCA/Flow-Field evaluieren, Bibliothekswahl, float-Direktfelder im GameState verbieten) – Review F-04 MP.
 
 ## Nächste Schritte
 
-- TDD-Detailfixes (Disconnect-Angleichung GDD, Sim-Tick-Budget, Index/CHANGELOG), dann Sprint-3-Abschlussbericht und Commit/Push (Versionsbump, freigegeben).
+- Korrekturlauf Sprint 4: D-043–D-052 und alle kritischen/hohen Review-Befunde in die TDD-/GDD-Dokumente einarbeiten; danach Sprint-4-Abschlussbericht und Commit/Push (Versionsbump 0.5.0).
 
 ## Änderungsverlauf
 
@@ -418,3 +494,4 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 | 1.3.2 | 2026-07-21 | D-032: Restpunkte Feinschliff (Burrow-Detektion bestätigt, Vernichtungs-Definition harmonisiert, HQ-Grundenergie +30) | Game Director |
 | 1.4.0 | 2026-07-21 | D-033 bis D-036: Architektur-Grundentscheidungen (Sim-/MP-Modell, Pathfinding, OOP+Burst statt DOTS, Headless-SimRunner) | Lead Technical Director |
 | 1.5.0 | 2026-07-21 | D-037 bis D-042: TDD-Review-Entscheidungen (Burst/Managed-Doppelstruktur, Disconnect-Regel, Audio-Backend, Renderer/Licht, Sentry, Sim-Budget-Klärungen) | Lead Technical Director |
+| 1.6.0 | 2026-07-21 | D-043 bis D-052: Architecture-Review-Entscheidungen (Assembly-Topologie, V5-Gate, Managed-first, MP-Trust-Anchor, Reichweiten-Harmonisierung, Skalierungs-Deckel, CI-Realismus, Branching, Quantum-Fallback gestrichen, Referenzhardware) | Lead Technical Director |

@@ -1,6 +1,6 @@
 # Wirtschaftssystem (Economy)
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
+**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
 
 ## Zweck
 
@@ -11,7 +11,7 @@ Spezifiziert den Wirtschafts-Kreislauf von Project Nova: Sammler-Loop, Lagerkapa
 - [../production/DecisionLog.md](../production/DecisionLog.md) – D-008 (12 Gebäudetypen), D-010 (Hybridwirtschaft, Matchdauer), D-011 (Evolvierte-Wachstum/Regeneration), D-014 (Drohnen), D-015 (Elite-Einheiten), D-016 (Objective-Belohnungen), D-024 (Lager & Raffinerie), D-027 (Regenerations-Bonus), D-030 (Low-Power & Forschung)
 - [./Resources.md](./Resources.md) – Feldregeln, Nachwuchsraten, Überernte
 - [./Factions.md](./Factions.md) – Fraktionsprofile (Allianz teuer/präzise, Legion günstig/Masse, Evolvierte organisch)
-- [./Buildings.md](./Buildings.md) – Bauvoraussetzungen, Bauzeiten, Evolvierte-Reifung, HQ-Grundenergie (geplant)
+- [./Buildings.md](./Buildings.md) – **führend für Gebäudekosten, Energiewerte und Bauzeiten** (Review F-03, Grundsatzregel D-047); Bauvoraussetzungen, Evolvierte-Reifung, HQ-Grundenergie
 - [./NeutralUnits.md](./NeutralUnits.md) – Objective-Belohnungen 400/800/1.200 AE (D-016)
 - [./Infantry.md](./Infantry.md), [./Vehicles.md](./Vehicles.md), [./Aircraft.md](./Aircraft.md) – Einheiten-Details (geplant)
 - [../analysis/KnowledgeBase.md](../analysis/KnowledgeBase.md) – Quellkontext (TPD §8.4)
@@ -52,10 +52,9 @@ Harvester sind unbewaffnet (Allianz/Legion) und haben mittlere Panzerung; Evolvi
 
 ## Energie-System und Low-Power
 
-| Parameter | Wert v0.1 |
+| Parameter | Festlegung |
 |---|---|
-| Kraftwerk-Ertrag | 100 Energie |
-| Typischer Verbrauch | Produktionsgebäude 30–40, Forschungslabor 50, Radar 40, Verteidigungsplattform 30, Superwaffe 80, übrige 10–20 (Detailwerte in Buildings.md) |
+| Erzeugung und Verbrauch je Gebäude | **Führend: [./Buildings.md](./Buildings.md)** (Review F-03 – keine Doppelpflege in diesem Dokument) |
 | Bilanz | Energie ist eine **Produktions-Bilanz** (Erzeugung − Verbrauch), keine Lagerressource |
 
 **Low-Power-Regel (Zahlengerüst, verbindlich):** Bei Defizit (Verbrauch > Erzeugung):
@@ -79,24 +78,11 @@ Begründung: Stufe 1 finanziert eine Aufbau- und Ersteinheiten-Phase ohne Leerla
 
 ## Kostenrahmen v0.1
 
-Fraktions-Profil-Faktor: Allianz ×1,15 (teuer, stark), Legion ×0,85 (günstig, Masse), Evolvierte ×1,0 (Referenz). Tabellen zeigen Referenzwerte (Evolvierte/Neutralbasis); Bauzeiten in Buildings.md.
+Fraktions-Profil-Faktor: Allianz ×1,15 (teuer, stark), Legion ×0,85 (günstig, Masse), Evolvierte ×1,0 (Referenz). Die Einheiten-Tabelle unten zeigt Referenzwerte; **Gebäudekosten, -energie und -bauzeiten sind führend in [./Buildings.md](./Buildings.md) definiert** (Review F-03, Grundsatzregel D-047 – keine Doppelpflege hier).
 
 ### Gebäude (12 Typen gemäß D-008)
 
-| Gebäude | Kosten (AE) | Energie |
-|---|---|---|
-| HQ | (Startgebäude; Neuaufbau 2.500) | +30 (liefert; Grundenergie gemäß [./Buildings.md](./Buildings.md)) |
-| Kraftwerk | 500 | +100 |
-| Raffinerie | 900 (inkl. 1 Harvester, Packaging gemäß D-024) | −30 |
-| Lager | 300 | −5 |
-| Kaserne | 600 | −20 |
-| Fahrzeugfabrik | 1.200 | −35 |
-| Flugfeld | 1.500 | −40 |
-| Forschungslabor | 1.500 | −50 |
-| Radar | 800 | −40 |
-| Verteidigungsplattform | 700 (Basisturm) + Modul MG 200 / Flak 300 / Rakete 400 | −30 |
-| Mauer (pro Segment) | 50 | 0 |
-| Superwaffe | 4.000 | −80 |
+Kosten, Energiebilanz und Bauzeiten aller Gebäude stehen **ausschließlich in [./Buildings.md](./Buildings.md)** (führendes Dokument, Review F-03). Economy.md legt für Gebäude nur den systemischen Rahmen fest: Startressourcen (1.000 AE), Einkommensraten-Ziele, Low-Power-Regel, Lager-/Kapazitätsregeln (D-024) und Reparatur-/Verkaufsregeln (Prozentwerte unten).
 
 ### Einheiten (Rahmen pro Kategorie und Tech-Tier)
 
@@ -156,7 +142,7 @@ Leitplanke: Gesamt-AE-Fluss pro Spieler über ein typisches 25-min-Match ≈ 25.
 ## Nächste Schritte
 
 - Feinwerte je Einheit mit Infantry.md/Vehicles.md/Aircraft.md abstimmen (Kostenrahmen als Obergrenze).
-- Gebäude-Bauzeiten und Tech-Voraussetzungen in Buildings.md auf diese Kostenrahmen mappen.
+- Gebäude-Werte werden seit Review F-03 führend in Buildings.md gepflegt; hier verbleibt nur die Systemlogik (Raten, Low-Power, Lager) – ein Werte-Abgleich entfällt.
 - Tuning-Szenarien (Simulationsläufe) für die Zielkurven definieren; erste Validierung im MVP-Vertical-Slice (Sprint 4).
 - KI-Anforderung ableiten: KI muss Expansions-Timing (Stufe 2 ab Min. 6–10) und Überernte-Vermeidung beherrschen (Input für AIArchitecture, Sprint 3).
 
@@ -166,3 +152,4 @@ Leitplanke: Gesamt-AE-Fluss pro Spieler über ein typisches 25-min-Match ≈ 25.
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Gameplay Designer |
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 2 (D-020–D-030) | Lead Gameplay Designer |
+| 0.3.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): Gebäudekosten/-energie durch Verweise auf Buildings.md ersetzt (Review F-03, D-047-Grundsatzregel); Economy.md behält nur Systemlogik (Raten, Low-Power, Lager) | Lead Gameplay Designer |
