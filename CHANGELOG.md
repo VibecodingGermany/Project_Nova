@@ -13,6 +13,9 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 
 ## [Unreleased]
 
+### Geändert
+- `SprintPlanning.md` (1.3.0): Status auf Sprint 4 **abgeschlossen** / Sprint 5 (Asset Audit) **bereit (GO)** synchronisiert (Angleichung an das docs/README-Status-Board).
+
 ## [0.5.0] – 2026-07-21 · Sprint 4: Architecture Review + Governance
 
 ### Hinzugefügt
