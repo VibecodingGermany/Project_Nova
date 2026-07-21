@@ -63,7 +63,7 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 - Übernahme der historischen Quelldokumente (`RTS_Game_Design_Outline.md`,
   `RTS_Technisches_Planungsdokument.md`, `RTS_Asset_Pipeline.md`).
 
-[Unreleased]: https://github.com/cubetribe/Project_Nova/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/cubetribe/Project_Nova/releases/tag/v0.3.0
-[0.2.0]: https://github.com/cubetribe/Project_Nova/releases/tag/v0.2.0
-[0.1.0]: https://github.com/cubetribe/Project_Nova/releases/tag/v0.1.0
+[Unreleased]: https://github.com/VibecodingGermany/Project_Nova/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.3.0
+[0.2.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.2.0
+[0.1.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.1.0
