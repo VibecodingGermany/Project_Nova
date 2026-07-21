@@ -21,8 +21,12 @@ Der aktuelle Fokus ist Sprint 3 (Technical Design).
 
 ## 2. Goldene Regeln (nicht verhandelbar)
 
-1. **Kein Push ohne ausdrückliche Freigabe.** Committen lokal jederzeit; `git push`
-   nur, wenn der Mensch es explizit erlaubt hat.
+1. **Push nach Versionsbump ist dauerhaft freigegeben.** Der Projektinhaber hat am
+   2026-07-21 ausdrücklich und dauerhaft angeordnet: Nach jedem Versionsbump
+   (Sprint-Abschluss, Release-Tag, Wiki-Versionserhöhung) wird der Stand committet und
+   zu GitHub gepusht – ohne erneute Einzelfreigabe. Für alle anderen Pushes
+   (zwischenzeitliche Feature-Branches, experimentelle Arbeit) gilt weiterhin: `git push`
+   nur nach expliziter Freigabe. Committen lokal ist jederzeit erlaubt.
 2. **Niemals `main` mit `--force` überschreiben.** Keine History-Rewrites auf geteilten
    Branches. `main` bleibt jederzeit in einem konsistenten Zustand.
 3. **Keine Secrets ins Repo.** Keine Tokens, Keys, `.env`-Inhalte, Passwörter oder
@@ -193,3 +197,4 @@ git push -u origin <branch>
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 1.0.0 | 2026-07-21 | Initiale Agenten-Arbeitsregeln (Repo-Setup) | Orchestrator |
+| 1.1.0 | 2026-07-21 | Goldene Regel 1: Push nach Versionsbump dauerhaft freigegeben (Anordnung Projektinhaber) | Orchestrator |
