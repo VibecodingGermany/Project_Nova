@@ -1,17 +1,19 @@
 # Luftfahrzeuge (Aircraft)
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead Vehicle Artist / Lead Gameplay Designer | **Sprint:** 2
+**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Vehicle Artist / Lead Gameplay Designer | **Sprint:** 4
 
 ## Zweck
 
-Spezifikation aller Luftfahrzeuge für die drei Fraktionen (Allianz, Legion, Evolvierte): 7 Typen pro Fraktion gemäß Zahlengerüst, inklusive Luftkampf-Regeln (Air-to-Air vs. Air-to-Ground, Flak-Konter), Munitions-/Betankungsregeln und Landeplatz-Logik am Flugfeld. Alle Werte sind Startwerte v0.2 zum Tunen – Richtwerte mit Begründung, keine Pseudo-Präzision. Leitprinzip: Lufteinheiten sind teure, gläserne Präzisionswerkzeuge – Flak ist der harte Konter, kein Spieler soll ohne Luftabwehr gegen Luft verlieren können, aber auch kein Luft-only-Rush dominieren.
+Spezifikation aller Luftfahrzeuge für die drei Fraktionen (Allianz, Legion, Evolvierte): 7 Typen pro Fraktion gemäß Zahlengerüst, inklusive Luftkampf-Regeln (Air-to-Air vs. Air-to-Ground, Flak-Konter), Munitions-/Betankungsregeln und Landeplatz-Logik am Flugfeld. Alle Werte sind Startwerte v0.3 zum Tunen – Richtwerte mit Begründung, keine Pseudo-Präzision. Leitprinzip: Lufteinheiten sind teure, gläserne Präzisionswerkzeuge – Flak ist der harte Konter, kein Spieler soll ohne Luftabwehr gegen Luft verlieren können, aber auch kein Luft-only-Rush dominieren.
 
 ## Abhängigkeiten
 
-- [DecisionLog](../production/DecisionLog.md) – D-008 (Flugfeld als Gebäudetyp, Verteidigungsplattform mit Flak-Modul), D-012 (Zerstörbarkeit), D-013 (keine Marine), D-018 (Modi-Staffelung), D-026 (Evolvierte-Luft-Spezialeinheit, Konter-Lücken)
+- [DecisionLog](../production/DecisionLog.md) – D-008 (Flugfeld als Gebäudetyp, Verteidigungsplattform mit Flak-Modul), D-012 (Zerstörbarkeit), D-013 (keine Marine), D-018 (Modi-Staffelung), D-026 (Evolvierte-Luft-Spezialeinheit, Konter-Lücken), D-034/D-047 (1 Grid-Feld ≙ 1 m, Weapons.md führend für Reichweiten)
 - [Factions](./Factions.md) – Fraktionsidentitäten
 - [Buildings](./Buildings.md) – Flugfeld, Verteidigungsplattform (Flak-Modul), Radar
 - [Vehicles](./Vehicles.md) – gemeinsame Schadens-/Panzerungstypen, Rocket Launcher als Boden-Flak-Ergänzung
+- [Weapons](./Weapons.md) – **führende Quelle** für Waffenwerte (Reichweite, Schaden, Abklingzeit, Flak-Modul), D-047
+- [FogOfWar](./FogOfWar.md) – Sichtweiten-Klassen (VIS-*), führend für Sichtwerte (D-047)
 - [ResearchTree](./ResearchTree.md) – Tier-1–3-Freischaltungen
 - [Economy](./Economy.md) – Währung AE
 - [FogOfWar-Research](../research/FogOfWar.md) – Sicht-/Aufklärungsregeln für Luft-Scouting
@@ -33,9 +35,9 @@ Flacher Datensatz pro Einheit – erweitert das Fahrzeug-Schema aus [Vehicles](.
 | `damageType` | enum | Kinetisch / Explosiv / Flamme / Energie / Bio |
 | `dpsAir` | float | Schaden vs. Luft (0 = kein Air-to-Air) |
 | `dpsGround` | float | Schaden vs. Boden |
-| `rangeM` | float | Angriffsreichweite |
+| `rangeM` | float | Angriffsreichweite in Grid-Feldern (1 Feld ≙ 1 m, D-034/D-047); verbindliche Werte in [Weapons](./Weapons.md) |
 | `speedMS` | float | Fluggeschwindigkeit (typisch 12–20 m/s) |
-| `sightM` | float | Sichtweite |
+| `sightM` | float | Sichtweite; Werte nur als VIS-Klassen in [FogOfWar](./FogOfWar.md) (D-047) |
 | `flightModel` | enum | FixedWing / VTOL (siehe Landeplatz-Regeln) |
 | `ammoCount` | int | Munition vor Rückkehr (−1 = unbegrenzt) |
 | `prerequisites` | string[] | Gebäude-/Tech-Voraussetzungen |
@@ -53,9 +55,11 @@ Flacher Datensatz pro Einheit – erweitert das Fahrzeug-Schema aus [Vehicles](.
 
 **Flak als harter Konter:**
 
-- Verteidigungsplattform mit **Flak-Modul** (D-008) ist die primäre Luftabwehr: Richtwert 90 DPS vs. Luft, Reichweite 55 m, Flächenschaden (kontert Schwärme).
+- Verteidigungsplattform mit **Flak-Modul** (D-008) ist die primäre Luftabwehr: Reichweite 11–12 Felder (≙ m, D-047), 25–40 Schaden pro Schuss bei 1,5 s Abklingzeit, kleiner Flächenradius 1 (kontert Schwärme) – verbindliche Werte in [Weapons](./Weapons.md).
 - Rocket Launcher (Fahrzeug) und Kampf-Drohne (leicht) liefern mobile, schwächere Ergänzung; für die Evolvierten zusätzlich der Kristallmagier (Infanterie, Zielklasse „Beides", D-026 – siehe [Infantry](./Infantry.md)).
-- Flak-Schaden gegen Luft erhält Multiplikator 2,0 auf den Basis-Explosivwert – Lufteinheiten sind fragil genug, dass 2–3 Flak-Plattformen eine Basis dicht machen, aber Anflug-Routen über Radar-Sicht planbar bleiben (Radar deckt Flak-Positionen auf).
+- Flak-Schaden gegen Luft erhält Multiplikator ×2,0 auf den Basiswert (25–40 Schaden / 1,5 s ≙ effektiv ~33–53 DPS vs. Luft) – Lufteinheiten sind fragil genug, dass 2–3 Flak-Plattformen eine Basis dicht machen, aber Anflug-Routen über Radar-Sicht planbar bleiben (Radar deckt Flak-Positionen auf).
+
+**Verweis-Regel (D-047, Korrekturlauf Sprint 4):** 1 Grid-Feld ≙ 1 m (D-034/D-047). Verbindliche Waffenwerte (Reichweite, Schaden, Abklingzeit) existieren genau einmal – in [Weapons](./Weapons.md) (führend); verbindliche Sichtweiten nur als VIS-Klassen in [FogOfWar](./FogOfWar.md). Diese Datei definiert Rollen, Konter, Munitions-/Landeplatz-Regeln und Einheiten-Rahmenwerte (HP, Kosten, Tempo); die Reichweiten-Spalten folgen den Weapons.md-Korridoren. Grundsatz: Angriffsreichweite > Sichtweite ist Design-Prinzip (Scouting/Spotter, D-047), kein Fehler.
 
 **Munition und Betankung (Entscheidung, begründet):**
 
@@ -85,29 +89,29 @@ Flacher Datensatz pro Einheit – erweitert das Fahrzeug-Schema aus [Vehicles](.
 
 ## Allianz (Azurblau/Stahlgrau – präzise, teuer)
 
-| Typ | Name | Tier | Kosten (AE) | Bauzeit (s) | HP | DPS Luft | DPS Boden | Reichweite (m) | Tempo (m/s) | Munition | Fähigkeiten | Voraussetzungen |
+| Typ | Name | Tier | Kosten (AE) | Bauzeit (s) | HP | DPS Luft | DPS Boden | Reichweite (Felder ≙ m) | Tempo (m/s) | Munition | Fähigkeiten | Voraussetzungen |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Scout | Falke | 1 | 400 | 15 | 250 | – | – | – | 20 | – | Sicht 80 m, Zielmarkierung | Flugfeld |
-| Gunship | Valkyrie | 2 | 900 | 28 | 600 | – | 55 (Energie) | 30 | 14 | – | Präzisionssalve (+Schaden vs. Leicht) | + Forschungslabor |
-| Fighter | Blitz-Abfangjäger | 2 | 1.000 | 30 | 450 | 85 (Energie) | – | 35 | 20 | – | Nachbrenner (+50 % Tempo, 5 s) | + Forschungslabor |
-| Bomber | Hammer | 2 | 1.200 | 35 | 550 | – | 400/Abwurf (Explosiv) | 10 (Abwurf) | 16 | 3 | Bunkerbrecher (+50 % vs. Gebäude) | + Forschungslabor |
+| Scout | Falke | 1 | 400 | 15 | 250 | – | – | – | 20 | – | Sicht VIS-SCOUT ([FogOfWar](./FogOfWar.md)), Zielmarkierung | Flugfeld |
+| Gunship | Valkyrie | 2 | 900 | 28 | 600 | – | 55 (Energie) | 9 | 14 | – | Präzisionssalve (+Schaden vs. Leicht) | + Forschungslabor |
+| Fighter | Blitz-Abfangjäger | 2 | 1.000 | 30 | 450 | 85 (Energie) | – | 10 | 20 | – | Nachbrenner (+50 % Tempo, 5 s) | + Forschungslabor |
+| Bomber | Hammer | 2 | 1.200 | 35 | 550 | – | 400/Abwurf (Explosiv) | Abwurf | 16 | 3 | Bunkerbrecher (+50 % vs. Gebäude) | + Forschungslabor |
 | Transport | Albatros | 1 | 800 | 25 | 700 | – | – | – | 15 | – | 8 Infanterie oder 1 leichtes Fahrzeug | Flugfeld |
-| Heavy Gunship | Sturmvogel | 3 | 1.800 | 45 | 1.200 | – | 110 (Energie) | 32 | 12 | – | Schwerer Schild (absorbiert 800, CD 60 s) | + Tier 3 |
-| Spezial | EMP-Sturmjäger "Nemesis" | 3 | 2.000 | 50 | 500 | 40 | 150 (Energie) | 40 | 19 | 1 | EMP-Abwurf: feindliche Gebäude/Fahrzeuge im Radius 8 s deaktiviert (Produktion/Verteidigung offline) | + Tier 3 |
+| Heavy Gunship | Sturmvogel | 3 | 1.800 | 45 | 1.200 | – | 110 (Energie) | 9 | 12 | – | Schwerer Schild (absorbiert 800, CD 60 s) | + Tier 3 |
+| Spezial | EMP-Sturmjäger "Nemesis" | 3 | 2.000 | 50 | 500 | 40 | 150 (Energie) | 10 | 19 | 1 | EMP-Abwurf: feindliche Gebäude/Fahrzeuge im Radius 8 s deaktiviert (Produktion/Verteidigung offline) | + Tier 3 |
 
 **Begründung Spezial:** Passt zur Low-Power-Regel des Zahlengerüsts (Energie-Thema) und zur Präzisions-Identität: zeitkritisches Ausschalten statt Flächenzerstörung.
 
 ## Legion (Rostrot/Ocker – günstig, Masse)
 
-| Typ | Name | Tier | Kosten (AE) | Bauzeit (s) | HP | DPS Luft | DPS Boden | Reichweite (m) | Tempo (m/s) | Munition | Fähigkeiten | Voraussetzungen |
+| Typ | Name | Tier | Kosten (AE) | Bauzeit (s) | HP | DPS Luft | DPS Boden | Reichweite (Felder ≙ m) | Tempo (m/s) | Munition | Fähigkeiten | Voraussetzungen |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Scout | Fledermaus | 1 | 300 | 12 | 220 | – | – | – | 20 | – | Sicht 70 m, Störpeil (Radar-Verwirrung, 10 s) | Flugfeld |
-| Gunship | Hornisse | 2 | 700 | 22 | 550 | – | 45 (Kinetisch) | 28 | 14 | – | Raketenpod-Salve (kleiner Flächenburst) | + Forschungslabor |
-| Fighter | Raubvogel | 2 | 800 | 24 | 420 | 75 (Kinetisch) | – | 32 | 20 | – | – | + Forschungslabor |
-| Bomber | Teppichbomber "Vulkan" | 2 | 1.000 | 28 | 650 | – | 250/Abwurf (Explosiv, große Fläche) | 10 (Abwurf) | 14 | 4 | Teppichabwurf (Linie statt Punkt) | + Forschungslabor |
+| Scout | Fledermaus | 1 | 300 | 12 | 220 | – | – | – | 20 | – | Sicht VIS-SCOUT ([FogOfWar](./FogOfWar.md)), Störpeil (Radar-Verwirrung, 10 s) | Flugfeld |
+| Gunship | Hornisse | 2 | 700 | 22 | 550 | – | 45 (Kinetisch) | 8 | 14 | – | Raketenpod-Salve (kleiner Flächenburst) | + Forschungslabor |
+| Fighter | Raubvogel | 2 | 800 | 24 | 420 | 75 (Kinetisch) | – | 9 | 20 | – | – | + Forschungslabor |
+| Bomber | Teppichbomber "Vulkan" | 2 | 1.000 | 28 | 650 | – | 250/Abwurf (Explosiv, große Fläche) | Abwurf | 14 | 4 | Teppichabwurf (Linie statt Punkt) | + Forschungslabor |
 | Transport | Lastenesel | 1 | 650 | 20 | 800 | – | – | – | 13 | – | 8 Infanterie oder 1 leichtes Fahrzeug; Fallschirm-Abwurf (kein Landen nötig) | Flugfeld |
-| Heavy Gunship | Fliegende Festung | 3 | 1.500 | 38 | 1.500 | – | 90 (Explosiv, Vierfachrohre) | 30 | 10 | – | Zusatzpanzerung (−20 % Flak-Schaden) | + Tier 3 |
-| Spezial | Napalm-Schleuder "Phönix" | 3 | 1.700 | 42 | 600 | – | 350/Abwurf (Flamme) | 12 (Abwurf) | 15 | 2 | Napalm-Teppich: entzündet Vegetation/Gebäude großflächig (D-012), DoT-Zone 15 s | + Tier 3 |
+| Heavy Gunship | Fliegende Festung | 3 | 1.500 | 38 | 1.500 | – | 90 (Explosiv, Vierfachrohre) | 9 | 10 | – | Zusatzpanzerung (−20 % Flak-Schaden) | + Tier 3 |
+| Spezial | Napalm-Schleuder "Phönix" | 3 | 1.700 | 42 | 600 | – | 350/Abwurf (Flamme) | Abwurf | 15 | 2 | Napalm-Teppich: entzündet Vegetation/Gebäude großflächig (D-012), DoT-Zone 15 s | + Tier 3 |
 
 **Begründung Spezial:** Flächen-Flamme ist Legions Kernidentität; der Brand setzt Gelände außer Gefecht (Vegetation/Dekor brennbar, D-012) und bestraft statisches Verteidigen – Kontrast zur präzisen Allianz-EMP.
 
@@ -115,15 +119,15 @@ Flacher Datensatz pro Einheit – erweitert das Fahrzeug-Schema aus [Vehicles](.
 
 Alle Evolvierten-Flieger sind Kreaturen: Regeneration ~1 % HP/s nach 5 s kampffrei; Landebuchten des Flugfelds sind Nistkammern (Regel identisch).
 
-| Typ | Name | Tier | Kosten (AE) | Bauzeit (s) | HP | DPS Luft | DPS Boden | Reichweite (m) | Tempo (m/s) | Munition | Fähigkeiten | Voraussetzungen |
+| Typ | Name | Tier | Kosten (AE) | Bauzeit (s) | HP | DPS Luft | DPS Boden | Reichweite (Felder ≙ m) | Tempo (m/s) | Munition | Fähigkeiten | Voraussetzungen |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Scout | Schwingenspäher | 1 | 350 | 13 | 240 | 20 (Bio, Notwehr) | – | 20 | 19 | – | Sicht 75 m; tarnt über Aetherium-Feldern (schwebend) | Flugfeld |
-| Gunship | Stachelschwarm-Träger | 2 | 800 | 25 | 580 | – | 50 (Bio, Stachelhagel-Fläche) | 28 | 13 | – | Verlangsamende Sporen (−20 % Tempo Ziel, 4 s) | + Forschungslabor |
-| Fighter | Sturmklaue | 2 | 900 | 27 | 440 | 80 (Bio, Klauen+Nahdistanz) | – | 25 | 21 | – | Sturzflug (+Burst-Schaden beim Anflug) | + Forschungslabor |
-| Bomber | Sporenregen-Bringer | 2 | 1.100 | 31 | 600 | – | 320/Abwurf (Bio-Säure) | 10 (Abwurf) | 15 | 3 | Säurepfütze (DoT-Zone, verweigert Gelände 12 s) | + Forschungslabor |
+| Scout | Schwingenspäher | 1 | 350 | 13 | 240 | 20 (Bio, Notwehr) | – | 7 | 19 | – | Sicht VIS-SCOUT ([FogOfWar](./FogOfWar.md)); tarnt über Aetherium-Feldern (schwebend) | Flugfeld |
+| Gunship | Stachelschwarm-Träger | 2 | 800 | 25 | 580 | – | 50 (Bio, Stachelhagel-Fläche) | 8 | 13 | – | Verlangsamende Sporen (−20 % Tempo Ziel, 4 s) | + Forschungslabor |
+| Fighter | Sturmklaue | 2 | 900 | 27 | 440 | 80 (Bio, Klauen+Nahdistanz) | – | 8 | 21 | – | Sturzflug (+Burst-Schaden beim Anflug) | + Forschungslabor |
+| Bomber | Sporenregen-Bringer | 2 | 1.100 | 31 | 600 | – | 320/Abwurf (Bio-Säure) | Abwurf | 15 | 3 | Säurepfütze (DoT-Zone, verweigert Gelände 12 s) | + Forschungslabor |
 | Transport | Flugbrut | 1 | 720 | 22 | 750 | – | – | – | 14 | – | 8 Infanterie oder 1 leichtes Fahrzeug; heilt Fracht 2 % HP/s | Flugfeld |
-| Heavy Gunship | Himmelsleviathan | 3 | 1.650 | 42 | 1.350 | – | 100 (Bio) | 30 | 11 | – | Kristallhaut (+25 % Panzerung bei vollem HP); wirft Bio-Brut ab (2 Nahkampf-Kreaturen beim Tod) | + Tier 3 |
-| Spezial | Säure-Bomberin „Siechschwinge" | 3 | 1.850 | 46 | 700 | – | 220/Abwurf (Bio-Säure) | 14 (Abwurf) | 16 | 2 | Konzentrierter Säureabwurf: hoher DoT vs. Schwer/Gebäude, Säurepfütze verweigert Gelände 15 s | + Tier 3 |
+| Heavy Gunship | Himmelsleviathan | 3 | 1.650 | 42 | 1.350 | – | 100 (Bio) | 9 | 11 | – | Kristallhaut (+25 % Panzerung bei vollem HP); wirft Bio-Brut ab (2 Nahkampf-Kreaturen beim Tod) | + Tier 3 |
+| Spezial | Säure-Bomberin „Siechschwinge" | 3 | 1.850 | 46 | 700 | – | 220/Abwurf (Bio-Säure) | Abwurf | 16 | 2 | Konzentrierter Säureabwurf: hoher DoT vs. Schwer/Gebäude, Säurepfütze verweigert Gelände 15 s | + Tier 3 |
 
 **Begründung Spezial:** Die Säure-Bomberin ist die MVP-Spezialeinheit der Evolvierten (D-026): die bio-horrorhafte Entsprechung zu EMP (Allianz) und Napalm (Legion) – asymmetrisch, aber gleich teuer und gleich selten (Tier 3, 2 Munition), ohne Controller-Wechsel-Logik. **Ausblick ab Beta:** Die Parasiten-Königin (dauerhafte Übernahme feindlicher Fahrzeuge <800 HP pro Abwurf) bleibt als Beta-Kandidat dokumentiert; sie scheidet für den MVP wegen Neuer-Controller-Logik und MP-Sync-Risiko aus (D-026).
 
@@ -136,7 +140,8 @@ Alle Evolvierten-Flieger sind Kreaturen: Regeneration ~1 % HP/s nach 5 s kampffr
 
 ## Offene Punkte
 
-- Flak-Modul-Stats der Verteidigungsplattform (90 DPS, 55 m) müssen in [Buildings](./Buildings.md) gespiegelt werden – Abstimmung offen.
+- Flak-Modul-Werte: **entschieden (D-047)** – [Weapons](./Weapons.md) ist die einzige Werte-Quelle (Flak: 11–12 Felder ≙ m, 25–40 Schaden / 1,5 s, ×2,0 vs. Luft); Aircraft.md ist angeglichen, die Spiegelung in [Buildings](./Buildings.md) erfolgt im selben Korrekturlauf durch den Buildings-Owner (kein Design-Konflikt mehr).
+- Reichweiten-/Sichtweiten-Harmonisierung: **entschieden (D-047)** – alle Angriffsreichweiten auf Grid-Felder (1 Feld ≙ 1 m) nach den Weapons.md-Korridoren umgestellt; Sicht-Einzelwerte durch VIS-Klassen-Verweise auf [FogOfWar](./FogOfWar.md) ersetzt.
 
 Entschieden im Korrekturlauf Sprint 2 (aus der Liste entfernt):
 
@@ -148,7 +153,7 @@ Entschieden im Korrekturlauf Sprint 2 (aus der Liste entfernt):
 ## Nächste Schritte
 
 1. Review durch Game Director und Lead Systems Design (Luftkampf-Regeln, Buchten-Logik).
-2. Flak-Werte mit [Buildings](./Buildings.md) und Rocket-Launcher-Werte mit [Vehicles](./Vehicles.md) abgleichen (eine Quelle für die Schadens-Matrix).
+2. Verbleibende Verweis-Aufräumarbeiten nach D-047: [Buildings](./Buildings.md) (Flak-Modul) und [Vehicles](./Vehicles.md) (Rocket-Launcher-AA) verweisen auf [Weapons](./Weapons.md) als einzige Werte-Quelle (eine Quelle für die Schadens-Matrix).
 3. Flugmodelle (FixedWing-Anflugmuster, VTOL-Schweben) mit dem Pathfinding-Research ([../research/Pathfinding.md](../research/Pathfinding.md)) abstimmen – Höhen-Layer vs. Bodenkollision.
 4. Playtest-Iteration: Bomber-Munitionsregel und Flak-Dichte in Skirmish 1v1 vs. KI kalibrieren (D-018).
 5. Werte-Export als ScriptableObject-Datensätze für das Balancing-Tool.
@@ -159,3 +164,4 @@ Entschieden im Korrekturlauf Sprint 2 (aus der Liste entfernt):
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Vehicle Artist / Lead Gameplay Designer |
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 2 (D-020–D-030) | Lead Vehicle Artist / Lead Gameplay Designer |
+| 0.3.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings) | Lead Vehicle Artist / Lead Gameplay Designer |

@@ -1,6 +1,6 @@
 # Deployment & Build-Pipeline
 
-**Version:** 0.1.0 | **Status:** Entwurf | **Verantwortungsbereich:** Lead DevOps Engineer | **Sprint:** 3
+**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead DevOps Engineer | **Sprint:** 3
 
 ## Zweck
 
@@ -8,7 +8,8 @@ Definiert Build- und Auslieferungswege von Project Nova: skriptgesteuerte Unity-
 
 ## Abhängigkeiten
 
-- [../production/DecisionLog.md](../production/DecisionLog.md) – D-006 (Unity 6.3 LTS, Desktop Win/macOS primär), D-007 (Premium, Steam), D-018 (Modi-Staffelung, Beta-Zeitpunkt)
+- [../production/DecisionLog.md](../production/DecisionLog.md) – D-006 (Unity 6.3 LTS, Desktop Win/macOS primär), D-007 (Premium, Steam), D-018 (Modi-Staffelung, Beta-Zeitpunkt), D-050 (Branching-Modell gestuft: main + Feature-Branches bis Sprint 6, develop ab Sprint 7)
+- [../../AGENTS.md](../../AGENTS.md) – Goldene Regeln, insbesondere Regel 1 v1.1.0 (Push nach Versionsbump dauerhaft freigegeben) und §5 (PR-Workflow der Doku-Phase)
 - [RTS_Technisches_Planungsdokument.md](../../RTS_Technisches_Planungsdokument.md) §12 (Git/Branching, LFS), §13 (Phasen), §16 (Crash-Reporting, Savegame-Versionierung)
 - [../production/OpenQuestions.md](../production/OpenQuestions.md) – Q-019 (Telemetrie, offen)
 - [./Testing.md](./Testing.md) – CI-Jobs, Release-Gates (Blocker-Klassen)
@@ -68,11 +69,13 @@ Ab Beta relevant (D-018: Online-Modi Beta; interne Steam-Pipeline kann früher a
 
 ## Git-LFS- & Branching-Policy
 
-Übernimmt TPD §12.2 unverändert als verbindliche Struktur:
+Die LFS-Policy übernimmt TPD §12.2 unverändert; das **Branching-Modell ist gestuft (D-050)** und löst den früheren Konflikt zwischen AGENTS.md (PR → `main`) und diesem Dokument (`develop`-Integration) auf:
 
-- **Branches:** `main` (stabil, releasefähig), `develop` (Integration), `feature/…`, `fix/…`, `art/…` (größere Asset-Integrationen), `release/…` (Release-Härtung). Parallele Agenten-/Entwickler-Arbeit über getrennte Git-Worktrees (TPD §12.2).
-- **Schutz:** `main` und `develop` sind geschützt – **PR-Pflicht**, mindestens 1 Review, Statuschecks `editmode-tests` + `replay-tests` grün ([./Testing.md](./Testing.md)); direkte Pushes sind technisch gesperrt.
-- **Merge-Fluss:** `feature|fix|art/* → develop`; `develop → release/x.y.z` bei Meilenstein-Freeze; `release/* → main` + Tag; Hotfixes als `fix/…` direkt auf `release/…` bzw. `main` mit Rückportierung nach `develop`.
+- **Doku-Phase (bis Sprint 6, D-050):** `main` + kurze Feature-/Sprint-Branches mit PR (z. B. `docs/…`, `sprint/…`, `fix/…`). Es gibt **kein `develop`** in dieser Phase; maßgeblich ist der Workflow in [../../AGENTS.md](../../AGENTS.md) §5.
+- **Code-Phase (ab Sprint 7, D-050):** TPD §12.2 vollständig – `main` (stabil, releasefähig), `develop` (Integration), `feature/…`, `fix/…`, `art/…` (größere Asset-Integrationen), `release/…` (Release-Härtung). Parallele Agenten-/Entwickler-Arbeit über getrennte Git-Worktrees (TPD §12.2).
+- **Schutz:** `main` ist geschützt – **PR-Pflicht**, mindestens 1 Review; direkte Pushes sind technisch gesperrt. Ab Sprint 7 gilt dasselbe für `develop`, ergänzt um die Statuschecks `editmode-tests` + `replay-tests` grün ([./Testing.md](./Testing.md)).
+- **Push-/Merge-Freigabe ([../../AGENTS.md](../../AGENTS.md) §2 Regel 1, v1.1.0):** Nach jedem **Versionsbump** (Sprint-Abschluss, Release-Tag, Wiki-Versionserhöhung) sind Commit und Push dauerhaft freigegeben, ohne Einzelfreigabe. Alle anderen Pushes sowie Merges nach `main` erfolgen nur nach menschlicher Freigabe. Lokales Committen ist jederzeit erlaubt.
+- **Merge-Fluss (ab Sprint 7):** `feature|fix|art/* → develop`; `develop → release/x.y.z` bei Meilenstein-Freeze; `release/* → main` + Tag; Hotfixes als `fix/…` direkt auf `release/…` bzw. `main` mit Rückportierung nach `develop`. Bis Sprint 6 gilt schlicht: Feature-Branch → PR → `main`.
 - **LFS-Policy:** Git LFS für alle Binär-Assets (Texturen `.png/.tga/.psd`, Audio `.wav/.ogg`, Modelle `.fbx/.blend`, Video). Text-Formate bleiben in Git (`.cs`, `.md`, `.json`, `.asset`-YAML, `.unity`, `.prefab`). Regeln ausschließlich über versionierte `.gitattributes`; LFS-Zeiger dürfen nicht in `main` gebrochen werden (CI-Check `git lfs fsck` im Build-Job). Quell-Assets (PSD/Blend) und abgeleitete Importe werden nicht doppelt versioniert – Quelle ins LFS, Ableitung erzeugt der Unity-Importer.
 - **Repo-Hygiene:** Library/Build-Outputs sind ignoriert; CI baut immer aus einem sauberen Checkout.
 
@@ -123,7 +126,7 @@ Telemetrie-Infrastruktur ist offene Frage **Q-019** (Owner-Sprint 3/6, [../produ
 - [ ] `fix/…` vom betroffenen Tag; Patch-Version erhöhen (z. B. 0.4.1)
 - [ ] Nur gezielte Änderung + Regressionstest (Bug als roter Test vor Fix, [./Testing.md](./Testing.md))
 - [ ] Verkürzte Checkliste: Test-Suiten + Build-Matrix + QA-Smoke; danach wie Veröffentlichung ab Schritt 2
-- [ ] Rückportierung nach `develop` (Merge oder Cherry-Pick) im selben Vorgang
+- [ ] Rückportierung nach `develop` (Merge oder Cherry-Pick) im selben Vorgang – gilt ab Sprint 7 (D-050); in der Doku-Phase entfällt sie, da es kein `develop` gibt
 
 ## Offene Punkte
 
@@ -147,3 +150,4 @@ Telemetrie-Infrastruktur ist offene Frage **Q-019** (Owner-Sprint 3/6, [../produ
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead DevOps Engineer |
+| 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings) | Lead DevOps Engineer |

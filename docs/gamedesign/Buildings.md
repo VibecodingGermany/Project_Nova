@@ -1,6 +1,6 @@
 # Gebäude – alle Fraktionen
 
-**Version:** 0.3.1 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
+**Version:** 0.4.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
 
 ## Zweck
 
@@ -19,6 +19,7 @@ Spielbare Spezifikation aller 12 Gebäudetypen (D-008) für die drei Fraktionen 
 
 ## 1. Grundprinzipien
 
+- **Führende Quelle für Gebäudewerte (Review F-03, Grundsatzregel D-047):** Dieses Dokument ist die alleinige Quelle für Gebäudekosten, Energiewerte (Erzeugung/Verbrauch) und Bauzeiten. [./Economy.md](./Economy.md) verweist hierher und enthält nur Systemlogik (Einkommensraten, Low-Power-Regel, Lager-Kapazität); doppelte Zahlenpflege ist unzulässig.
 - **12 Typen pro Fraktion, identische Rollen, eigene Namen und Werte-Deltas** (D-008, D-011). Die Rolle ist fraktionsübergreifend balancierbar; Kosten/TP/Bauzeit tragen die Fraktionsidentität (Allianz teuer/präzise, Legion günstig/massig, Evolvierte regenerativ/wachsend).
 - **Energiebilanz:** Kraftwerke produzieren, fast alles andere verbraucht. Defizit löst die Low-Power-Regel aus: Produktions-, Bau- und Forschungsgeschwindigkeit −50 % (D-030), Radar und Verteidigungsplattformen offline, Superwaffen-Ladung pausiert (D-030) (Zahlengerüst).
 - **Lagerkapazität (D-024):** HQ-Basiskapazität 2.000 AE, +2.000 AE je Lager-Gebäude; Überschuss über der Kapazität verfällt; bei Lager-Zerstörung geht ein anteiliger AE-Bestand (25 %) verloren.
@@ -227,9 +228,10 @@ Module werden auf dem fertigen Podest installiert (nicht als separates Gebäude)
 ## Offene Punkte
 
 - **Tor-Modul (Status: Beta-Evaluierung):** Kein Tor-Gebäude im MVP – Durchlass per Segment-Verkauf (50 % Rückerstattung) ist die entschiedene MVP-Lösung. Ein Mauer-Tor-Modul (analog den Plattform-Modulen) wird frühestens zur Beta evaluiert; Entscheidung Game Director.
-- **HQ-Grundenergie (Status: entschieden, D-032):** +30 ist führend (Buildings.md); Economy.md wurde im Korrekturlauf angeglichen. Geschlossen.
-- **Flak-DPS-Korridor (Status: Balancing-Pass v0.2):** Aircraft.md nennt 90 DPS gegen Luft für das Flak-Modul; die Weapons.md-Rahmenwerte (25–40 Schaden / 1,5 s, ×2,0 Luft-Multiplikator ≈ 33–53 DPS) liegen darunter. Eine verbindliche Quelle für die Schadensmatrix ist im Balancing-Pass festzulegen.
+- **Flak-DPS-Korridor (Status: Balancing-Pass v0.2):** Aircraft.md nennt 90 DPS gegen Luft für das Flak-Modul; die Weapons.md-Rahmenwerte (25–40 Schaden / 1,5 s, ×2,0 Luft-Multiplikator ≈ 33–53 DPS) liegen darunter. Reichweiten sind seit D-047 verbindlich in Weapons.md geführt (1 Tile = 1 m); eine verbindliche Quelle für die **Schadens**-Werte ist im Balancing-Pass festzulegen.
 - **Footprints (Status: Abgleich mit Maps.md läuft):** Exakte Footprints (2×2 bis 4×4) sind Annahmen; Finalisierung mit Maps.md.
+
+Entschieden und entfernt im Korrekturlauf Sprint 4: HQ-Grundenergie (+30 führend in diesem Dokument, D-032 – war bereits als geschlossen markiert).
 
 ## Nächste Schritte
 
@@ -245,3 +247,4 @@ Module werden auf dem fertigen Podest installiert (nicht als separates Gebäude)
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 2 (D-020–D-030) | Lead Gameplay Designer |
 | 0.3.0 | 2026-07-21 | Feinschliff Sprint 2 Runde 2 (D-031) | Lead Gameplay Designer |
 | 0.3.1 | 2026-07-21 | HQ-Grundenergie +30 als führend bestätigt, Offener Punkt geschlossen (D-032) | Lead Gameplay Designer |
+| 0.4.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): als führende Quelle für Gebäudekosten/-energie/-bauzeiten festgelegt (Review F-03, D-047-Grundsatzregel); Offene Punkte bereinigt | Lead Gameplay Designer |

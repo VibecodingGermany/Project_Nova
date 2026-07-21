@@ -17,16 +17,33 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 - **Team-/Beitrags-Governance:** `CONTRIBUTING.md` (Team-Ablauf, PR-Pflicht, Release-Flow),
   PR-Vorlage und `CODEOWNERS` sowie ein günstiger, abhängigkeitsfreier CI-Check
   (`docs-check`, GitHub Actions) für tote interne Doku-Links.
-- Sprint 4 (Architecture Review, **laufend**): Serie adversarialer Review-Berichte unter
+- Sprint 4 (Architecture Review, **laufend**): sechs adversariale Review-Berichte unter
   `docs/tech/review/` (Performance, Wartbarkeit & Prozess, Architektur-Kohärenz & Korrektheit,
-  Multiplayer & Netcode, Skalierung & Systemgrenzen; GDD-/TDD-Konsistenz folgt). Einarbeitung
-  der Findings + Sprint-4-Bericht → Versionsbump auf 0.5.0.
+  Multiplayer & Netcode, Skalierung & Systemgrenzen, GDD↔TDD-Konsistenz) – jetzt im
+  Wiki-Index ([docs/README.md](docs/README.md)) verlinkt.
 
 ### Geändert
 - **Repository auf öffentlich umgestellt**, Community-Projekt der Organisation `VibecodingGermany`.
 - **`main` ist geschützt – Änderungen nur noch über Pull Requests** (Branch Protection:
   Review + grüne CI, keine direkten Pushes). `AGENTS.md` auf 2.0.0 (PR-only); Root-`README.md`
   auf Sprint 4 / 0.4.0 nachgezogen.
+- **Sprint-4-Findings in 21 GDD-/TDD-Dokumente eingearbeitet** (Auflösung der Review-Widersprüche):
+  Angriffsreichweiten metrisch → Grid-Felder (D-047, 1 Tile = 1 m); Weapons.md/Buildings.md/
+  Vehicles.md je einzige führende Wertequelle; Alpha-Mutant-Doppeldefinition aufgelöst;
+  Assembly-Topologie kanonisiert (D-043, KI als eigene Unity-freie Assembly `Nova.AI`);
+  Managed-first-Auslieferung (D-045); globaler 600-Einheiten-Deckel (D-048); GameDatabase-
+  Sharding (D-049); Post-Match-Re-Simulation als MP-Trust-Anchor (D-046); Quantum-Fallback
+  gestrichen (D-051). `DocumentationStandard.md` 1.1.0: Grundprinzip „Single Source of Truth
+  für Werte" (D-047).
+- **Zurückgehalten:** `docs/tech/ModuleOverview.md` – untere Hälfte noch nicht auf die
+  D-043-Topologie nachgezogen (Agent am Token-Limit gestoppt); folgt im nächsten Korrekturlauf-PR.
+
+### Entschieden
+- **D-043–D-052** (Sprint-4-Architecture-Review-Auflösungen, DecisionLog → 1.6.0): Assembly-
+  Topologie (D-043), gestuftes Sim-Tick-Modell + Pflicht-Gate V5 (D-044), Managed-first (D-045),
+  MP-Trust-Anchor (D-046), Werte-Single-Source (D-047), Skalierungs-Deckel (D-048), CI-Realismus
+  + DB-Sharding (D-049), gestuftes Branching (D-050), Quantum-Fallback gestrichen (D-051),
+  Referenzhardware (D-052).
 
 ## [0.4.0] – 2026-07-21 · Sprint 3: Technical Design
 

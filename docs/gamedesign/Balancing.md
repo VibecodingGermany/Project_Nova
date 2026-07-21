@@ -1,6 +1,6 @@
 # Balancing-Methodik
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead QA Engineer | **Sprint:** 2
+**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead QA Engineer | **Sprint:** 2
 
 ## Zweck
 
@@ -31,7 +31,8 @@ Erläuterungen:
 - **Ziel 2 vor Ziel 3:** Eine Fraktion darf 50 % Winrate haben und trotzdem kaputt sein, wenn ein einziger Build alle anderen schlägt. Strategie-Diversität wird deshalb separat gemessen.
 - **Geltungsbereich der Winrate-Bänder:** Ziel 3 (45–55 %) gilt ausschließlich für KI-vs-KI-Simulationen (pro Schwierigkeitsstufe separat) und später PvP – **nicht** für Spieler-vs-KI. Die Solo-Erfahrung der H1-Zielgruppe wird nicht über Winrate-Zielbänder balanciert, sondern über die datengetriebenen Difficulty-Profile (`DifficultyProfileSO`: Entscheidungsqualität statt Ressourcenboni) gemäß [../research/KI_Architektur.md](../research/KI_Architektur.md); die Spielbarkeit je Stufe wird qualitativ über die Playtest-Stufen 3–4 geprüft. PvP-Daten existieren frühestens ab Beta (D-018).
 - Matchdauer wird als **Median** gemessen, nicht als Mittelwert; Ausreißer über 45 min und unter 12 min werden als eigene Fehlerklasse untersucht (Stagnation bzw. ungestrafte Rushes).
-- **Survival-Modus (Beta, D-018):** hat per Definition keine "Matchdauer bis Sieg". Erfolgsmaß ist **Welle 20 überstehen = Sieg** (Endlos-Modus optional, Abgleich mit [MultiplayerModes.md](MultiplayerModes.md) §3.5); Balance-Metriken dort: erreichte Welle und Zeit bis Niederlage je Fraktion und Schwierigkeit.
+- **Survival-Modus (Beta, D-018):** hat per Definition keine "Matchdauer bis Sieg". Erfolgsmaß ist **Welle 20 überstehen = Sieg** (Endlos-Modus optional, Abgleich mit [MultiplayerModes.md](MultiplayerModes.md) §3.5); Balance-Metriken dort: erreichte Welle und Zeit bis Niederlage je Fraktion und Schwierigkeit. Für den Endlos-Modus gilt (D-048): Stärke-Abflachung ab Welle 25 (linear statt multiplikativ) und Despawn älterer Wellenreste – die Wellenstärke-Skalierung ist damit gedeckelt und als Balance-Hebel nur bis Welle 25 frei.
+- **Globales Einheiten-Deckel (D-048):** Pro Match sind maximal **600 Einheiten** gleichzeitig aktiv (Produktionsstopp mit UI-Hinweis bei Erreichen; führend: [MultiplayerModes.md](MultiplayerModes.md) §2). Alle Balancing-Rechnungen und Simulations-Setups müssen innerhalb dieses Deckels aussagefähig sein; Winrate- oder TTK-Aussagen oberhalb des Deckels sind unzulässig.
 
 ## TTK-Richtwerte (Time-to-Kill)
 
@@ -137,6 +138,10 @@ Entschieden im Korrekturlauf Sprint 2 (ehemals offen):
 - Survival-Erfolgsmaß: **Welle 20 überstehen = Sieg** (Endlos-Modus optional), abgeglichen mit [MultiplayerModes.md](MultiplayerModes.md) §3.5.
 - Elite-Limit (D-015): **hartes Limit** – 1 Elite-Einheit gleichzeitig im MVP/Alpha, 2 ab Release; kein kostenbasiertes Soft-Limit.
 
+Entschieden im Korrekturlauf Sprint 4 (D-048):
+
+- Skalierungs-Deckel: globales Einheiten-Deckel **600/Match** (Produktionsstopp + UI-Hinweis), Survival-Endlos-Abflachung ab Welle 25 (linear) + Despawn älterer Wellenreste, `AetheriumDensity` ≤1,5 bei 5–6 Spielern – führend: [MultiplayerModes.md](MultiplayerModes.md); Verweise in den Balancing-Zielen ergänzt.
+
 ## Nächste Schritte
 
 - Konter-Matrix-Lint-Regeln und Framework-Berechnungen als Schema-Kommentare in DamageSystem.md/ArmorSystem.md bzw. den Einheiten-Dokumenten verankern (Sprint 2, gemeinsam mit den zuständigen Autoren).
@@ -150,3 +155,4 @@ Entschieden im Korrekturlauf Sprint 2 (ehemals offen):
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead QA Engineer |
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 2 (D-020–D-030) | Lead QA Engineer |
+| 0.3.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): D-048-Verweise ergänzt (globales Einheiten-Deckel 600/Match, Survival-Endlos-Abflachung ab Welle 25) | Lead QA Engineer |

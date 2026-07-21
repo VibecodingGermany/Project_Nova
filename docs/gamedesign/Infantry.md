@@ -1,6 +1,6 @@
 # Infanterie – Einheiten-Design (24 Einheiten)
 
-**Version:** 0.2.0 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
+**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 4) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
 
 ## Zweck
 
@@ -103,9 +103,11 @@ Designlinie: Alle Evolvierten-Infanterie **regeneriert** HP langsam außerhalb d
 | Bio-Heiler | Support-Heilung | – | alles (unbewaffnet) | 250 AE | S (60) | – | 8 m (Heilung) | mittel | T1 |
 | Kristallmagier | T3-Caster, mobile Flugabwehr (D-026) | Gruppen (Kontrolle/Debuff), Luft (Zielklasse `Both`) | Sniper, Fokus-Feuer | 800 AE | M (110) | 10 Kristall | 14 m | langsam | T3 |
 | Tunnelgräber | Infiltration/Belagerung/Capture (D-022) | Gebäude, Mauern (untergräbt), Gebäude (capturen) | alles beim Auftauchen (verwundbar) | 400 AE | M (100) | 8 Bio | 3 m | mittel (unterirdisch schnell) | T2 |
-| Alpha-Mutant | **Elite (D-015)** | Infanterie, Fahrzeuge, Gebäude | konzentriertes Sperrfeuer, Superwaffen | 2.500 AE | XL (900) | 60 Bio/Kristall (Fläche-Nahkampf) | 4 m | mittel | T3, Limit 1–2 |
+| Alpha-Mutant | **Elite (D-015)** | Infanterie, Fahrzeuge, Gebäude | konzentriertes Sperrfeuer, Superwaffen | – | – | – | – | – | T3, Limit 1–2 |
 
-**Fähigkeiten:** Alle: *Regeneration* (passiv, ~2 HP/s außerhalb des Kampfs, verdoppelt auf Aetherium-Feld). Mutant: *Ansturm* (Sprung auf Ziel). Kristallkrieger: *Kristalllanze* (Stoßangriff, Bonusschaden vs. Fahrzeuge). Sporenwerfer: *Sporenwolke* (flächiger DoT, wirkt auch vs. Luft). Berserker: *Raserei* (Schaden steigt mit HP-Verlust). Bio-Heiler: *Heilsporen* (Flächen-HoT), *Gestärkte Regeneration* (verdoppelt Regeneration des Ziels). Kristallmagier: *Kristallgefängnis* (hält 1 Einheit fest), *Aether-Resonanz* (verstärkt Regeneration aller Verbündeten im Umkreis); Angriff mit Zielklasse `Both` – Boden und Luft (mobile Evolvierte-Flugabwehr gemäß D-026). Tunnelgräber: *Graben* (unterirdische Bewegung, ignoriert Mauern/Einheitenkollision), *Sprengblase* (Gebäudeschaden beim Auftauchen), *Einnehmen* (Kanal-Capture gemäß D-022-Regelwerk – Evolvierte-Capture-Einheit; auch Brücken-Reparatur nach D-028). Alpha-Mutant: *Kristallhieb* (Frontal-Fläche), *Territorialbrüllen* (Debuff feindlicher Infanterie), *Evolvierte Präsenz* (nahe Mutanten regenerieren auch im Kampf).
+**Alpha-Mutant (Elite, D-015):** Alle Zahlenwerte (Kosten, HP, DPS, Bauzeit, Reichweite, Produktionsvoraussetzungen) und Fähigkeiten sind **führend in [./Vehicles.md](./Vehicles.md)** (Elite-Tabelle) definiert – keine Doppelpflege in diesem Dokument (Grundsatzregel „jeder Wert existiert genau einmal", D-047; Korrekturlauf Sprint 4). Die Zeile oben dokumentiert nur die Rolle im Infanterie-Kontergeflecht.
+
+**Fähigkeiten:** Alle: *Regeneration* (passiv, ~2 HP/s außerhalb des Kampfs, verdoppelt auf Aetherium-Feld). Mutant: *Ansturm* (Sprung auf Ziel). Kristallkrieger: *Kristalllanze* (Stoßangriff, Bonusschaden vs. Fahrzeuge). Sporenwerfer: *Sporenwolke* (flächiger DoT, wirkt auch vs. Luft). Berserker: *Raserei* (Schaden steigt mit HP-Verlust). Bio-Heiler: *Heilsporen* (Flächen-HoT), *Gestärkte Regeneration* (verdoppelt Regeneration des Ziels). Kristallmagier: *Kristallgefängnis* (hält 1 Einheit fest), *Aether-Resonanz* (verstärkt Regeneration aller Verbündeten im Umkreis); Angriff mit Zielklasse `Both` – Boden und Luft (mobile Evolvierte-Flugabwehr gemäß D-026). Tunnelgräber: *Graben* (unterirdische Bewegung, ignoriert Mauern/Einheitenkollision), *Sprengblase* (Gebäudeschaden beim Auftauchen), *Einnehmen* (Kanal-Capture gemäß D-022-Regelwerk – Evolvierte-Capture-Einheit; auch Brücken-Reparatur nach D-028). Alpha-Mutant: Fähigkeiten und Werte führend in [./Vehicles.md](./Vehicles.md) (Elite-Tabelle, D-015) – keine Doppelpflege hier (D-047-Grundsatzregel).
 
 ## Konter-Matrix im Überblick (Rollen-Kohärenz)
 
@@ -124,6 +126,8 @@ Begründung der Asymmetrie: Allianz löst Konter über Reichweite/Qualität (hö
 
 Entschieden im Korrekturlauf Sprint 2 (entfernt): Garrison-/Capture-Regelwerk (D-022: Kanal-Capture, kein Garrison im MVP), Elite-Asymmetrie der Evolvierten (D-027: gewollt, Ausgleich über Release-Eliten), Versorgungssystem/`popLimit` (D-021: kein Supply-System), Bauzeit-Anker (abgeglichen: Economy.md/Buildings.md definieren keine Einheiten-Produktionszeiten; die Werte oben sind der Referenzrahmen).
 
+Bereinigt im Korrekturlauf Sprint 4: Alpha-Mutant-Doppelwerte (Kosten/HP/DPS/Fähigkeiten) entfernt – führend ist [./Vehicles.md](./Vehicles.md) (Grundsatzregel D-047, Review-Finding Werte-Duplikation).
+
 ## Nächste Schritte
 
 - Übergabe der Asset-Liste (24 Einheiten inkl. Fähigkeiten-VFX-Bedarf) an Sprint 5 (APL Paket 04 bleibt unverändert gültig).
@@ -137,3 +141,4 @@ Entschieden im Korrekturlauf Sprint 2 (entfernt): Garrison-/Capture-Regelwerk (D
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung: 24 Infanterieeinheiten mit Rollen, Konter-Matrix, Werte-Richtwerten, Fähigkeiten, Tech-Voraussetzungen | Lead Gameplay Designer |
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 2 (D-020–D-030) | Lead Gameplay Designer |
+| 0.3.0 | 2026-07-21 | Korrekturlauf Sprint 4 (D-043–D-052, Review-Findings): Alpha-Mutant-Werte/-Fähigkeiten durch Verweis auf Vehicles.md ersetzt (D-047-Grundsatzregel, keine Doppelpflege) | Lead Gameplay Designer |
