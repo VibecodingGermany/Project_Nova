@@ -14,12 +14,19 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 ## [Unreleased]
 
 ### Hinzugefügt
-- Sprint 4 (Architecture Review, **laufend**): fünf adversariale Review-Berichte unter
-  `docs/tech/review/` – Performance (Befunde F-1…F-18 inkl. Budget-Gesamtbewertung),
-  Wartbarkeit & Prozess (F-01…F-17), Architektur-Kohärenz & Korrektheit,
-  Multiplayer & Netcode (18 Befunde) sowie Skalierung & Systemgrenzen. Reine
-  Prüfberichte, keine Änderung an Bestandsdokumenten. Offen für den Sprint-4-Abschluss:
-  Einarbeitung kritischer Findings + Sprint-4-Bericht (dann Versionsbump auf 0.5.0).
+- **Team-/Beitrags-Governance:** `CONTRIBUTING.md` (Team-Ablauf, PR-Pflicht, Release-Flow),
+  PR-Vorlage und `CODEOWNERS` sowie ein günstiger, abhängigkeitsfreier CI-Check
+  (`docs-check`, GitHub Actions) für tote interne Doku-Links.
+- Sprint 4 (Architecture Review, **laufend**): Serie adversarialer Review-Berichte unter
+  `docs/tech/review/` (Performance, Wartbarkeit & Prozess, Architektur-Kohärenz & Korrektheit,
+  Multiplayer & Netcode, Skalierung & Systemgrenzen; GDD-/TDD-Konsistenz folgt). Einarbeitung
+  der Findings + Sprint-4-Bericht → Versionsbump auf 0.5.0.
+
+### Geändert
+- **Repository auf öffentlich umgestellt**, Community-Projekt der Organisation `VibecodingGermany`.
+- **`main` ist geschützt – Änderungen nur noch über Pull Requests** (Branch Protection:
+  Review + grüne CI, keine direkten Pushes). `AGENTS.md` auf 2.0.0 (PR-only); Root-`README.md`
+  auf Sprint 4 / 0.4.0 nachgezogen.
 
 ## [0.4.0] – 2026-07-21 · Sprint 3: Technical Design
 

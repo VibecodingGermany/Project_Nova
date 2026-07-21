@@ -1,0 +1,30 @@
+name: Docs Checks
+
+# Guenstige, abhaengigkeitsfreie Doku-Pruefung. Laeuft nur bei Aenderungen an
+# Markdown-Dateien und bricht laufende Durchgaenge ab -> minimale Actions-Minuten.
+# Auf oeffentlichen Repos sind GitHub Actions kostenlos.
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+  push:
+    branches: [main]
+    paths:
+      - '**/*.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs-check:
+    name: docs-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Interne Doku-Links pruefen (tote Links = Fehler)
+        run: python3 .github/scripts/check_docs.py

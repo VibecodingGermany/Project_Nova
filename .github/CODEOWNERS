@@ -1,0 +1,18 @@
+# CODEOWNERS – automatische Review-Zuweisung für Project Nova
+#
+# Syntax: <pfad-muster>   <owner(s)>
+# Letzter passender Eintrag gewinnt.
+#
+# Wirkung als Merge-BLOCKER nur, wenn in der Branch Protection von `main`
+# "Require review from Code Owners" aktiv ist. Ist das aus (Standard hier),
+# dient CODEOWNERS als hilfreiche automatische Reviewer-Zuweisung.
+
+# Standard: inhaltliche Änderungen reviewt das trusted-coders-Team
+*                         @VibecodingGermany/trusted-coders
+
+# Governance, Prozess & Release: Owner-Hoheit
+/AGENTS.md                @cubetribe
+/CONTRIBUTING.md          @cubetribe
+/CHANGELOG.md             @cubetribe
+/.github/                 @cubetribe
+/docs/meta/               @cubetribe

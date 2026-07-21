@@ -17,16 +17,18 @@ auch wenn viele verschiedene Agenten-Sessions daran arbeiten.
 mit Basisbau, drei Fraktionen und der Ressource **Aetherium**. Das Repo befindet sich
 in der **Design-/Planungsphase**: Es enthält **noch keinen Spielcode**, sondern ein
 strukturiertes Dokumentations-Wiki unter [`docs/`](docs/). Implementierung ist Sprint 7.
-Der aktuelle Fokus ist Sprint 3 (Technical Design).
+Sprint 3 (Technical Design) ist abgeschlossen (Wiki-Stand 0.4.0); aktueller Fokus ist
+Sprint 4 (Architecture Review, `docs/tech/review/`).
 
 ## 2. Goldene Regeln (nicht verhandelbar)
 
-1. **Push nach Versionsbump ist dauerhaft freigegeben.** Der Projektinhaber hat am
-   2026-07-21 ausdrücklich und dauerhaft angeordnet: Nach jedem Versionsbump
-   (Sprint-Abschluss, Release-Tag, Wiki-Versionserhöhung) wird der Stand committet und
-   zu GitHub gepusht – ohne erneute Einzelfreigabe. Für alle anderen Pushes
-   (zwischenzeitliche Feature-Branches, experimentelle Arbeit) gilt weiterhin: `git push`
-   nur nach expliziter Freigabe. Committen lokal ist jederzeit erlaubt.
+1. **`main` ist geschützt – Veröffentlichung ausschließlich über Pull Requests.** Direkte
+   Pushes auf `main` sind technisch gesperrt (GitHub Branch Protection) und für niemanden
+   erlaubt – auch nicht nach einem Versionsbump. Jede Änderung: Feature-/Sprint-Branch →
+   Pull Request → grüne CI (`docs-check`) → mindestens ein Review → Squash-Merge.
+   Feature-Branches darfst du jederzeit pushen; nur `main` ist gesperrt. Agenten ohne
+   Git-Fähigkeit schreiben nur Dateien – ein Maintainer verpackt sie in einen PR. Details:
+   [CONTRIBUTING.md](CONTRIBUTING.md).
 2. **Niemals `main` mit `--force` überschreiben.** Keine History-Rewrites auf geteilten
    Branches. `main` bleibt jederzeit in einem konsistenten Zustand.
 3. **Keine Secrets ins Repo.** Keine Tokens, Keys, `.env`-Inhalte, Passwörter oder
@@ -60,7 +62,8 @@ docs/
 ├── research/        ← Sprint 1 (abgeschlossen)
 ├── vision/          ← Sprint 2 (abgeschlossen)
 ├── gamedesign/      ← Sprint 2 – GDD (abgeschlossen)
-├── tech/            ← Sprint 3 – Technical Design (in Arbeit)
+├── tech/            ← Sprint 3 – Technical Design (abgeschlossen, 0.4.0)
+│   └── review/      ← Sprint 4 – Architecture Review (in Arbeit)
 └── production/      ← Sprint-Planung, DecisionLog, OpenQuestions, RiskAnalysis, sprints/
 ```
 
@@ -92,10 +95,11 @@ Das Wichtigste:
 - `main` ist immer stabil und konsistent.
 - Arbeit findet auf **Feature-/Sprint-Branches** statt und wird per **Pull Request**
   nach `main` gebracht:
-  - `sprint/03-technical-design`
+  - `sprint/04-architecture-review`
   - `docs/pathfinding-update`
   - `fix/economy-energy-values`
-- Kleine, isolierte Korrekturen dürfen nach Absprache direkt auf `main` – im Zweifel PR.
+- **Niemals direkt auf `main` pushen** – `main` ist per Branch Protection gesperrt und
+  nimmt Änderungen ausschließlich über Pull Requests an.
 
 ### Commits – Conventional Commits
 Format: `type(scope): kurze Beschreibung im Imperativ`
@@ -123,7 +127,9 @@ Regeln:
 - Titel im Conventional-Commit-Stil; Beschreibung listet: Was, Warum, betroffene
   Dokumente, geänderte Entscheidungen (D-IDs), Changelog-Eintrag.
 - Bei sprintabschließenden PRs: Sprint-Bericht verlinken.
-- **Merge nach `main` und `git push` nur mit menschlicher Freigabe.**
+- **Merge nach `main` nur per PR mit grüner CI (`docs-check`) und mindestens einem
+  Review.** Feature-Branches dürfen frei gepusht werden; direkte `main`-Pushes sind
+  gesperrt. Vollständiger Team-Ablauf: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 6. CHANGELOG-Disziplin (Keep a Changelog)
 
@@ -162,12 +168,13 @@ der Sprint-Bericht vorliegt.
 Eine Änderung ist erst „fertig", wenn **alle** Punkte erfüllt sind:
 
 - [ ] Inhalt geändert **und** der `Änderungsverlauf` im betroffenen Dokument ergänzt (+Version-Bump)
-- [ ] Bei Struktur-Änderung: [docs/README.md](docs/README.md)-Index aktualisiert
+- [ ] Bei Struktur-/Status-Änderung: [docs/README.md](docs/README.md)-Index **und** die
+      Root-[README.md](README.md) (Sprint-/Versionsstatus) aktualisiert
 - [ ] Entscheidung? → im [DecisionLog](docs/production/DecisionLog.md) mit ≥3 Alternativen
 - [ ] Eintrag unter `[Unreleased]` in [CHANGELOG.md](CHANGELOG.md)
-- [ ] Interne Links geprüft (keine toten relativen Links)
+- [ ] Interne Links geprüft (keine toten relativen Links; CI `docs-check` grün)
 - [ ] Sauberer Conventional-Commit
-- [ ] Push/Merge nur nach menschlicher Freigabe
+- [ ] Als Pull Request eingebracht (kein direkter `main`-Push), CI grün + Review
 
 ## 9. Befehls-Spickzettel
 
@@ -186,8 +193,11 @@ git commit -m "docs(<scope>): <imperativ>"
 # Interne Links auf tote Ziele prüfen (Beispiel)
 grep -rIoE '\]\(([^)]+\.md)[^)]*\)' docs | sort -u
 
-# Push – NUR nach Freigabe
+# Feature-Branch pushen (jederzeit erlaubt; NIE auf main)
 git push -u origin <branch>
+
+# Pull Request öffnen (Merge nach main läuft ausschließlich so)
+gh pr create --fill --base main
 ```
 
 ---
@@ -198,3 +208,4 @@ git push -u origin <branch>
 |---|---|---|---|
 | 1.0.0 | 2026-07-21 | Initiale Agenten-Arbeitsregeln (Repo-Setup) | Orchestrator |
 | 1.1.0 | 2026-07-21 | Goldene Regel 1: Push nach Versionsbump dauerhaft freigegeben (Anordnung Projektinhaber) | Orchestrator |
+| 2.0.0 | 2026-07-21 | Regel 1 auf **PR-only** umgestellt (main per Branch Protection gesperrt); Repo öffentlich; Team-Workflow + CI (`docs-check`) verankert; Status auf Sprint 4 aktualisiert; DoD um Root-README ergänzt | Orchestrator |

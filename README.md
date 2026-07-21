@@ -2,7 +2,7 @@
 
 > Modernes Echtzeitstrategiespiel (RTS) mit Basisbau, drei Fraktionen und der lebendigen Kristallressource **Aetherium**. *Project Nova* ist der Arbeitstitel.
 
-**Phase:** Konzeption & Technical Design · **Status:** Sprint 3 (Technical Design) in Arbeit · **Repo:** privat
+**Phase:** Konzeption & Architektur-Review · **Status:** Sprint 4 (Architecture Review) in Arbeit · **Repo:** öffentlich (Community-Projekt)
 
 ---
 
@@ -46,7 +46,7 @@ Project Nova/
     ├── research/          ← Technologie- & Markt-Research (Sprint 1)
     ├── vision/            ← Leitbild, USP, Zielgruppe, Game Loop (Sprint 2)
     ├── gamedesign/        ← vollständiges GDD (Sprint 2)
-    ├── tech/              ← Technical Design Documents (Sprint 3, in Arbeit)
+    ├── tech/              ← Technical Design (Sprint 3) + review/ (Architecture Review, Sprint 4)
     └── production/        ← Sprint-Planung, Entscheidungen, Risiken, Sprint-Berichte
 ```
 
@@ -57,8 +57,8 @@ Project Nova/
 | 0 | Projektinitialisierung & Analyse | ✅ abgeschlossen |
 | 1 | Research | ✅ abgeschlossen |
 | 2 | Game Design (GDD) | ✅ abgeschlossen |
-| 3 | Technical Design | 🔧 in Arbeit |
-| 4 | Architecture Review | ⛔ blockiert bis Sprint 3 |
+| 3 | Technical Design | ✅ abgeschlossen |
+| 4 | Architecture Review | 🔧 in Arbeit |
 | 5 | Asset Audit | ⛔ blockiert bis Sprint 3 |
 | 6 | Produktionsplanung | ⛔ blockiert bis Sprint 5 |
 | 7 | Implementierung | ⛔ blockiert bis Sprint 6 |
@@ -69,11 +69,11 @@ Details und Exit-Kriterien: [docs/production/SprintPlanning.md](docs/production/
 
 - **Engine:** Unity 6.3 LTS · **Sprache:** C# · **Render-Pipeline:** URP
 - **Architektur-Prämisse:** Vier-Säulen-Architektur mit Unity-freiem, deterministischem Simulationskern (`Nova.Simulation`)
-- **In Evaluierung (Sprint 3):** ECS/DOTS, Pathfinding-Verfahren, Multiplayer-Simulationsmodell
+- **In Sprint 3 entschieden (D-033–D-042):** Multiplayer-Simulationsmodell, Pathfinding-Verfahren, ECS/DOTS-Frage
 
 ## Arbeitsweise
 
-Die Entwicklung läuft **KI-gestützt** über Coding-Agenten. Verbindliche Regeln für Commits, Branches, CHANGELOG-Pflege und Dokumentationsdisziplin stehen in **[AGENTS.md](AGENTS.md)** – jeder Agent und jede mitwirkende Person liest diese Datei zuerst.
+Die Entwicklung läuft **KI-gestützt** über Coding-Agenten. Verbindliche Regeln für Commits, Branches, CHANGELOG-Pflege und Dokumentationsdisziplin stehen in **[AGENTS.md](AGENTS.md)** – jeder Agent und jede mitwirkende Person liest diese Datei zuerst. Alle Änderungen laufen über **Pull Requests** (kein direkter `main`-Push); der Team-Ablauf steht in **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 Grundprinzipien:
 - **Living Documents:** Jede Erkenntnis/Entscheidung wird sofort dokumentiert und versioniert – Doku ist nie „fertig".
@@ -82,8 +82,12 @@ Grundprinzipien:
 
 ## Änderungshistorie
 
-Siehe [CHANGELOG.md](CHANGELOG.md). Die Versionsnummern folgen dem Dokumentationsstand des Wikis (aktuell `0.3.0`).
+Siehe [CHANGELOG.md](CHANGELOG.md). Die Versionsnummern folgen dem Dokumentationsstand des Wikis (aktuell `0.4.0`).
+
+## Mitmachen
+
+Öffentliches **Community-Projekt** der Organisation **VibecodingGermany**. Beiträge sind willkommen – bitte zuerst [CONTRIBUTING.md](CONTRIBUTING.md) und [AGENTS.md](AGENTS.md) lesen. Alle Änderungen laufen über Pull Requests.
 
 ## Lizenz
 
-© 2026 Dennis Westermann / cubetribe. Alle Rechte vorbehalten. Proprietäres, nicht-öffentliches Projekt – keine Nutzung, Vervielfältigung oder Weitergabe ohne ausdrückliche Genehmigung.
+© 2026 VibecodingGermany / Dennis Westermann. Eine formale Lizenz ist **noch festzulegen** (`LICENSE` folgt). Bis dahin: Ansehen und Mitwirken per Pull Request ausdrücklich erwünscht; keine Weiterverbreitung als eigenes Werk ohne Absprache.
