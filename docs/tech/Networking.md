@@ -1,6 +1,6 @@
 # Networking – Zielarchitektur Lockstep über autoritativem Command-Relay
 
-**Version:** 0.1.0 | **Status:** Entwurf | **Verantwortungsbereich:** Lead Multiplayer Engineer | **Sprint:** 3
+**Version:** 0.1.1 | **Status:** Entwurf | **Verantwortungsbereich:** Lead Multiplayer Engineer | **Sprint:** 3
 
 ## Zweck
 
@@ -133,7 +133,7 @@ Fachliche Regeln: [../gamedesign/MultiplayerModes.md](../gamedesign/MultiplayerM
 - *Auto-Niederlage verworfen:* bestraft flüchtige Netzprobleme mit Matchverlust und ruiniert 2v2-/Koop-Matches für den Mitspieler (Team-Asymmetrie); Wiedereinstieg wäre unmöglich, obwohl die Reconnect-Technik ohnehin gebaut wird.
 - *KI-Übernahme* hält das Match für alle verbleibenden Spieler spielbar, nutzt die ohnehin existierende KI-Schicht (Command-only, erzeugt ausschließlich Commands wie ein menschlicher Slot) und das Reconnect-System, und kostet keinen zusätzlichen Netzwerk-Pfad.
 
-**Konflikt:** [../gamedesign/VictoryConditions.md](../gamedesign/VictoryConditions.md) definiert "Verbindungsverlust > 120 s = Niederlage". Diese Regel ist durch die finale Festlegung **ersetzt** (KI-Übernahme statt Auto-Niederlage); Angleichung als Nächster Schritt (§9). Die vorläufige Regel in MultiplayerModes.md §3.2 wird damit final.
+**Konflikt (aufgelöst):** [../gamedesign/VictoryConditions.md](../gamedesign/VictoryConditions.md) definierte ursprünglich "Verbindungsverlust > 120 s = Niederlage". Diese Regel ist durch die finale Festlegung **ersetzt** (KI-Übernahme statt Auto-Niederlage, D-038); die Angleichung von VictoryConditions.md und MultiplayerModes.md §3.2 ist erfolgt (beide verweisen auf dieses Dokument als führend).
 
 ## 6. Host-Migration-Bewertung
 
@@ -154,7 +154,7 @@ Gemäß D-033 **akzeptiert bis Ranked-Re-Evaluierung**: Jeder Client besitzt den
 
 ## Offene Punkte
 
-- **Konflikt VictoryConditions.md:** "Verbindungsverlust > 120 s = Niederlage" widerspricht der finalen KI-Übernahme-Regel (§5) – Angleichung erforderlich, fachliche Hoheit bei Game Design / Game Director.
+- **Konflikt VictoryConditions.md (aufgelöst, D-038):** Die frühere Regel "Verbindungsverlust > 120 s = Niederlage" widersprach der finalen KI-Übernahme-Regel (§5) – Angleichung erfolgt (VictoryConditions.md 0.3.1, MultiplayerModes.md 0.3.2; dieses Dokument führend).
 - **KI-Slot-Ausführungsort im Relay-Match** (§4.3): feste Zuordnung pro Slot vs. Server-seitige KI-Prozesse (erhöht Hosting-Kosten). Zu entscheiden mit Beta-Infrastrukturplanung.
 - **Server-Ausfall mid-match:** Fortsetzungs-Szenario bewusst nicht verplant; Restrisiko für lange Matches (20–35 min) dokumentieren.
 - **Relay-Backend-Technologie:** Implementierungssprache/-Hosting des Relay-Servers (z. B. .NET auf Basis von `Nova.Simulation`-nahen Serializern) ist Sprint-6-/Beta-Thema; Research nennt Backend-Dienst explizit orthogonal.
@@ -163,7 +163,7 @@ Gemäß D-033 **akzeptiert bis Ranked-Re-Evaluierung**: Jeder Client besitzt den
 
 ## Nächste Schritte
 
-1. Angleichung von [../gamedesign/VictoryConditions.md](../gamedesign/VictoryConditions.md) (technischer Abbruch) und [../gamedesign/MultiplayerModes.md](../gamedesign/MultiplayerModes.md) §3.2 (Disconnect-Regel final, Host-Migration-Frage beantwortet) – Übergabe an Game Design / Game Director.
+1. ~~Angleichung von [../gamedesign/VictoryConditions.md](../gamedesign/VictoryConditions.md) (technischer Abbruch) und [../gamedesign/MultiplayerModes.md](../gamedesign/MultiplayerModes.md) §3.2~~ – **erledigt (D-038, 2026-07-21)**; die Host-Migration-Frage aus MultiplayerModes.md §4 ist oben (§6) beantwortet.
 2. Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86 validieren (Fallback-Kriterium §3, DecisionLog Offene Punkte).
 3. [./GameState.md](./GameState.md): Command-Schema und Tick-Loop so definieren, dass `TickBatch`/Input-Delay direkt darauf aufsetzen.
 4. Sprint 6 (Produktionsplanung): Relay-Server-Hosting, Regionen und Kostenrahmen für Beta schätzen.
@@ -173,3 +173,4 @@ Gemäß D-033 **akzeptiert bis Ranked-Re-Evaluierung**: Jeder Client besitzt den
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Multiplayer Engineer |
+| 0.1.1 | 2026-07-21 | Konflikt-Verweise auf VictoryConditions.md/MultiplayerModes.md als aufgelöst markiert (D-038-Angleichung erfolgt) | Lead Technical Director |

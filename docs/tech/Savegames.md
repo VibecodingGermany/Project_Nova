@@ -13,7 +13,7 @@ Definiert Umfang, Dateistruktur, Ablage und Lebenszyklus von Speicherständen un
 - [../research/Multiplayer_Simulation.md](../research/Multiplayer_Simulation.md) – Replay = Seed + Befehlsstrom; Replays als Savegame-Grundlage
 - [./GameState.md](./GameState.md) – snapshot-fähiger `WorldState`
 - [./Serialization.md](./Serialization.md) – Binärformat, `SchemaVersion`, `ReplayHeader`, Checksummen-Basis
-- [./Simulation.md](./Simulation.md) – Tick-Loop, Speicher-/Lade-Hooks (parallel, Sprint 3)
+- [./Architecture.md](./Architecture.md) – Sim-Tick-Loop, Speicher-/Lade-Hooks (parallel, Sprint 3)
 
 ## Savegame-Umfang
 

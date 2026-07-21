@@ -1,6 +1,6 @@
 # Performance-Budget (Frame & Tick)
 
-**Version:** 0.1.0 | **Status:** Entwurf | **Verantwortungsbereich:** Lead Performance Engineer | **Sprint:** 3
+**Version:** 0.1.1 | **Status:** Entwurf | **Verantwortungsbereich:** Lead Performance Engineer | **Sprint:** 3
 
 ## Zweck
 
@@ -8,13 +8,13 @@ Dieses Dokument operationalisiert die Qualitätsziele aus TPD §15 („stabile 6
 
 ## Abhängigkeiten
 
-- [../production/DecisionLog.md](../production/DecisionLog.md) – D-006 (Unity 6.3 LTS + URP), D-033 (fester Sim-Tick 10 Hz, Rendering entkoppelt), D-034 (Pathfinding-CPU-Budget ≤2–4 ms), D-035 (Burst/Jobs-Hotspots, keine GC-Allokationen im Tick), D-036 (Nova.SimRunner für Headless-Messungen)
+- [../production/DecisionLog.md](../production/DecisionLog.md) – D-006 (Unity 6.3 LTS + URP), D-033 (fester Sim-Tick 10 Hz, Rendering entkoppelt), D-034 (Pathfinding-CPU-Budget ≤2–4 ms), D-035 (Burst/Jobs-Hotspots, keine GC-Allokationen im Tick), D-036 (Nova.SimRunner für Headless-Messungen), D-042.1 (Sim-Tick-Gesamtbudget ≤8 ms mit Unterbudgets PF ≤4 ms / FoW ≤1,0 ms / Rest-Sim ≤3 ms, führend Architecture.md)
 - [../production/OpenQuestions.md](../production/OpenQuestions.md) – vier Pflicht-Validierungen am Phase-0-Spike (§ Offene Punkte)
 - [../research/Pathfinding.md](../research/Pathfinding.md) – CPU-Budget-Arbeitsannahme §4.1
 - [../research/Animation_Audio_UI.md](../research/Animation_Audio_UI.md) – Animator-vs.-Playables-Frage, Animations-LOD
 - [../research/FogOfWar.md](../research/FogOfWar.md) – Sicht-Tick-Kostenmodell
 - [./MemoryBudget.md](MemoryBudget.md), [./AssetBudget.md](AssetBudget.md) – Schwesterdokumente
-- [./Pathfinding.md](Pathfinding.md), [./SimulationArchitecture.md](SimulationArchitecture.md) – Schwester-TDDs aus Sprint 3 (in Erstellung)
+- [./Pathfinding.md](Pathfinding.md), [./Architecture.md](Architecture.md) – Schwester-TDDs aus Sprint 3
 
 ## 1. Zielwerte
 
@@ -35,7 +35,7 @@ Ein Sim-Tick fällt bei 10 Hz auf jeden 6. Frame. Der Tick muss an dem Frame, au
 
 | Posten | Tick-Frame (jeder 6.) | Normal-Frame | 30-FPS-Modus | Bemerkung |
 |---|---|---|---|---|
-| Sim-Tick gesamt | ≤ 4,0 ms | 0 ms | ≤ 4,0 ms | davon: Pathfinding ≤2–4 ms (D-034), FoW ≤1,0 ms (an FoW-Tick-Frames), Rest-Sim (Kampf, Wirtschaft, Produktion, KI-Command-Verarbeitung) Restbetrag |
+| Sim-Tick gesamt | ≤ 8,0 ms | 0 ms | ≤ 8,0 ms | Unterbudgets (D-042.1, führend [Architecture.md](Architecture.md)): Pathfinding ≤4 ms (D-034), FoW ≤1,0 ms (an FoW-Tick-Frames), Rest-Sim (Kampf, Wirtschaft, Produktion, KI-Command-Verarbeitung) ≤3 ms |
 | Rendering CPU (Main Thread) | ≤ 4,0 ms | ≤ 4,0 ms | ≤ 8,0 ms | Draw-Call-Aufbereitung, Culling, BatchRendererGroup/Resident Drawer, Animation-Update |
 | GPU | ≤ 8,0 ms | ≤ 8,0 ms | ≤ 20,0 ms | URP inkl. Full Screen Pass (FoW-Overlay), Shadow-Update reduziert |
 | UI (UI Toolkit) | ≤ 1,0 ms | ≤ 1,0 ms | ≤ 2,0 ms | HUD, Minimap, Healthbar-Overlay (gebatchtes Mesh) |
@@ -119,7 +119,7 @@ Die Spike-Ergebnisse fließen als Version 0.2.0 in dieses Dokument (Budget-Nachj
 
 ## Offene Punkte
 
-- **Budget-Spannung Sim-Tick:** D-034 erlaubt Pathfinding ≤2–4 ms, das gesamte Sim-Tick-Budget beträgt aber nur 4 ms – im ungünstigsten Fall bliebe für FoW (≤1 ms) und Rest-Sim nichts. Klärung durch Spike V4: Ist das PF-Budget *Teil* der 4 ms (dann muss PF real ≤2 ms) oder sind 4–5 ms Gesamt-Sim tolerierbar? Eskalation an Lead Technical Director nach Phase 0.
+- **Budget-Spannung Sim-Tick:** entschieden (D-042.1) – das Sim-Tick-Gesamtbudget beträgt **≤ 8 ms** (führend: [Architecture.md](Architecture.md)); Unterbudgets Pathfinding ≤4 ms (D-034), FoW ≤1,0 ms, Rest-Sim ≤3 ms. Die Spannung „D-034 ≤2–4 ms PF bei nur 4 ms Gesamt-Sim" ist damit aufgelöst; §2 ist entsprechend angeglichen.
 - **Exakte Spezifikation der Windows-Referenzhardware** muss beschaffbar und verbindlich fixiert werden (Vorschlag §4); Owner: Lead Performance Engineer, Sprint 4.
 - **GPU-Budget-Aufteilung** (Shadows vs. Full Screen Pass vs. Partikel) kann erst nach dem Rendersequenzen-TDD (terminiert Sprint 6, OpenQuestions) final beziffert werden; die 8 ms sind bis dahin Obergrenze ohne Unterposten.
 - **KI-Command-Verarbeitung** (Utility-Director + HTN + Squad-BTs) hat noch kein eigenes Unterbudget im Sim-Tick; hängt vom KI-TDD ab (Sprint 3). Vorläufig im Rest-Sim-Posten enthalten.
@@ -137,3 +137,4 @@ Die Spike-Ergebnisse fließen als Version 0.2.0 in dieses Dokument (Budget-Nachj
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Performance Engineer |
+| 0.1.1 | 2026-07-21 | Sim-Tick-Gesamtbudget auf ≤8 ms angehoben mit Unterbudgets (D-042.1, führend Architecture.md); offener Punkt „Budget-Spannung Sim-Tick" als entschieden markiert | Lead Technical Director |

@@ -1,6 +1,6 @@
 # Victory Conditions – Sieg, Remis, Timeout, Aufgabe
 
-**Version:** 0.3.0 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
+**Version:** 0.3.1 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead Gameplay Designer | **Sprint:** 2
 
 ## Zweck
 
@@ -57,7 +57,7 @@ Alle modus-spezifischen Siegparameter liegen als flache Datensätze vor (Scripta
 | Zeitlimit (optional, Skirmish/Koop) | Standard: **aus**. Wählbar: 45 / 60 / 90 min. Bei Ablauf: **Remis** (kein Punktesieg) | H1-Solo-Erlebnis (D-007): Ein Solo-Match soll nicht durch eine Wertung "verloren" werden, wenn das Anti-Stall-System (D-010) versagt hat; Remis macht den Stall sichtbar statt ihn zu belohnen |
 | Zeitlimit (PvP, Beta) | Turnier-/Lobby-Option; bei Ablauf Wertung nach Punkteschlüssel, Default weiterhin Remis. **Punkteschlüssel und Unentschieden-Wertformel werden erst im Beta-Balancing finalisiert (D-029)** | Wettkampf braucht Entscheidbarkeit; der Schlüssel wird mit dem PvP-Balancing in Beta festgelegt (s. Balancing.md) |
 | Gleichzeitige Auslöschung | Remis (s. oben) | – |
-| Technischer Abbruch (MP) | Verbindungsverlust > 120 s = Niederlage des getrennten Spielers; Team weiterspielbar | State-Sync-/Lockstep-Wahl offen (Q-013), Regel ist davon unabhängig |
+| Technischer Abbruch (MP) | 60-s-Grace-Period mit Reconnect-Fenster; danach KI-Übernahme (Mittel-Difficulty-Profil); Match läuft unpausiert weiter; kein Re-Entry nach Übernahme. Führend: [../tech/Networking.md](../tech/Networking.md) (D-038) | Entschieden in D-038 (Sim-/MP-Modell ist mit D-033 entschieden): hält Matches für Verbleibende spielbar, bestraft niemanden für Verbindungsabbrüche und schließt den Informations-Exploit (kein Re-Entry) |
 | Stall-Erkennung (Solo) | Kein erzwungenes Match-Ende; stattdessen Hinweis-Dialog ab 40 min ohne Schadensereignis ("Keine Seite macht Fortschritt – Aufgabe oder weiterspielen?") | Soft-Anti-Stall, respektiert Solo-Spielerfreiheit |
 
 ## Aufgabe-Regel
@@ -106,3 +106,4 @@ Im Solo-Skirmish ist der Screen ohne Zeitdruck verlassbar; im MP (ab Beta) führ
 | 0.1.0 | 2026-07-21 | Erstfassung | Lead Gameplay Designer |
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 2 (D-020–D-030): Mauern aus Vernichtungsbedingung ausgenommen, Last-Unit-Reveal auf versteckte Gebäude ohne Einheiten (Evolvierte-Keime) ausgeweitet, D-025-Klarstellung (Alpha-FFA lokal, Online-Modi ab Beta), PvP-Timeout-Schlüssel auf Beta-Balancing verschoben (D-029) | Lead Gameplay Designer |
 | 0.3.0 | 2026-07-21 | Feinschliff Sprint 2 Runde 2 (D-031) | Lead Gameplay Designer |
+| 0.3.1 | 2026-07-21 | Technischer Abbruch (MP) auf finale D-038-Regel angeglichen (60-s-Grace, KI-Übernahme, kein Re-Entry; führend tech/Networking.md) | Lead Technical Director |

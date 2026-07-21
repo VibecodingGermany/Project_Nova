@@ -13,7 +13,7 @@ Dieses Dokument legt das verbindliche RAM-Budget für Project Nova (Desktop-Rele
 - [../research/FogOfWar.md](../research/FogOfWar.md) – Bitmask-Datenstruktur (`values`/`visited` pro Team)
 - [./PerformanceBudget.md](PerformanceBudget.md) – Frame-/Tick-Budgets, Mess-Methodik
 - [./AssetBudget.md](AssetBudget.md) – Asset-seitige Speicherbudgets (Texturen, Meshes, Audio)
-- [./Pathfinding.md](Pathfinding.md), [./FogOfWar.md](FogOfWar.md) – Schwester-TDDs aus Sprint 3 (in Erstellung)
+- [./Pathfinding.md](Pathfinding.md), [./Architecture.md](Architecture.md) – Schwester-TDDs aus Sprint 3 (FoW als Subsystem von `Nova.Simulation`)
 
 ## 1. Gesamtbudget
 

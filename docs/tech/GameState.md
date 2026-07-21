@@ -15,7 +15,7 @@ Definiert das vollständige, serialisierbare Zustandsmodell der `Nova.Simulation
 - [../gamedesign/Economy.md](../gamedesign/Economy.md) / [../gamedesign/ResearchTree.md](../gamedesign/ResearchTree.md) – Ressourcen-/Tech-State (führend)
 - [./Serialization.md](./Serialization.md) – Format der Serialisierung
 - [./Savegames.md](./Savegames.md) – Snapshot-Verwendung
-- [./Pathfinding.md](./Pathfinding.md), [./FogOfWar.md](./FogOfWar.md) – Grid- und Sichtsysteme (parallel, Sprint 3)
+- [./Pathfinding.md](./Pathfinding.md) – Grid-Nutzung für Wegfindung; [./Rendering.md](./Rendering.md) – FoW-Darstellung (parallel, Sprint 3)
 
 ## Grundprinzipien (aus D-033)
 

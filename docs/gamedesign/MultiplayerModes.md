@@ -1,6 +1,6 @@
 # Multiplayer- und Spielmodi
 
-**Version:** 0.3.1 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead UI/UX Designer | **Sprint:** 2
+**Version:** 0.3.2 | **Status:** Entwurf (Korrekturlauf Sprint 2) | **Verantwortungsbereich:** Lead UI/UX Designer | **Sprint:** 2
 
 ## Zweck
 
@@ -66,7 +66,7 @@ Siegbedingung "Vernichtung": Ein Spieler/Team ist besiegt, wenn **alle Gebäude 
 - Team aus 2 Parteien vs. 1–2 KI-Gegner; Karten S/M. **Alpha (D-031.3):** 1 menschlicher Spieler + **KI-Verbündeter**, lokal – es gibt **kein lokales 2-Spieler-RTS** (genreunüblich, undefinierte Eingabemechanik). **Online-Koop mit 2 menschlichen Spielern frühestens ab Beta** (Netz-MP frühestens Beta, D-025).
 - **Geteilte Sicht** innerhalb des Teams (Team-Fog-of-War); **kein Ressourcentransfer zwischen Teamspielern** (D-029: Wirtschaft bleibt ehrlich, Handelsverbot gilt sinngemäß).
 - Jeder Spieler baut eigene Basis; gemeinsame Niederlage/Sieg.
-- Drop-in/Drop-out: nein in v0.1 (Lockstep-Reconnect-Problem, siehe Research §4) – Disconnect = KI-Übernahme der Basis des Ausfallers (**vorläufige Regel**; finale Festlegung abhängig von der Q-013-Entscheidung in Sprint 3, siehe Offene Punkte).
+- Drop-in/Drop-out: nein in v0.1 (Lockstep-Reconnect-Problem, siehe Research §4). **Disconnect-Regel (entschieden, D-038):** 60-s-Grace-Period mit Reconnect-Fenster; danach KI-Übernahme der Basis des Ausfallers (Mittel-Difficulty-Profil); Match läuft unpausiert weiter; kein Re-Entry nach Übernahme (führend: [../tech/Networking.md](../tech/Networking.md)).
 
 ### 3.3 PvP 1v1 / 2v2 (Beta)
 
@@ -161,7 +161,7 @@ Technische Grundlage und Begründung: [../research/Multiplayer_Simulation.md](..
 - **Ressourcentransfer zwischen Teamspielern:** entschieden (D-029) – kein Transfer, §3.2 entsprechend festgelegt.
 - **Survival-Spielerzahl:** entschieden (D-029) – bis 4 Spieler, §3.5 entsprechend festgelegt.
 - **FFA in Alpha (lokal vs. online):** entschieden (D-025) – Alpha-FFA = lokal gegen KI-Mitspieler; alle Netz-Modi (Koop online, PvP) frühestens Beta, abhängig vom Q-013-Ausgang.
-- **Disconnect-Regel (KI-Übernahme, §3.2):** **vorläufig** – UX-Notlösung für das Lockstep-Reconnect-Problem (Research §4). Alternativen: Pause-Vote mit Wartezeit, oder Auto-Niederlage nach 60 s. Finale Entscheidung mit MP-Engineering in **Sprint 3 (Q-013-abhängig)**.
+- **Disconnect-Regel (KI-Übernahme, §3.2):** entschieden (D-038) – 60-s-Grace-Period mit Reconnect-Fenster; danach KI-Übernahme (Mittel-Difficulty-Profil); Match läuft unpausiert weiter; kein Re-Entry nach Übernahme. Führend: [../tech/Networking.md](../tech/Networking.md); §3.2 entsprechend festgelegt.
 - **Ingame-Voice-Chat:** entschieden (D-029) – kein Ingame-Voice-Chat; externe Tools decken das ab.
 - **Unentschieden-/Timeout-Wertformel:** entschieden (D-029) – PvP-Timeout-Punkteschlüssel und Unentschieden-Wertformel werden erst im Beta-Balancing festgelegt, nicht in diesem Dokument.
 - **Host-Migration bei Host-Wechsel (§4):** offen – technische Machbarkeit im Lockstep-Relay mit MP-Engineering in Sprint 3 (Q-013) validieren.
@@ -181,3 +181,4 @@ Technische Grundlage und Begründung: [../research/Multiplayer_Simulation.md](..
 | 0.2.0 | 2026-07-21 | Korrekturlauf Sprint 2 (D-020–D-030): Modus-Tabelle mit lokal/online (D-025), Kampagne Phase 3 ohne Koop-Kampagne (D-020), kein Ressourcentransfer + Survival bis 4 + kein Voice-Chat + Timeout-Formel erst Beta (D-029), Survival auf Standard-Karten (D-028), Disconnect-Regel vorläufig (Q-013), Links repariert (Economy.md/Maps.md) | Lead UI/UX Designer |
 | 0.3.0 | 2026-07-21 | Feinschliff Sprint 2 Runde 2 (D-031) | Lead Gameplay Designer |
 | 0.3.1 | 2026-07-21 | Vernichtungs-Definition an VictoryConditions.md harmonisiert (D-032) | Lead Gameplay Designer |
+| 0.3.2 | 2026-07-21 | Disconnect-Regel als entschieden markiert und §3.2 auf D-038 angeglichen (60-s-Grace, KI-Übernahme, kein Re-Entry; führend tech/Networking.md) | Lead Technical Director |
