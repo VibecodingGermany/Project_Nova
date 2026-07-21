@@ -1,0 +1,69 @@
+# ── Project Nova .gitignore ────────────────────────────────────────────────
+# Aktuell reines Dokumentationsprojekt (Markdown). Unity-Regeln sind bereits
+# vorbereitet, damit ab Sprint 7 (Implementierung) nichts nachgezogen werden muss.
+
+# ── macOS ──────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# ── Editor / IDE ───────────────────────────────────────────────────────────
+.idea/
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── KI-/Agenten-Tooling (lokal, nicht versioniert) ─────────────────────────
+.claude/
+.cursor/
+.kimi/
+reports/          # lokale Orchestrator-/Session-Reports gehören nicht ins Repo
+
+# ── Unity (ab Sprint 7 relevant) ───────────────────────────────────────────
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+.consulo/
+*.tmp
+*.unitypackage
+*.app
+crashlytics-build.properties
+ExportedObj/
+sysinfo.txt
+
+# Unity generierte Solution-/Projektdateien
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity Asset Meta-Daten von ignorierten Ordnern
+/[Aa]ssets/[Aa]ssetStoreTools*
+/[Aa]ssets/[Pp]lugins/[Ee]ditor/JetBrains*
+
+# ── Node / Tooling (falls Build-Skripte hinzukommen) ───────────────────────
+node_modules/
+npm-debug.log*
+.env
+.env.local
