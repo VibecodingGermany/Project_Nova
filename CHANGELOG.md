@@ -13,17 +13,32 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 
 ## [Unreleased]
 
+*(leer)*
+
+## [0.4.0] – 2026-07-21 · Sprint 3: Technical Design
+
 ### Hinzugefügt
+- Vollständiges Technical Design (23 Dokumente) unter `docs/tech/`: Architektur-Kern
+  (Architecture, ModuleOverview, DependencyGraph, FolderStructure, CodingGuidelines,
+  NamingConvention), Simulation & Daten (GameState, Serialization, Savegames),
+  Multiplayer (Networking, Replication), Gameplay-Systeme (Pathfinding, AIArchitecture),
+  Präsentation (Rendering, Lighting, AnimationSystem, InputSystem, AudioArchitecture),
+  Budgets & Betrieb (PerformanceBudget, MemoryBudget, AssetBudget, Testing, Deployment).
+- Sprint-3-Abschlussbericht ([docs/production/sprints/Sprint03_Report.md](docs/production/sprints/Sprint03_Report.md)).
 - Repository-Grundgerüst: Root-`README.md`, `AGENTS.md` (Arbeitsregeln für KI-Agenten),
-  `CHANGELOG.md`, `.gitignore` (macOS + Unity-vorbereitet).
-- Technical-Design-Dokumente (Sprint 3, Entwurfsstand v0.1.0) unter `docs/tech/`:
-  Architektur, Modul-Übersicht, Dependency-Graph, Folder-Struktur, Coding-Guidelines,
-  GameState, Serialization, Savegames, Networking, Replication, Pathfinding,
-  AIArchitecture, Rendering, Lighting, AnimationSystem, InputSystem, AudioArchitecture,
-  Performance-/Memory-/Asset-Budget, Testing, Deployment.
+  `CHANGELOG.md`, `.gitignore` (macOS + Unity-vorbereitet); initiale Spiegelung zu GitHub.
+
+### Entschieden
+- 10 Architektur-Entscheidungen (D-033–D-042): determinismus-fähige Command-Simulation
+  mit Lockstep-Relay-Zielbild (Q-013), Flow-Field-Pathfinding (Q-014), OOP+Burst statt
+  DOTS (Q-015), Nova.SimRunner (Q-020), Burst/Managed-Doppelstruktur, Disconnect-Regel,
+  Audio-Backend (FMOD ab Alpha), Forward/Realtime-Licht, Sentry, Sim-Tick-Budget ≤8 ms.
 
 ### Geändert
-- Projekt erstmals unter Git-Versionskontrolle genommen und nach GitHub gespiegelt.
+- Detail-Angleichungen GDD↔TDD (Disconnect-Regel final, Sim-Tick-Budget) in
+  VictoryConditions, MultiplayerModes, PerformanceBudget, Networking.
+- AGENTS.md Regel 1: Push nach jedem Versionsbump dauerhaft freigegeben (Anordnung
+  Projektinhaber).
 
 ## [0.3.0] – 2026-07-21 · Sprint 2: Game Design
 
@@ -63,7 +78,8 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 - Übernahme der historischen Quelldokumente (`RTS_Game_Design_Outline.md`,
   `RTS_Technisches_Planungsdokument.md`, `RTS_Asset_Pipeline.md`).
 
-[Unreleased]: https://github.com/VibecodingGermany/Project_Nova/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/VibecodingGermany/Project_Nova/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.4.0
 [0.3.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.3.0
 [0.2.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.2.0
 [0.1.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.1.0
