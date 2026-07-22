@@ -1,6 +1,6 @@
 # Decision Log
 
-**Version:** 1.6.1 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director | **Sprint:** 4
+**Version:** 1.7.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director | **Sprint:** 5
 
 ## Zweck
 
@@ -470,6 +470,14 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 **Entscheidung:** (b) – **Referenz (60-FPS-Ziel): Ryzen 5 5600 / RTX 3060 / 16 GB / NVMe-SSD**; **Minimum (30-FPS-Ziel): Ryzen 3 3100 / GTX 1050 Ti / 8 GB**; **Mac-Baseline: Apple M2** (Entwicklungs- und Qualitätsplattform, D-006).
 **Konsequenzen:** PerformanceBudget.md; Beschaffung in Sprint-6-Planung; Messungen auf Standalone-Builds (nie Editor).
 
+### D-053 | verbindlich | Sprint 5 (Asset-Beschaffungsstrategie)
+
+**Kontext:** Der Asset Audit (Sprint 5) muss eine verbindliche Beschaffungsstrategie ratifizieren; die Entscheidungsvorlage lag als Research-Ergebnis vor ([../research/AssetStore_Landschaft.md](../research/AssetStore_Landschaft.md), „Sprint 5 zu bestätigen").
+**Alternativen:** (a) **Asset Store only (Synty-zentriert)** – scheitert an den biologischen Evolvierten und am Signature-Aetherium, Publisher-Abhängigkeit ohne Preishebel; (b) **Multi-Store-Mix mit Synty als Stil-Anker** (Asset Store + Humble-Bundles + CC0 + Fab/Sketchfab + Sonniss-Audio); (c) **BUILD-first** (nur Tools/Audio kaufen) – gefährdet MVP-Disziplin und Zeitplan durch Eigenbau von ~130+ Modellen ohne Qualitätsvorteil auf RTS-Distanz.
+**Entscheidung:** (b) – **Multi-Store-Mix mit Synty als Stil-Anker.** Menschliche Fraktionen (Allianz/Legion), Biome, UI-Icons und Basis-Animationen werden gekauft; **Aetherium, die komplette Evolvierten-Fraktion und alle Fraktions-Signaturen werden MODIFY/BUILD.** Leitplanken: URP-Kompatibilität als K.O.-Kriterium (Badge + Testprojekt), **keine RTS-Komplett-Frameworks** (Kollision mit D-033/D-035/D-043), einheitlicher URP-Material-Standard mit Teamfarben-Masken (Gegenmittel R-04), Lizenz-Register-Pflicht ([assets/Licenses.md](../assets/Licenses.md)), keine Rohdaten im öffentlichen Repo.
+**Begründung:** Nutzt den dokumentierten Preishebel (Synty-Humble-Bundles ~30 USD statt >600 USD) und CC0 für Prototyping, deckt die menschlichen Fraktionen käuflich ab und reserviert Eigenbau gezielt für das Unverwechselbare. Die nötige Lizenz-/URP-Disziplin institutionalisiert der Audit selbst.
+**Konsequenzen:** [../assets/ProcurementStrategy.md](../assets/ProcurementStrategy.md), [../assets/AssetRegister.md](../assets/AssetRegister.md), [../assets/Licenses.md](../assets/Licenses.md), [../assets/BuildBacklog.md](../assets/BuildBacklog.md); Budget-Obergrenze bleibt Inhaberentscheidung (Q-035); reale Käufe erst ab Phase 0/Sprint 7.
+
 ---
 
 ## Offene Punkte
@@ -477,10 +485,11 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 - Alle Sprint-4-Review-Befunde (105, davon 9 kritisch): 7 entscheidungsbedürftige kritische Befunde sind durch D-043–D-052 entschieden (Architektur-Kohärenz F-1 & Wartbarkeit F-01 → D-043; GDD↔TDD F-01 → D-047; Multiplayer-Netcode F-01 → D-046; Performance F-1 → D-044; Performance F-2 → D-045; Skalierung F-1 → D-048). Die verbleibenden 2 kritischen Befunde sind **keine** Entscheidungsfragen, sondern reine Datenmodell-Lücken zu bereits getroffenen Entscheidungen und wurden ohne eigene D-Nummer als Doku-Erweiterung in GameState.md gelöst/terminiert: GDD↔TDD F-02 (Status-Effekt-/Fähigkeiten-System ohne technisches Zuhause) und Architektur-Kohärenz F-2 (fehlende State-Felder für Capture/Keim/Mutterkristall-Ausbaustufe/Elite-Zähler/Superwaffen-Cooldown/Neutrale Lager, jeweils Ergänzung zu D-011/D-015/D-016/D-022/D-023). HOCH/MITTEL im Korrekturlauf zu dokumentieren bzw. zu terminieren.
 - Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie, Sprint 6) bleiben offen.
 - Fixed-Point-Migration (Beta): Phase-0-Spike-Scope erweitert (Fixed-Point-Pfad für ORCA/Flow-Field evaluieren, Bibliothekswahl, float-Direktfelder im GameState verbieten) – Review F-04 MP.
+- Sprint 5 (Asset Audit): D-053 (Beschaffungsstrategie B) ratifiziert; die **Budget-Obergrenze bleibt bewusst offen** als Inhaberentscheidung (Q-035), ebenso Seat-Planung (Q-036) und Bundle-Fenster-Monitoring (Q-037). Reale Käufe erst ab Phase 0/Sprint 7.
 
 ## Nächste Schritte
 
-- Korrekturlauf Sprint 4: D-043–D-052 und alle kritischen/hohen Review-Befunde in die TDD-/GDD-Dokumente einarbeiten; danach Sprint-4-Abschlussbericht und Commit/Push (Versionsbump 0.5.0).
+- Sprint 6 (Produktionsplanung): Budget-Obergrenze (Q-035) und Seat-Planung (Q-036) mit dem Projektinhaber entscheiden; BUILD-Backlog-Aufwand ([../assets/BuildBacklog.md](../assets/BuildBacklog.md)) in die Aufwandsschätzung (R-16) übernehmen.
 
 ## Änderungsverlauf
 
@@ -496,3 +505,4 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 | 1.5.0 | 2026-07-21 | D-037 bis D-042: TDD-Review-Entscheidungen (Burst/Managed-Doppelstruktur, Disconnect-Regel, Audio-Backend, Renderer/Licht, Sentry, Sim-Budget-Klärungen) | Lead Technical Director |
 | 1.6.0 | 2026-07-21 | D-043 bis D-052: Architecture-Review-Entscheidungen (Assembly-Topologie, V5-Gate, Managed-first, MP-Trust-Anchor, Reichweiten-Harmonisierung, Skalierungs-Deckel, CI-Realismus, Branching, Quantum-Fallback gestrichen, Referenzhardware) | Lead Technical Director |
 | 1.6.1 | 2026-07-21 | Korrektur „Offene Punkte": Kritisch-Zähler auf 9 (statt 10) berichtigt; präzisiert, dass F-02 (GDD↔TDD) und F-2 (Architektur-Kohärenz) als Doku-Erweiterung in GameState.md gelöst wurden statt durch D-043–D-052, da reine Datenmodell-Ergänzungen ohne eigenen Entscheidungsbedarf | Lead Technical Director |
+| 1.7.0 | 2026-07-22 | D-053: Asset-Beschaffungsstrategie B (Multi-Store-Mix mit Synty als Stil-Anker) ratifiziert – Sprint 5 (Asset Audit) | Producer / Lead Technical Director |

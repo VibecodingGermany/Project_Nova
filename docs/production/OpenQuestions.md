@@ -1,6 +1,6 @@
 # Open Questions
 
-**Version:** 1.5.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Executive Producer | **Sprint:** 4
+**Version:** 1.6.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Executive Producer | **Sprint:** 5
 
 ## Zweck
 
@@ -21,7 +21,10 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 | Q-031 | P1 | Fähigkeiten-/Status-Effekt-System (4 Status-Effekte, ~40 Fähigkeiten mit Cooldowns/Kanälen) hat kein Sim-Modul-Zuhause – `EffectState`/`AbilityState` fehlen in GameState.md, kein Modul in ModuleOverview.md. | Review_GDD-TDD-Konsistenz F-02 | 5 (vor Sprint-7-Start) | offen |
 | Q-032 | P2 | MemoryBudget-Abgleich: Snapshot-/Grid-Layer-Größe (Serialization.md 50–150 kB vs. GameState.md-Layer-Rechnung ~1–2 MB), Flow-Field-Eviction-Policy (LRU vs. RefCount widersprüchlich), native Speicher-Baseline (macOS 8 GB ungemessen), max. Spielerzahl (6 vs. 8 uneinheitlich). | Review_Skalierung_Systemgrenzen F-2/F-4/F-5/F-12/F-13, Review_Performance F-12 | 5 (vor Phase-0-Spike) | offen |
 | Q-033 | P1 | Phase-0-Spike-Erweiterung V5-Gate: Kampf-/KI-Kostenmodell (Zielsuche mit Spatial Hash, Projektil-/AoE-Kosten, KI-Command-Verarbeitung) für Rest-Sim-Unterbudget ≤3 ms – Gate durch D-044 beschlossen, Kampf-Subsystem-TDD mit Kostenmodell noch nicht geschrieben. | D-044, Review_Performance F-1/F-4/F-5 | Phase 0 (Pflicht vor Sprint-7-Kampfmodul-Start) | offen |
-| Q-034 | P3 | Tote interne Verweise auf nicht existierende Tech-Dokumente (FogOfWar.md, CameraSystem.md, Commands.md, SimulationCore.md) – FoW-TDD hat höchste fachliche Priorität. | Review_GDD-TDD-Konsistenz F-16 | 5 | offen |
+| Q-034 | P3 | Tote interne Verweise auf nicht existierende Tech-Dokumente (FogOfWar.md, CameraSystem.md, Commands.md, SimulationCore.md) – FoW-TDD hat höchste fachliche Priorität. | Review_GDD-TDD-Konsistenz F-16 | 6 | offen (in Sprint 5 geprüft: TDD-Authoring, **kein** Asset-Audit-Thema; Owner auf Sprint 6 präzisiert) |
+| Q-035 | P2 | Asset-Budget-Obergrenze (USD): Der Audit liefert Kategorie-Kostenschätzungen (~200–600 USD Kaufkern), aber die verbindliche Studio-Obergrenze ist eine Inhaber-/Kapazitätsentscheidung (gekoppelt an R-16). | Sprint-5 Asset Audit (D-053) | 6 | offen |
+| Q-036 | P3 | Seat-Planung (Teamgröße/Externe): steuert Synty-5-Seat-Lizenzen, Editor-Tool-Käufe und Mixamo-Rohdaten-Weitergabe. | Sprint-5 Asset Audit | 6 | offen |
+| Q-037 | P3 | Humble-Bundle-/Sale-Kauffenster: zeitlich limitierte Synty-Bundles opportunistisch nutzen – Beobachtung ab Beschaffungsstart. | Sprint-5 Asset Audit | 6 / Phase 0 | offen |
 
 ## Geschlossene Fragen
 
@@ -64,14 +67,15 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 ## Offene Punkte
 
 - Noch offen: Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie-Infrastruktur, Sprint 6).
-- Neu aus dem Sprint-4-Korrekturlauf offen: Q-031 (Fähigkeiten-/Status-Effekt-System, vor Sprint 7), Q-032 (MemoryBudget-Abgleich, vor Phase-0-Spike), Q-033 (V5-Gate Kampf-/KI-Kostenmodell, Phase 0), Q-034 (tote Doku-Verweise, Sprint 5).
+- Neu aus dem Sprint-4-Korrekturlauf offen: Q-031 (Fähigkeiten-/Status-Effekt-System, vor Sprint 7), Q-032 (MemoryBudget-Abgleich, vor Phase-0-Spike), Q-033 (V5-Gate Kampf-/KI-Kostenmodell, Phase 0), Q-034 (tote Doku-Verweise). **Klarstellung Sprint 5:** Q-031–Q-034 sind TDD-Authoring-/Doku-Aufgaben, **nicht** Teil des Asset-Audit-Scopes; sie wurden in Sprint 5 nicht bearbeitet und laufen zu ihren fachlichen Ownern weiter (Q-034 auf Sprint 6 präzisiert).
+- Neu aus Sprint 5 (Asset Audit, D-053): Q-035 (Asset-Budget-Obergrenze, Sprint 6, gekoppelt an R-16), Q-036 (Seat-Planung, Sprint 6), Q-037 (Bundle-Kauffenster, Sprint 6/Phase 0) – alle Inhaber-/Beschaffungsentscheidungen, kein Blocker für Sprint 6.
 - Aus Research hängen vier Pflicht-Validierungen am Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86 (jetzt zusätzlich Q-033-Kostenmodell), URP GPU Resident Drawer, Animator vs. Playables, Pathfinding-CPU-Budget (Managed-Pfad, D-037); Fixed-Point-Migration-Spike-Scope zusätzlich um ORCA/Flow-Field-Evaluierung, Bibliothekswahl und float-Direktfeld-Verbot im GameState erweitert (DecisionLog.md, Offene Punkte).
 - Terminierte Folgepunkte aus dem TDD-Review (keine Blocker): KI-Bedrohungskarten-Auflösung (siehe auch Q-032), Evolvierte-Plan-Tasks, Snapshot-Größenmessung (siehe auch Q-032), Fixed-Point-Bibliothekswahl (Beta), Analyzer-Enforcement (Sprint 7); Windows-Referenzhardware ist mit D-052 geschlossen.
 - Alle Sprint-4-Review-Befunde (~105, davon 9 kritisch): 7 der 9 kritischen durch D-043–D-052 entschieden (Q-021–Q-030), 2 (GDD↔TDD F-02, Architektur-Kohärenz F-2) als Datenmodell-Erweiterung in GameState.md gelöst; verbleibende HOCH/MITTEL-Befunde teils als Q-031–Q-034 registriert, Rest im Korrekturlauf terminiert.
 
 ## Nächste Schritte
 
-- Sprint-4-Korrekturlauf abschließen (Q-031–Q-034 in die zuständigen TDD-/GDD-Dokumente einarbeiten), danach Sprint-4-Abschlussbericht und Versionsbump 0.5.0.
+- Sprint 6 (Produktionsplanung): Q-035/Q-036/Q-037 (Budget-Obergrenze, Seat-Planung, Bundle-Fenster) mit dem Projektinhaber entscheiden; Q-034 (tote Verweise) mit der offenen TDD-Autorenarbeit sequenzieren.
 
 ## Änderungsverlauf
 
@@ -83,3 +87,4 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 | 1.3.0 | 2026-07-21 | Q-001–Q-012, Q-016, Q-017 formal geschlossen (Sprint-2-Abschluss, D-007–D-032) | Executive Producer |
 | 1.4.0 | 2026-07-21 | Q-013, Q-014, Q-015, Q-020 formal geschlossen (Sprint 3, D-033–D-038) | Executive Producer |
 | 1.5.0 | 2026-07-21 | Q-021–Q-030 neu und sofort geschlossen (Sprint 4, D-043–D-052); Q-031–Q-034 neu aus Review-Folgearbeit (Ability/Status-System, MemoryBudget-Abgleich, V5-Gate-Kostenmodell, tote Verweise) | Executive Producer |
+| 1.6.0 | 2026-07-22 | Q-035/Q-036/Q-037 neu aus Sprint 5 (Asset-Budget-Obergrenze, Seat-Planung, Bundle-Fenster, D-053); Q-034 als TDD-Authoring präzisiert und auf Sprint 6 umterminiert | Executive Producer |
