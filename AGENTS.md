@@ -17,8 +17,8 @@ auch wenn viele verschiedene Agenten-Sessions daran arbeiten.
 mit Basisbau, drei Fraktionen und der Ressource **Aetherium**. Das Repo befindet sich
 in der **Design-/Planungsphase**: Es enthält **noch keinen Spielcode**, sondern ein
 strukturiertes Dokumentations-Wiki unter [`docs/`](docs/). Implementierung ist Sprint 7.
-Sprint 3 (Technical Design) ist abgeschlossen (Wiki-Stand 0.4.0); aktueller Fokus ist
-Sprint 4 (Architecture Review, `docs/tech/review/`).
+Sprint 5 (Asset Audit) ist abgeschlossen (Wiki-Stand 0.6.0); aktueller Fokus ist
+Sprint 6 (Produktionsplanung, `docs/production/`).
 
 ## 2. Goldene Regeln (nicht verhandelbar)
 
@@ -62,8 +62,9 @@ docs/
 ├── research/        ← Sprint 1 (abgeschlossen)
 ├── vision/          ← Sprint 2 (abgeschlossen)
 ├── gamedesign/      ← Sprint 2 – GDD (abgeschlossen)
-├── tech/            ← Sprint 3 – Technical Design (abgeschlossen, 0.4.0)
-│   └── review/      ← Sprint 4 – Architecture Review (in Arbeit)
+├── tech/            ← Sprint 3 – Technical Design (abgeschlossen)
+│   └── review/      ← Sprint 4 – Architecture Review (abgeschlossen)
+├── assets/          ← Sprint 5 – Asset Audit (abgeschlossen)
 └── production/      ← Sprint-Planung, DecisionLog, OpenQuestions, RiskAnalysis, sprints/
 ```
 
@@ -209,3 +210,4 @@ gh pr create --fill --base main
 | 1.0.0 | 2026-07-21 | Initiale Agenten-Arbeitsregeln (Repo-Setup) | Orchestrator |
 | 1.1.0 | 2026-07-21 | Goldene Regel 1: Push nach Versionsbump dauerhaft freigegeben (Anordnung Projektinhaber) | Orchestrator |
 | 2.0.0 | 2026-07-21 | Regel 1 auf **PR-only** umgestellt (main per Branch Protection gesperrt); Repo öffentlich; Team-Workflow + CI (`docs-check`) verankert; Status auf Sprint 4 aktualisiert; DoD um Root-README ergänzt | Orchestrator |
+| 2.1.0 | 2026-07-22 | Statusstand auf Sprint 5 abgeschlossen / Sprint 6 aktiv aktualisiert; `assets/`-Bereich in die Struktur aufgenommen | Orchestrator |

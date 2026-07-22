@@ -2,7 +2,7 @@
 
 > Modernes Echtzeitstrategiespiel (RTS) mit Basisbau, drei Fraktionen und der lebendigen Kristallressource **Aetherium**. *Project Nova* ist der Arbeitstitel.
 
-**Phase:** Konzeption & Architektur-Review · **Status:** Sprint 4 (Architecture Review) in Arbeit · **Repo:** öffentlich (Community-Projekt)
+**Phase:** Konzeption & Produktionsvorbereitung · **Status:** Sprint 5 (Asset Audit) abgeschlossen · **Repo:** öffentlich (Community-Projekt)
 
 ---
 
@@ -47,6 +47,7 @@ Project Nova/
     ├── vision/            ← Leitbild, USP, Zielgruppe, Game Loop (Sprint 2)
     ├── gamedesign/        ← vollständiges GDD (Sprint 2)
     ├── tech/              ← Technical Design (Sprint 3) + review/ (Architecture Review, Sprint 4)
+    ├── assets/            ← Asset Audit: Register, Strategie, Lizenzen, Build-Backlog (Sprint 5)
     └── production/        ← Sprint-Planung, Entscheidungen, Risiken, Sprint-Berichte
 ```
 
@@ -58,9 +59,9 @@ Project Nova/
 | 1 | Research | ✅ abgeschlossen |
 | 2 | Game Design (GDD) | ✅ abgeschlossen |
 | 3 | Technical Design | ✅ abgeschlossen |
-| 4 | Architecture Review | 🔧 in Arbeit |
-| 5 | Asset Audit | ⛔ blockiert bis Sprint 3 |
-| 6 | Produktionsplanung | ⛔ blockiert bis Sprint 5 |
+| 4 | Architecture Review | ✅ abgeschlossen |
+| 5 | Asset Audit | ✅ abgeschlossen |
+| 6 | Produktionsplanung | 🟢 bereit (GO) |
 | 7 | Implementierung | ⛔ blockiert bis Sprint 6 |
 
 Details und Exit-Kriterien: [docs/production/SprintPlanning.md](docs/production/SprintPlanning.md).
@@ -82,7 +83,7 @@ Grundprinzipien:
 
 ## Änderungshistorie
 
-Siehe [CHANGELOG.md](CHANGELOG.md). Die Versionsnummern folgen dem Dokumentationsstand des Wikis (aktuell `0.4.0`).
+Siehe [CHANGELOG.md](CHANGELOG.md). Die Versionsnummern folgen dem Dokumentationsstand des Wikis (aktuell `0.6.0`).
 
 ## Mitmachen
 

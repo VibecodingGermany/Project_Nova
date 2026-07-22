@@ -1,6 +1,6 @@
 # Project Nova – Entwicklungs-Wiki
 
-**Version:** 0.5.0 | **Status:** Living Document | **Verantwortungsbereich:** Executive Producer / Technical Writer | **Sprint:** 4
+**Version:** 0.6.0 | **Status:** Living Document | **Verantwortungsbereich:** Executive Producer / Technical Writer | **Sprint:** 5
 
 ## Zweck
 
@@ -12,7 +12,7 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 
 - [RTS_Game_Design_Outline.md](../RTS_Game_Design_Outline.md) – Game-Design-Grundgerüst (historisch)
 - [RTS_Technisches_Planungsdokument.md](../RTS_Technisches_Planungsdokument.md) – verbindliche technische Grundausrichtung
-- [RTS_Asset_Pipeline.md](../RTS_Asset_Pipeline.md) – Asset-Bedarf und Paketstruktur (wird in Sprint 5 korrigiert)
+- [RTS_Asset_Pipeline.md](../RTS_Asset_Pipeline.md) – historische Asset-Wunschliste; in Sprint 5 abgeglichen und durch [assets/AssetRegister.md](assets/AssetRegister.md) als führende Quelle abgelöst
 
 ## Dokumentbereiche
 
@@ -25,7 +25,7 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 | Game Design | [gamedesign/](gamedesign/) | abgeschlossen | 2 |
 | Technical Design | [tech/](tech/) | abgeschlossen | 3 |
 | Architecture Review | [tech/review/](tech/review/) | abgeschlossen | 4 |
-| Asset Pipeline | assets/ | geplant | 5 |
+| Asset Audit | [assets/](assets/AssetRegister.md) | abgeschlossen | 5 |
 | Production | [production/](production/SprintPlanning.md) | aktiv | 0–6 |
 | Sprint-Berichte | [production/sprints/](production/sprints/) | laufend | alle |
 
@@ -62,12 +62,18 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 - Budgets & Betrieb: [PerformanceBudget.md](tech/PerformanceBudget.md) · [MemoryBudget.md](tech/MemoryBudget.md) · [AssetBudget.md](tech/AssetBudget.md) · [Testing.md](tech/Testing.md) · [Deployment.md](tech/Deployment.md)
 - Architecture Review (Sprint 4): [Performance](tech/review/Review_Performance.md) · [Wartbarkeit & Prozess](tech/review/Review_Wartbarkeit_Prozess.md) · [Architektur-Kohärenz](tech/review/Review_ArchitekturKohaerenz.md) · [Multiplayer & Netcode](tech/review/Review_Multiplayer_Netcode.md) · [Skalierung & Systemgrenzen](tech/review/Review_Skalierung_Systemgrenzen.md) · [GDD↔TDD-Konsistenz](tech/review/Review_GDD-TDD-Konsistenz.md)
 
+### Asset Audit (Sprint 5)
+- [ProcurementStrategy.md](assets/ProcurementStrategy.md) – Beschaffungsstrategie B (D-053), BUY/MODIFY/BUILD-Rubrik
+- [AssetRegister.md](assets/AssetRegister.md) – Master-Register über 14 Kategorien (kanonische GDD-Zahlen, Klassifikation)
+- [Licenses.md](assets/Licenses.md) – Lizenz-Register (Seats/Attribution/Weitergabe je Quelle)
+- [BuildBacklog.md](assets/BuildBacklog.md) – priorisierter Eigenbau-Backlog (~110–180 PT) für Sprint 6
+
 ### Production
 - [SprintPlanning.md](production/SprintPlanning.md) – Sprint-Definitionen und Status
-- [DecisionLog.md](production/DecisionLog.md) – alle Entscheidungen (D-001–D-052)
-- [OpenQuestions.md](production/OpenQuestions.md) – offene Fragen (u. a. Q-018, Q-019, Q-031–Q-034)
+- [DecisionLog.md](production/DecisionLog.md) – alle Entscheidungen (D-001–D-053)
+- [OpenQuestions.md](production/OpenQuestions.md) – offene Fragen (u. a. Q-018, Q-019, Q-031–Q-037)
 - [RiskAnalysis.md](production/RiskAnalysis.md) – Risikoregister
-- Sprint-Berichte: [Sprint 0](production/sprints/Sprint00_Report.md) · [Sprint 1](production/sprints/Sprint01_Report.md) · [Sprint 2](production/sprints/Sprint02_Report.md) · [Sprint 3](production/sprints/Sprint03_Report.md) · [Sprint 4](production/sprints/Sprint04_Report.md)
+- Sprint-Berichte: [Sprint 0](production/sprints/Sprint00_Report.md) · [Sprint 1](production/sprints/Sprint01_Report.md) · [Sprint 2](production/sprints/Sprint02_Report.md) · [Sprint 3](production/sprints/Sprint03_Report.md) · [Sprint 4](production/sprints/Sprint04_Report.md) · [Sprint 5](production/sprints/Sprint05_Report.md)
 
 ## Status-Board
 
@@ -78,25 +84,26 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 | 2 | Game Design | **abgeschlossen** |
 | 3 | Technical Design | **abgeschlossen** |
 | 4 | Architecture Review | **abgeschlossen** |
-| 5 | Asset Audit | bereit (GO) |
-| 6 | Produktionsplanung | blockiert bis Sprint 5 |
+| 5 | Asset Audit | **abgeschlossen** |
+| 6 | Produktionsplanung | bereit (GO) |
 | 7 | Implementierung | blockiert bis Sprint 6 |
 
 ## Abhängigkeiten
 
 - Alle Wiki-Dokumente folgen [meta/DocumentationStandard.md](meta/DocumentationStandard.md).
-- Verbindlicher Technik-Stack: Unity 6.3 LTS, C#, URP ([DecisionLog D-006](production/DecisionLog.md)); Architektur: D-033–D-052.
+- Verbindlicher Technik-Stack: Unity 6.3 LTS, C#, URP ([DecisionLog D-006](production/DecisionLog.md)); Architektur: D-033–D-052; Asset-Beschaffung: D-053.
 - Verbindliches Design: [DecisionLog D-007–D-032](production/DecisionLog.md); führende Zahlenanker: [Economy.md](gamedesign/Economy.md), [Resources.md](gamedesign/Resources.md).
 
 ## Offene Punkte
 
 - Q-018 (Preispunkt), Q-019 (Telemetrie): Sprint 6.
-- Q-031–Q-034 aus dem Architecture Review (Fähigkeiten-/Effekt-System, MemoryBudget-Abgleich, V5-Gate, tote Verweise) – siehe [OpenQuestions.md](production/OpenQuestions.md).
+- Q-035 (Asset-Budget-Obergrenze), Q-036 (Seat-Planung), Q-037 (Bundle-Fenster) neu aus Sprint 5 – Inhaber-/Beschaffungsentscheidungen für Sprint 6.
+- Q-031–Q-034 aus dem Architecture Review (Fähigkeiten-/Effekt-System, MemoryBudget-Abgleich, V5-Gate, tote Verweise) – TDD-Authoring, siehe [OpenQuestions.md](production/OpenQuestions.md).
 - Vier Phase-0-Spike-Validierungen als Pflicht-Checkliste für Sprint 7.
 
 ## Nächste Schritte
 
-- Sprint 5 (Asset Audit): pro benötigtem Asset Recherche/Lizenz/Kosten/Klassifikation (BUY/MODIFY/BUILD) gemäß GO-Empfehlung in [Sprint04_Report.md](production/sprints/Sprint04_Report.md) §8 – finale Freigabe durch den Projektinhaber.
+- Sprint 6 (Produktionsplanung): MVP/Alpha/Beta/Release-Plan, Roadmap.md, Milestones.md; BUILD-Backlog-Aufwand ([assets/BuildBacklog.md](assets/BuildBacklog.md)) in die Aufwandsschätzung (R-16) übernehmen; Q-035/Q-036 mit dem Projektinhaber entscheiden – gemäß GO-Empfehlung in [Sprint05_Report.md](production/sprints/Sprint05_Report.md) §8.
 
 ## Änderungsverlauf
 
@@ -107,3 +114,4 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 | 0.3.0 | 2026-07-21 | Vision- und GDD-Bereich (25 Dokumente) aufgenommen, Sprint 2 abgeschlossen | Technical Writer |
 | 0.4.0 | 2026-07-21 | Technical-Design-Bereich (23 Dokumente) aufgenommen, Sprint 3 abgeschlossen | Technical Writer |
 | 0.5.0 | 2026-07-21 | Sprint 4 (Architecture Review) abgeschlossen: 6 Reviews, D-043–D-052, Findings-Integration, Governance/Öffentlichkeit | Executive Producer |
+| 0.6.0 | 2026-07-22 | Sprint 5 (Asset Audit) abgeschlossen: Asset-Bereich (4 Dokumente), D-053, APL-Reconciliation, R-04/R-07 mitigiert | Executive Producer |

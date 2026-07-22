@@ -13,8 +13,37 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 
 ## [Unreleased]
 
+## [0.6.0] – 2026-07-22 · Sprint 5: Asset Audit
+
+### Hinzugefügt
+- **Neuer Wiki-Bereich `docs/assets/` (Asset Audit)** mit vier Dokumenten:
+  [ProcurementStrategy.md](docs/assets/ProcurementStrategy.md) (Beschaffungsstrategie B,
+  BUY/MODIFY/BUILD-Rubrik, 4 Bewertungsdimensionen), [AssetRegister.md](docs/assets/AssetRegister.md)
+  (Master-Register über 14 Kategorien mit kanonischen GDD-Zahlen, Lizenz, Kosten-/Aufwands-
+  schätzung, Klassifikation), [Licenses.md](docs/assets/Licenses.md) (Lizenz-Register je Quelle)
+  und [BuildBacklog.md](docs/assets/BuildBacklog.md) (priorisierter Eigenbau-Backlog ~110–180 PT).
+- Sprint-5-Abschlussbericht [Sprint05_Report.md](docs/production/sprints/Sprint05_Report.md).
+
+### Entschieden
+- **D-053** Asset-Beschaffungsstrategie **B (Multi-Store-Mix mit Synty als Stil-Anker)**
+  ratifiziert: menschliche Fraktionen/Biome/UI-Icons/Basis-Animationen = Kauf; Aetherium,
+  komplette Evolvierten-Fraktion und Fraktions-Signaturen = MODIFY/BUILD. Leitplanken:
+  URP-K.O.-Kriterium, keine RTS-Komplett-Frameworks, einheitlicher URP-Material-Standard,
+  Lizenz-Register-Pflicht, keine Rohdaten im öffentlichen Repo.
+
 ### Geändert
-- `SprintPlanning.md` (1.3.0): Status auf Sprint 4 **abgeschlossen** / Sprint 5 (Asset Audit) **bereit (GO)** synchronisiert (Angleichung an das docs/README-Status-Board).
+- `SprintPlanning.md` (1.4.0): Sprint 5 **abgeschlossen**, Sprint 6 (Produktionsplanung) **GO**;
+  `docs/README.md` (0.6.0) und Root-`README.md` (Status-Board, Struktur, Version 0.6.0) nachgezogen.
+- **Kanonische Asset-Zahlen gegen die historische `RTS_Asset_Pipeline.md` abgeglichen**
+  (Gebäude 36 statt 54 = D-008, Karten 12 statt 10 = D-017, Elite 3→9 statt 15 = D-015,
+  Neutrale ohne Händler = D-016, Marine gestrichen = D-013); nicht-destruktiver Korrekturhinweis
+  an der Spitze der APL verweist auf das AssetRegister als führende Quelle.
+- `RiskAnalysis.md` (1.5.0): **R-04** (visuelle Inkohärenz) und **R-07** (Lizenz-/Kostenfallen)
+  auf „mitigiert" gesenkt.
+
+### Behoben
+- Root-`README.md` von veraltetem Stand (Version 0.4.0, „Sprint 4 in Arbeit", Status-Board
+  „blockiert bis Sprint 3") auf den aktuellen Stand (0.6.0, Sprint 5 abgeschlossen) korrigiert.
 
 ## [0.5.0] – 2026-07-21 · Sprint 4: Architecture Review + Governance
 
@@ -112,7 +141,8 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 - Übernahme der historischen Quelldokumente (`RTS_Game_Design_Outline.md`,
   `RTS_Technisches_Planungsdokument.md`, `RTS_Asset_Pipeline.md`).
 
-[Unreleased]: https://github.com/VibecodingGermany/Project_Nova/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/VibecodingGermany/Project_Nova/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.6.0
 [0.5.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.5.0
 [0.4.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.4.0
 [0.3.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.3.0
