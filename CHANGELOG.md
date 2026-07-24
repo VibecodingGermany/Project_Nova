@@ -21,8 +21,9 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
   - **Flow-Field Pathfinding (`Nova.Simulation.Pathfinding`):** `GridPos2D`, `Direction2D`, `CostField` (Kosten-Grid), `IntegrationField` (allokationsfreie Dijkstra-Welle), `FlowField` (8-Wege-Vektor-Feld), `PathfindingSystem`.
   - **Entitätsverwaltung & Bewegungs-System (`Nova.Simulation.State` & `Movement`):** `Transform2D`, `UnitState`, `EntityManager` (vorallokiertes Speicher-Array mit Index-Free-List-Recycling für 0-GC-Spawns), `MovementSystem` ($O(N)$ Spatial-Grid-Binning für flüssige Gruppen-Bewegung mit Sub-Millisekunden-Performanz).
   - **Unity-Gameplay-Brücke (`Nova.Gameplay`):** `MatchRunner` (MonoBehaviour 20-Hz-Akkumulator), `UnitViewManager` (60-FPS-View-Interpolation), `PathfindingTestBootstrap` (500 Einheiten Test-Runner).
-  - **Headless SimRunner & Tests:** Standalone .NET 8 Konsolen-Executable `tools/Nova.SimRunner`, NUnit-EditMode-Testsuiten (`DeterministicSimTests`, `FlowFieldPathfindingTests`, `MovementSystemTests`, `MovementPerformanceTests`, `MatchRunnerTests`).
-  - **Modulspezifikationen:** `MovementSystem_Spec.md` und `GameplayBridge_Spec.md` unter `docs/tech/modules/`.
+  - **GameDatabase Sharding & Master Index (`Nova.Data` & `Nova.Editor`):** Category Sub-Registries (`UnitRegistrySO`, `BuildingRegistrySO`, `WeaponRegistrySO`), Aggregator `GameDatabaseMasterSO`, Editor Generator `GameDatabaseGenerator.cs` (Rebuild & Validierung) sowie Unity-freie `UnitDefinition` Structs für das Match-Setup gemäß D-049.
+  - **Headless SimRunner & Tests:** Standalone .NET 8 Konsolen-Executable `tools/Nova.SimRunner`, NUnit-EditMode-Testsuiten (`DeterministicSimTests`, `FlowFieldPathfindingTests`, `MovementSystemTests`, `MovementPerformanceTests`, `MatchRunnerTests`, `GameDatabaseTests`).
+  - **Modulspezifikationen:** `MovementSystem_Spec.md`, `GameplayBridge_Spec.md` und `GameDatabase_Spec.md` unter `docs/tech/modules/`.
 
 ## [0.7.0] – 2026-07-24 · Sprint 6: Produktionsplanung
 

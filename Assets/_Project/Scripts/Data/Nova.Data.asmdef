@@ -2,7 +2,8 @@
     "name": "Nova.Data",
     "rootNamespace": "Nova.Data",
     "references": [
-        "Nova.Core"
+        "Nova.Core",
+        "Nova.Simulation"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
