@@ -1,0 +1,17 @@
+{
+    "name": "Nova.Presentation",
+    "rootNamespace": "Nova.Presentation",
+    "references": [
+        "Nova.Core",
+        "Nova.Gameplay"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
