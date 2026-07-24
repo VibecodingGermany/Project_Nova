@@ -39,8 +39,8 @@
 | **Modul 10** | **Basisbau- & Bauplatz-System** (`Nova.Simulation.Construction`) | HQ-Bau-Queues, Bauzonen-Grid, Gebäudebau-Zustände, Grid-Platzierung & Kollision | ✅ **Fertiggestellt** |
 | **Modul 11** | **Einheiten-Produktion & Tech-Tree** (`Nova.Simulation.Production`) | Kasernen-/Fabrik-Bau-Queues, Tier-1/2-Forschungs-Entsperrung (`ResearchTreeSystem`) | ✅ **Fertiggestellt** |
 | **Modul 12** | **Fog of War & Sichtweiten-Grid** (`Nova.Simulation.Vision`) | 2D-Sichtraster, Nebel des Krieges (unbekannt / erkundet / sichtbar), Tarnungs- & Detektor-Mechanik | ✅ **Fertiggestellt** |
-| **Modul 13** | **Skirmish-KI (Allianz & Legion)** (`Nova.AI`) | Nutzenbasierte KI-Entscheidungsschleife (Wirtschaftsaufbau, Basisverteidigung, Angriffs-Squad-Formierung) | 🚀 **In Arbeit** |
-| **Modul 14** | **RTS-UI & Command-Card** (`Nova.Presentation.UI`) | Minimap-Rendering, Ressourcenanzeige, Einheiten-Mehrfachauswahl (Selection Box), Command-Card (Icons/Hotkeys) | ⏳ Geplant |
+| **Modul 13** | **Skirmish-KI (Allianz & Legion)** (`Nova.AI`) | Nutzenbasierte KI-Entscheidungsschleife (Wirtschaftsaufbau, Basisverteidigung, Angriffs-Squad-Formierung) | ✅ **Fertiggestellt** |
+| **Modul 14** | **RTS-UI & Command-Card** (`Nova.Presentation.UI`) | Minimap-Rendering, Ressourcenanzeige, Einheiten-Mehrfachauswahl (Selection Box), Command-Card (Icons/Hotkeys) | 🚀 **In Arbeit** |
 | **Modul 15** | **Asset-Integration MS-1** (`Nova.Data`) | Einbindung der CC0-Asset-Bibliotheken (Kenney/Quaternius) für 27 Einheiten & 24 Gebäude | ⏳ Geplant |
 
 ---
