@@ -2,7 +2,7 @@
 
 > Modernes Echtzeitstrategiespiel (RTS) mit Basisbau, drei Fraktionen und der lebendigen Kristallressource **Aetherium**. *Project Nova* ist der Arbeitstitel.
 
-**Phase:** Konzeption & Produktionsvorbereitung · **Status:** Sprint 5 (Asset Audit) abgeschlossen · **Repo:** öffentlich (Community-Projekt)
+**Phase:** Konzeption & Produktionsvorbereitung · **Status:** Sprint 6 (Produktionsplanung) abgeschlossen · **Repo:** öffentlich (Community-Projekt)
 
 ---
 
@@ -16,7 +16,7 @@
 - Infanterie, Fahrzeuge, Luftfahrzeuge, Verteidigungsanlagen
 - KI-Gegner und Multiplayer, Gefechte mit vielen gleichzeitigen Einheiten
 
-> **Wichtig:** Dieses Repository befindet sich in der **Design- und Planungsphase**. Es enthält **noch keinen Spielcode** – die Implementierung ist als Sprint 7 geplant. Der gesamte aktuelle Wert liegt in der strukturierten, konsistenten Dokumentation unter [`docs/`](docs/).
+> **Wichtig:** Dieses Repository befindet sich in der **Design- und Planungsphase**. Es enthält **noch keinen Spielcode** – die Implementierung startet in Sprint 7 (MS-0 Spike). Der gesamte aktuelle Wert liegt in der strukturierten, konsistenten Dokumentation unter [`docs/`](docs/).
 
 ## Einstieg in die Dokumentation
 
@@ -61,8 +61,8 @@ Project Nova/
 | 3 | Technical Design | ✅ abgeschlossen |
 | 4 | Architecture Review | ✅ abgeschlossen |
 | 5 | Asset Audit | ✅ abgeschlossen |
-| 6 | Produktionsplanung | 🟢 bereit (GO) |
-| 7 | Implementierung | ⛔ blockiert bis Sprint 6 |
+| 6 | Produktionsplanung | ✅ abgeschlossen |
+| 7 | Implementierung | 🟢 bereit (GO) |
 
 Details und Exit-Kriterien: [docs/production/SprintPlanning.md](docs/production/SprintPlanning.md).
 
@@ -83,7 +83,7 @@ Grundprinzipien:
 
 ## Änderungshistorie
 
-Siehe [CHANGELOG.md](CHANGELOG.md). Die Versionsnummern folgen dem Dokumentationsstand des Wikis (aktuell `0.6.0`).
+Siehe [CHANGELOG.md](CHANGELOG.md). Die Versionsnummern folgen dem Dokumentationsstand des Wikis (aktuell `0.7.0`).
 
 ## Mitmachen
 
