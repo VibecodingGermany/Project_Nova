@@ -3,6 +3,7 @@
     "rootNamespace": "Nova.Presentation",
     "references": [
         "Nova.Core",
+        "Nova.Simulation",
         "Nova.Gameplay"
     ],
     "includePlatforms": [],

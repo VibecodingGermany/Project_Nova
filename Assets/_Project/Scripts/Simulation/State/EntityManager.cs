@@ -45,7 +45,7 @@ namespace Nova.Simulation.State
             return _versions[id.Index] == id.Version && _units[id.Index].IsActive;
         }
 
-        public EntityId SpawnUnit(byte playerId, Transform2D initialTransform, float moveSpeed, float radius = 0.5f)
+        public EntityId SpawnUnit(byte playerId, Transform2D initialTransform, float moveSpeed, float radius = 0.5f, int maxHealth = 100)
         {
             if (_freeSlots.Count == 0)
             {
@@ -56,7 +56,7 @@ namespace Nova.Simulation.State
             ushort version = _versions[index];
             var id = new EntityId(index, version);
 
-            _units[index] = new UnitState(id, playerId, initialTransform, moveSpeed, radius);
+            _units[index] = new UnitState(id, playerId, initialTransform, moveSpeed, radius, maxHealth);
             ActiveCount++;
 
             return id;

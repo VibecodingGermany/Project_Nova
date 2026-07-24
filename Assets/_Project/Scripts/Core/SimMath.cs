@@ -22,5 +22,10 @@ namespace Nova.Core
         public static ushort FloorToUShort(float value) => (ushort)Math.Max(0, Math.Min(ushort.MaxValue, (int)Math.Floor(value)));
         public static int Clamp(int value, int min, int max) => Math.Max(min, Math.Min(max, value));
         public static float Clamp(float value, float min, float max) => Math.Max(min, Math.Min(max, value));
+
+        public static uint SingleToUInt32Bits(float value)
+        {
+            return (uint)BitConverter.SingleToInt32Bits(value);
+        }
     }
 }
