@@ -119,7 +119,7 @@ namespace Nova.Simulation.Movement
 
                                 if (distSq > 0f && distSq < minDist * minDist)
                                 {
-                                    float dist = (float)Math.Sqrt(distSq);
+                                    float dist = SimMath.Sqrt(distSq);
                                     float pushFactor = (minDist - dist) / dist;
                                     sepDx += (curX - other.Transform.PositionX) * pushFactor;
                                     sepDy += (curY - other.Transform.PositionY) * pushFactor;
@@ -138,14 +138,14 @@ namespace Nova.Simulation.Movement
                 float lenSq = finalDx * finalDx + finalDy * finalDy;
                 if (lenSq > 0.0001f)
                 {
-                    float len = (float)Math.Sqrt(lenSq);
+                    float len = SimMath.Sqrt(lenSq);
                     finalDx /= len;
                     finalDy /= len;
 
                     float step = unit.MoveSpeed * TickDeltaSeconds;
                     float nextX = curX + finalDx * step;
                     float nextY = curY + finalDy * step;
-                    float rotation = (float)Math.Atan2(finalDy, finalDx);
+                    float rotation = SimMath.Atan2(finalDy, finalDx);
 
                     unit.Transform = new Transform2D(nextX, nextY, rotation);
                 }

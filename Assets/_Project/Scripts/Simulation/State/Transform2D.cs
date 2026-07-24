@@ -1,4 +1,5 @@
 using System;
+using Nova.Core;
 
 namespace Nova.Simulation.State
 {
@@ -30,7 +31,7 @@ namespace Nova.Simulation.State
 
         public float DistanceTo(in Transform2D other)
         {
-            return (float)Math.Sqrt(DistanceToSquared(in other));
+            return SimMath.Sqrt(DistanceToSquared(in other));
         }
 
         public bool Equals(Transform2D other)
