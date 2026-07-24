@@ -1,6 +1,6 @@
 # Project Nova – Entwicklungs-Wiki
 
-**Version:** 0.7.0 | **Status:** Living Document | **Verantwortungsbereich:** Executive Producer / Technical Writer | **Sprint:** 6
+**Version:** 0.7.1 | **Status:** Recovery-Baseline | **Verantwortungsbereich:** Executive Producer / Technical Writer | **Sprint:** 7
 
 ## Zweck
 
@@ -26,7 +26,7 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 | Technical Design | [tech/](tech/) | abgeschlossen | 3 |
 | Architecture Review | [tech/review/](tech/review/) | abgeschlossen | 4 |
 | Asset Audit | [assets/](assets/AssetRegister.md) | abgeschlossen | 5 |
-| Production | [production/](production/SprintPlanning.md) | abgeschlossen | 6 |
+| Production / Recovery | [production/](production/SprintPlanning.md) | aktiv | 7 |
 | Sprint-Berichte | [production/sprints/](production/sprints/) | laufend | alle |
 
 ## Aktuelle Dokumente
@@ -68,13 +68,15 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 - [Licenses.md](assets/Licenses.md) – Lizenz-Register (CC0 & KI-Regeln für öffentliches Repo)
 - [BuildBacklog.md](assets/BuildBacklog.md) – priorisierter Eigenbau-Backlog (~110–180 PT)
 
-### Production (Sprint 6)
+### Production (Sprint 6 / Sprint 7 Recovery)
 - [Milestones.md](production/Milestones.md) – Meilenstein-Definitionen (MS-0 bis MS-4)
-- [Roadmap.md](production/Roadmap.md) – Produktions-Roadmap (445 PT Gesamtaufwand, Phasenplan 2026–2028)
+- [Roadmap.md](production/Roadmap.md) – historische Sprint-6-Schätzung; Rebaseline erforderlich
 - [SprintPlanning.md](production/SprintPlanning.md) – Sprint-Definitionen und Status
-- [DecisionLog.md](production/DecisionLog.md) – alle Entscheidungen (D-001–D-054)
-- [OpenQuestions.md](production/OpenQuestions.md) – offene Fragen (Q-018, Q-019, Q-035 geschlossen)
-- [RiskAnalysis.md](production/RiskAnalysis.md) – Risikoregister (R-16 mitigiert)
+- [DecisionLog.md](production/DecisionLog.md) – alle Entscheidungen (D-001–D-055)
+- [OpenQuestions.md](production/OpenQuestions.md) – offene Fragen einschließlich Q-038/Q-039
+- [RiskAnalysis.md](production/RiskAnalysis.md) – Risikoregister einschließlich R-17
+- [ImplementationAudit_2026-07-24.md](production/ImplementationAudit_2026-07-24.md) – tatsächlicher Code- und Nachweisstand bei `460290e`
+- [MVPRecoveryPlan.md](production/MVPRecoveryPlan.md) – verbindliche Recovery-Gates G0–G5
 - Sprint-Berichte: [Sprint 0](production/sprints/Sprint00_Report.md) · [Sprint 1](production/sprints/Sprint01_Report.md) · [Sprint 2](production/sprints/Sprint02_Report.md) · [Sprint 3](production/sprints/Sprint03_Report.md) · [Sprint 4](production/sprints/Sprint04_Report.md) · [Sprint 5](production/sprints/Sprint05_Report.md) · [Sprint 6](production/sprints/Sprint06_Report.md)
 
 ## Status-Board
@@ -87,8 +89,8 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 | 3 | Technical Design | **abgeschlossen** |
 | 4 | Architecture Review | **abgeschlossen** |
 | 5 | Asset Audit | **abgeschlossen** |
-| 6 | Produktionsplanung | **abgeschlossen** |
-| 7 | Implementierung | **bereit (GO)** |
+| 6 | Produktionsplanung | **Abschluss zurückgezogen – D-055** |
+| 7 | Implementierungs-Recovery | **aktiv – aktuell G0** |
 
 ## Abhängigkeiten
 
@@ -98,14 +100,14 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 
 ## Offene Punkte
 
-- Q-018 (Preispunkt: 29,99–39,99 €) und Q-019 (Opt-in Telemetrie) in Sprint 6 geschlossen.
+- Q-018 und Q-019 bleiben mangels gültiger D-ID offen.
 - Q-035 (Asset-Budget-Obergrenze = 0 €) durch D-054 geschlossen.
 - Q-034 (tote Verweise) – Refactoring-Task für Sprint 7.
-- Vier Phase-0-Spike-Validierungen als Pflicht-Checkliste für Sprint 7 (MS-0).
+- Q-038 (MVP-Zuschnitt) und Q-039 (Fixed-Point-Konflikt) sind P0-Recovery-Blocker.
 
 ## Nächste Schritte
 
-- **Sprint 7 (Implementierung / Phase 0 Spike / MS-0):** Start der modularen C#-Entwicklung für den Simulations- & Lockstep-Kern, Fixed-Point-Determinismus (ARM↔x86) und Flow-Field Pathfinding.
+- Gate G0 reproduzierbar schließen; danach die Gates des [MVP-Recovery-Plans](production/MVPRecoveryPlan.md) ohne Alpha-Vorgriff sequenziell abarbeiten.
 
 ## Änderungsverlauf
 
@@ -118,3 +120,4 @@ Dieses Wiki folgt dem Prinzip vieler kleiner, logisch getrennter und untereinand
 | 0.5.0 | 2026-07-21 | Sprint 4 (Architecture Review) abgeschlossen: 6 Reviews, D-043–D-052 | Executive Producer |
 | 0.6.0 | 2026-07-22 | Sprint 5 (Asset Audit) abgeschlossen: Asset-Bereich (4 Dokumente), D-053/D-054 | Executive Producer |
 | 0.7.0 | 2026-07-24 | Sprint 6 (Produktionsplanung) abgeschlossen: Milestones.md, Roadmap.md, Sprint06_Report.md, Q-018/Q-019 geschlossen, R-16 mitigiert, Sprint 7 GO | Executive Producer |
+| 0.7.1 | 2026-07-24 | Recovery-Baseline: Implementierungs-Audit, D-055, tatsächlicher Status und MVP-Gates G0–G5 | Executive Producer / Lead Technical Director |

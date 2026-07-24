@@ -1,18 +1,22 @@
 # Sprint-6-Bericht – Produktionsplanung
 
-**Version:** 1.0.0 | **Status:** Sprint abgeschlossen | **Verantwortungsbereich:** Executive Producer | **Sprint:** 6
+**Version:** 1.1.0 | **Status:** Abschluss widerrufen durch D-055 | **Verantwortungsbereich:** Executive Producer | **Sprint:** 6
 
 ## Zweck
 
-Verbindlicher Abschlussbericht von Sprint 6 (Produktionsplanung) gemäß Sprint-Ritual ([../SprintPlanning.md](../SprintPlanning.md)): Dokumentationsstand, Ergebnisse, Konsistenzreview, Self Review, Architecture Review, Risikoanalyse-Update, Qualitätsbewertung, offene Punkte, begründete Empfehlung für Sprint 7 (Implementierung).
+Historischer Abschlussbericht von Sprint 6 (Produktionsplanung) gemäß Sprint-Ritual ([../SprintPlanning.md](../SprintPlanning.md)). Der ursprünglich verbindliche Abschluss wurde durch D-055 widerrufen; der Bericht dokumentiert weiterhin, welche Annahmen zu diesem Zeitpunkt getroffen wurden.
 
 ## Abhängigkeiten
 
 - [../Milestones.md](../Milestones.md) – Meilenstein-Planung (MS-0 bis MS-4)
 - [../Roadmap.md](../Roadmap.md) – Zeit- und Aufwandsschätzung (445 PT), Phasenplan
-- [../RiskAnalysis.md](../RiskAnalysis.md) – Risikoanalyse (R-16 auf mitigiert)
-- [../OpenQuestions.md](../OpenQuestions.md) – Q-018 & Q-019 geschlossen
-- [../SprintPlanning.md](../SprintPlanning.md) – Sprint-6-Definition, Sprint-7-Scope (Implementierung)
+- [../RiskAnalysis.md](../RiskAnalysis.md) – Risikoanalyse
+- [../OpenQuestions.md](../OpenQuestions.md) – Fragenregister
+- [../SprintPlanning.md](../SprintPlanning.md) – Sprint-Definitionen und Recovery-Status
+
+## Korrekturvermerk vom 2026-07-24
+
+Die Aussagen dieses Berichts zu vollständiger Konsistenz, erfüllten Exit-Kriterien, mitigiertem R-16, geschlossenen Q-018/Q-019 und dem pauschalen GO für Sprint 7 sind **widerrufen**. Der [Implementierungs-Audit](../ImplementationAudit_2026-07-24.md) belegt einen roten Test, einen nicht angeschlossenen Command-Pfad, fehlende spielbare Integration und nicht erfüllte MS-0-Nachweise. Die 445-PT-Schätzung ist unbelegt. Der historische Bericht bleibt zur Nachvollziehbarkeit erhalten; führend sind D-055 und der [MVP-Recovery-Plan](../MVPRecoveryPlan.md).
 
 ---
 
@@ -88,8 +92,8 @@ Verbindlicher Abschlussbericht von Sprint 6 (Produktionsplanung) gemäß Sprint-
 
 ## Nächste Schritte
 
-1. Commit/Push (Versionsbump Wiki 0.7.0), `docs/README.md`, `README.md`, `CHANGELOG.md` aktualisieren.
-2. **Sprint 7 (Implementierung / Phase 0 Spike)** starten!
+1. Recovery-Gate G0 reproduzierbar schließen.
+2. Q-038 entscheiden und Q-039 vor G1-Abschluss auflösen.
 
 ---
 
@@ -98,3 +102,4 @@ Verbindlicher Abschlussbericht von Sprint 6 (Produktionsplanung) gemäß Sprint-
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 1.0.0 | 2026-07-24 | Sprint 6 (Produktionsplanung) abgeschlossen, GO für Sprint 7 (Implementierung) | Executive Producer |
+| 1.1.0 | 2026-07-24 | Abschluss und GO durch D-055 widerrufen; Bericht als historische, nicht führende Momentaufnahme markiert | Executive Producer |

@@ -1,10 +1,10 @@
 # Produktions-Roadmap (Roadmap)
 
-**Version:** 1.0.0 | **Status:** sprint-freigegeben | **Verantwortungsbereich:** Producer / Executive Producer | **Sprint:** 6
+**Version:** 1.1.0 | **Status:** Rebaseline erforderlich – nicht terminverbindlich | **Verantwortungsbereich:** Producer / Executive Producer | **Sprint:** 7
 
 ## Zweck
 
-Verbindlicher Zeit-, Aufwands- und Kapazitätsplan für *Project Nova*. Bündelt alle Person-Tage (PT) aus dem [BuildBacklog.md](../assets/BuildBacklog.md) (B-01 bis B-14) und der Simulations-/Engine-Code-Implementierung, entkräftet das Zeit-/Kapazitätsrisiko ([RiskAnalysis.md](RiskAnalysis.md), R-16) sowie das Bus-Faktor-Risiko (R-13) und definiert das Geschäfts- und Telemetriemodell (**Q-018, Q-019**). Verbindlich für: Producer, Lead Technical Director, Game Director, alle Mitwirkenden.
+Historische Zeit-, Aufwands- und Kapazitätsannahmen für *Project Nova*. Nach D-055 ist dieses Dokument **nicht termin- oder scope-verbindlich**: Die 445-PT-Schätzung besitzt keine belastbare Messbasis, R-16 ist nicht mitigiert und Q-018/Q-019 bleiben offen. Eine neue Roadmap darf erst aus gemessenen Recovery-Gates und einem durch Q-038 ratifizierten MVP entstehen.
 
 ## Abhängigkeiten
 
@@ -15,6 +15,10 @@ Verbindlicher Zeit-, Aufwands- und Kapazitätsplan für *Project Nova*. Bündelt
 - [RiskAnalysis.md](RiskAnalysis.md) – R-13 (Bus-Faktor) und R-16 (Kapazitätsmodell)
 
 ---
+
+## Korrekturvermerk
+
+Der folgende Sprint-6-Plan bleibt aus Gründen der Nachvollziehbarkeit erhalten, ist aber keine Freigabe. Verbindlich sind der [Implementierungs-Audit](ImplementationAudit_2026-07-24.md), D-055 und der [MVP-Recovery-Plan](MVPRecoveryPlan.md). MS-0 ist offen, das MVP nicht erreicht und Alpha nicht begonnen.
 
 ## 1. Gesamtaufwandsschätzung (Personentage / PT)
 
@@ -61,23 +65,27 @@ Das Projekt basiert auf einem **hybriden Open-Source-Entwicklungsmodell** (Proje
 
 ## 3. Kommerzielles Modell & Telemetrie (Q-018, Q-019)
 
-### 3.1 Preispunkt & Geschäftsmodell (Q-018 geschlossen)
+### 3.1 Preispunkt & Geschäftsmodell (Q-018 offen; historische Annahme)
 * **Entscheidung (D-007 Ratifizierung):** **Premium Singleplayer/Skirmish-first** auf Steam (Windows / macOS).
 * **Preispunkt:** **29,99 € (Standard)** / **39,99 € (Supporter Edition)**.
-* **Grundsätze:** Kein Pay-to-Win, keine In-Game-Käufe, keine Online-Pflicht, 0 € laufende Server-Kosten (Relay/P2P, D-051).
+* **Grundsätze (Vorschlag):** Kein Pay-to-Win, keine In-Game-Käufe, keine Online-Pflicht. Laufende Serverkosten sind nicht mit 0 € belegt.
 
-### 3.2 Telemetrie-Modell (Q-019 geschlossen)
+### 3.2 Telemetrie-Modell (Q-019 offen; historische Annahme)
 * **Entscheidung:** **Opt-in Anonymized Telemetry.**
 * **Scope:** Anonymisierte Crash-Reports (Sentry, D-042) und anonymisierte Match-Statistiken (Win-Rates, Fraktions-Wahl, Matchdauer) für Balancing-Passes.
 * **Datenschutz:** DSGVO-konform, kein Tracking persönlicher Daten, standardmäßig deaktiviert (Opt-in).
 
 ---
 
-## 4. Offene Punkte & Nächste Schritte
+## 4. Offene Punkte
 
-- **Nächste Schritte:**
-  1. [SprintPlanning.md](SprintPlanning.md) auf Sprint 6 **abgeschlossen** und Sprint 7 **bereit (GO)** setzen.
-  2. Direkt mit **Sprint 7 (Implementierung / MS-0 Spike)** beginnen!
+- Q-018 und Q-019 benötigen gültige Entscheidungen mit Alternativen.
+- Q-038 bestimmt den MVP-Zuschnitt; R-16 benötigt Messdaten statt pauschaler PT.
+
+## Nächste Schritte
+
+1. Recovery-Gates G0–G5 ausführen.
+2. Nach G2 den gemessenen Durchsatz und nach G4 den bestätigten Scope neu schätzen.
 
 ---
 
@@ -86,3 +94,4 @@ Das Projekt basiert auf einem **hybriden Open-Source-Entwicklungsmodell** (Proje
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 1.0.0 | 2026-07-24 | Erstfassung Sprint 6: Gesamtaufwand (445 PT), Phasenplan 2026–2028, Q-018 (Preispunkt 29,99–39,99 €) und Q-019 (Opt-in Telemetrie) geschlossen | Producer / Executive Producer |
+| 1.1.0 | 2026-07-24 | Sprint-6-Schätzung durch D-055 als unbelegte historische Annahme eingestuft; Roadmap bis zur Recovery-Rebaseline entfristet | Producer / Executive Producer |

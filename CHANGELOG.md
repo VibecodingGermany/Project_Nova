@@ -13,6 +13,15 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 
 ## [Unreleased]
 
+### Geändert
+- **Recovery-Baseline nach strengem Implementierungs-Audit:** MS-0 ist offen, das MVP ist nicht erreicht und Alpha hat nicht begonnen. Die bisherigen Sprint-7-Einträge belegen nur vorhandene Prototyp-Struktur, nicht fertige oder integrierte Features.
+- [ImplementationAudit_2026-07-24.md](docs/production/ImplementationAudit_2026-07-24.md) dokumentiert Testfehler, Integrationslücken, fehlende Akzeptanznachweise und Planungswidersprüche am eingefrorenen Stand `460290e`.
+- [MVPRecoveryPlan.md](docs/production/MVPRecoveryPlan.md) ersetzt pauschale Modul-Fertigmeldungen durch sequenzielle Gates G0–G5.
+- Sprint-6-Abschluss, Sprint-7-GO, 445-PT-Verbindlichkeit sowie die ungültigen Schließungen Q-018/Q-019 wurden durch D-055 zurückgezogen; R-16 wurde reaktiviert und R-17 ergänzt.
+
+### Entschieden
+- **D-055:** Vorhandenen Code als Prototyp erhalten, Projektstatus auf Recovery zurücksetzen und Fortschritt ausschließlich über reproduzierbare Evidenz qualifizieren.
+
 ### Hinzugefügt
 - **Sprint 7 (Implementierung / MS-0 Phase-0-Spike Kern-Simulation):**
   - **Assembly-Topologie & Engine-Entkopplung (`noEngineReferences: true`):** `Assets/_Project/Scripts/Core/Nova.Core.asmdef`, `Assets/_Project/Scripts/Simulation/Nova.Simulation.asmdef`, `Assets/_Project/Scripts/AI/Nova.AI.asmdef`.
@@ -24,7 +33,7 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
   - **GameDatabase Sharding & Master Index (`Nova.Data` & `Nova.Editor`):** Category Sub-Registries (`UnitRegistrySO`, `BuildingRegistrySO`, `WeaponRegistrySO`), Aggregator `GameDatabaseMasterSO`, Editor Generator `GameDatabaseGenerator.cs` (Rebuild & Validierung) sowie Unity-freie `UnitDefinition` Structs für das Match-Setup gemäß D-049.
   - **Command Bus & Order System (`Nova.Simulation.Commands`):** Unboxed Command Transport via `CommandEnvelope`, `CommandProcessorSystem` (`ISimSystem` für `Move`, `Stop`, `AttackTarget`).
   - **Combat & Damage Pipeline (`Nova.Simulation.Combat`):** `WeaponDefinition`, `CombatSystem` (`ISimSystem` für Entfernungsprüfungen, Waffenfrequenzen, Schadensberechnungen und Entitäts-Zerstörung).
-  - **Lockstep State Hashing, Replay & Visual Debug View (`Nova.Simulation.State`, `Nova.Simulation.Replays`, `Nova.Presentation`):** Bit-exakter FNV-1a 64-Bit `StateHashUtility` zur Multiplayer-Desync-Erkennung, `ReplayBuffer` zur Match-Aufzeichnung & Wiederholung sowie `FlowFieldDebugView` (Scene View Gizmos).
+  - **State-Hash-/Replay-/Debug-Prototypen (`Nova.Simulation.State`, `Nova.Simulation.Replays`, `Nova.Presentation`):** unvollständiger FNV-1a-Hash, `ReplayBuffer` nur zur Aufzeichnung ohne Playback sowie `FlowFieldDebugView` (Scene View Gizmos); nicht als Lockstep-/Desync-Nachweis abgenommen.
   - **Wirtschafts- & Ressourcen-System (`Nova.Simulation.Economy`):** Phase 1 (Modul 9) - `PlayerEconomyState` Struct (16 Bytes, Aetherium-Guthaben & Energieraster), `ResourceHarvestingSystem` (Sammler-Entladung an Raffinerien) und `EnergyGridSystem` (Low-Power-Erkennung & -50 % Produktions-Strafen).
   - **Basisbau- & Bauplatz-System (`Nova.Simulation.Construction`):** Phase 1 (Modul 10) - `BuildingDefinition` Struct, `ConstructionGrid` (Zellbelegungs- und Bauzonenraster) und `ConstructionSystem` (`ISimSystem` für Gebäudeplatzierung, Bauzeit-Timer und automatische Energienetz-Registrierung bei Fertigstellung).
   - **Einheiten-Produktion & Tech-Tree (`Nova.Simulation.Production`):** Phase 1 (Modul 11) - `ProductionQueueSystem` (`ISimSystem` für Kasernen-/Fabrik-Queues, Bau-Timer & automatisches Spawnen im `EntityManager`) und `ResearchTreeSystem` (Tech-Tier-Freischaltungen [Tier 1, Tier 2] pro Spieler).
@@ -34,7 +43,7 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
   - **Asset-Integration MS-1 (`Nova.Data`):** Phase 1 (Modul 15) - `AssetMappingRegistrySO` (ScriptableObject-Mapping für 27 Einheiten- & 24 Gebäude-Assets aus Sprint 5 Audit) & GameDatabase-Lookup-Pipeline.
   - **3. Fraktion: Die Evolvierten (`Nova.Simulation.Factions`):** Phase 2 (Modul 16) - `BiomassGrid` (Verwaltet organische Biomasse-Zellen) und `EvolvedFactionSystem` (`ISimSystem` für passive Einheiten-Lebenspunkte-Regeneration [+2 HP / 0,5s] auf Biomasse).
   - **Commander- & Doktrinen-System (`Nova.Simulation.Commanders`):** Phase 2 (Modul 17) - `CommanderAbilityDefinition` Struct (Fähigkeiten-Parameter) und `CommanderSystem` (`ISimSystem` für passiven Energieaufbau [+1 Energy / 1,0s], Cooldowns & Bereichs-Effekte wie Orbital-Schläge).
-  - **Multiplayer Command-Relay (`Nova.Networking`):** Phase 2 (Modul 18) - `CommandEnvelopeNetPacket` Struct (Kompakte 41-Byte UDP-Netzwerk-Paket-Serialisierung) und `LockstepRelayBuffer` (Puffert eingehende Pakete pro Turn-Tick & führt Desync-Hash-Vergleiche durch).
+  - **Command-Relay-Scaffolding (`Nova.Networking`):** Phase-2-Prototyp aus `CommandEnvelopeNetPacket` und In-Memory-`LockstepRelayBuffer`; aktuelle Serialisierung liefert 34 Bytes, während Test und Spezifikation 41 beziehungsweise 37 Bytes erwarten; kein UDP-Transport.
   - **Map- & Biom-Erweiterung (`Nova.Presentation.Maps`):** Phase 2 (Modul 19) - `MapBiomeType` Enum (`Desert`, `Snow`, `JungleIndustrial`) und `MapDefinitionSO` (ScriptableObject-Layouts für 1v1 / 2v2 Karten mit 2–4 Spawn-Punkten & Aetherium-Knoten).
   - **Headless SimRunner & Tests:** Standalone .NET 8 Konsolen-Executable `tools/Nova.SimRunner`, NUnit-EditMode-Testsuiten (`DeterministicSimTests`, `FlowFieldPathfindingTests`, `MovementSystemTests`, `MovementPerformanceTests`, `MatchRunnerTests`, `GameDatabaseTests`, `CommandSystemTests`, `CombatSystemTests`, `LockstepReplayTests`, `EconomySystemTests`, `ConstructionSystemTests`, `ProductionSystemTests`, `VisionSystemTests`, `SkirmishAiTests`, `SelectionManagerTests`, `AssetIntegrationTests`, `EvolvedFactionTests`, `CommanderSystemTests`, `LockstepRelayBufferTests`, `MapDefinitionTests`).
   - **Modulspezifikationen:** `MovementSystem_Spec.md`, `GameplayBridge_Spec.md`, `GameDatabase_Spec.md`, `CommandSystem_Spec.md`, `CombatSystem_Spec.md`, `LockstepReplay_Spec.md`, `EconomySystem_Spec.md`, `ConstructionSystem_Spec.md`, `ProductionSystem_Spec.md`, `VisionSystem_Spec.md`, `SkirmishAi_Spec.md`, `RtsUi_Spec.md`, `AssetIntegration_Spec.md`, `EvolvedFaction_Spec.md`, `CommanderSystem_Spec.md`, `LockstepRelay_Spec.md` und `MapExpansion_Spec.md` unter `docs/tech/modules/`.

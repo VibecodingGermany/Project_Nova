@@ -1,79 +1,71 @@
-# Module und Phasen-Übersicht (*Project Nova*)
+# Module und Phasen – tatsächlicher Implementierungsstand
 
-```text
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                                    PROJECT NOVA                                        │
-└────────────────────────────────────────────────────────────────────────────────────────┘
-     │
-     ├── Phase 0: MS-0 Spike & Vertical Slice (ABGESCHLOSSEN ✅)
-     ├── Phase 1: MS-1 MVP (Minimum Viable Product / Spielbarer Kern)
-     ├── Phase 2: MS-2 Alpha (3 Fraktionen, Doktrinen, MP-Relay)
-     ├── Phase 3: MS-3 Beta (Karten-Skalierung, Superwaffen, Polish)
-     └── Phase 4: MS-4 Release v1.0 (Kampagne & Launch)
-```
+**Version:** 1.0.0 | **Status:** Recovery-Baseline | **Verantwortungsbereich:** Lead Technical Director / Producer | **Sprint:** 7
 
----
+## Zweck
 
-## 🟢 Phase 0: MS-0 Spike & Foundation Setup (ABGESCHLOSSEN ✅)
-> **Fokus:** Nachweis des deterministischen Simulationskerns, Flow-Field Pathfinding, Entitätsverwaltung & View-Brücke.
+Zeigt den nachweisbaren Implementierungsstand nach dem Audit auf Commit
+`460290e`. Statuswerte beruhen auf integrierten Ergebnissen und Gate-Evidenz,
+nicht auf vorhandenen Dateien oder APIs.
 
-| Modul | Name / Bereich | Inhalt & Hauptkomponenten | Status |
-|---|---|---|---|
-| **Modul 1** | **Sim Core & Lockstep Kernel** (`Nova.Core`, `Nova.Simulation`) | `SimMath`, `EntityId`, `Tick`, `SimRandom` (PRNG), `CommandEnvelope`, `SimulationKernel` | ✅ **Fertiggestellt** |
-| **Modul 2** | **Flow-Field Pathfinding** (`Nova.Simulation.Pathfinding`) | `GridPos2D`, `Direction2D`, `CostField`, `IntegrationField` (Dijkstra), `FlowField`, `PathfindingSystem` | ✅ **Fertiggestellt** |
-| **Modul 3** | **Entity Storage & Movement** (`Nova.Simulation.State`, `Movement`) | `Transform2D`, `UnitState`, `EntityManager` (0-GC Free-List), `MovementSystem` ($O(N)$ Spatial Binning) | ✅ **Fertiggestellt** |
-| **Modul 4** | **Unity Gameplay Bridge** (`Nova.Gameplay`) | `MatchRunner` (20-Hz-Akkumulator), `UnitViewManager` (60-FPS-Interpolation), `PathfindingTestBootstrap` | ✅ **Fertiggestellt** |
-| **Modul 5** | **GameDatabase Sharding** (`Nova.Data`, `Nova.Editor`) | Sub-Registries (`UnitRegistrySO`), `GameDatabaseMasterSO`, `GameDatabaseGenerator.cs`, `UnitDefinition` Structs | ✅ **Fertiggestellt** |
-| **Modul 6** | **Command Bus & Orders** (`Nova.Simulation.Commands`) | `CommandProcessorSystem` (`ISimSystem` für `Move`, `Stop`, `AttackTarget`) | ✅ **Fertiggestellt** |
-| **Modul 7** | **Combat & Damage Pipeline** (`Nova.Simulation.Combat`) | `WeaponDefinition`, `CombatSystem` (Reichweiten, Waffenfrequenzen, Schadensberechnungen, Zerstörung) | ✅ **Fertiggestellt** |
-| **Modul 8** | **Lockstep Hashing & Replays** (`Nova.Simulation.State`, `Replays`, `Nova.Presentation`) | `StateHashUtility` (FNV-1a 64-Bit), `ReplayBuffer`, `FlowFieldDebugView` (Scene View Gizmos) | ✅ **Fertiggestellt** |
+## Abhängigkeiten
 
----
+- [production/ImplementationAudit_2026-07-24.md](production/ImplementationAudit_2026-07-24.md)
+- [production/MVPRecoveryPlan.md](production/MVPRecoveryPlan.md)
+- [production/DecisionLog.md](production/DecisionLog.md) – D-055
+- [production/Milestones.md](production/Milestones.md)
 
-## 🟡 Phase 1: MS-1 MVP – Minimum Viable Product (ABGESCHLOSSEN ✅)
-> **Fokus:** Spielbarer 1v1-Skirmish-Kern mit 2 Fraktionen (Allianz vs. Legion) gegen die KI auf 1 Karte / Biom.
+## Aktueller Gesamtstatus
 
-| Modul | Name / Bereich | Geplante Features & Aufgaben | Status |
-|---|---|---|---|
-| **Modul 9** | **Wirtschafts- & Ressourcen-System** (`Nova.Simulation.Economy`) | Aetherium-Raffinerien, Mutterkristall-Sammler, Energienetz-Berechnung & Low-Power-Mali (-50 %) | ✅ **Fertiggestellt** |
-| **Modul 10** | **Basisbau- & Bauplatz-System** (`Nova.Simulation.Construction`) | HQ-Bau-Queues, Bauzonen-Grid, Gebäudebau-Zustände, Grid-Platzierung & Kollision | ✅ **Fertiggestellt** |
-| **Modul 11** | **Einheiten-Produktion & Tech-Tree** (`Nova.Simulation.Production`) | Kasernen-/Fabrik-Bau-Queues, Tier-1/2-Forschungs-Entsperrung (`ResearchTreeSystem`) | ✅ **Fertiggestellt** |
-| **Modul 12** | **Fog of War & Sichtweiten-Grid** (`Nova.Simulation.Vision`) | 2D-Sichtraster, Nebel des Krieges (unbekannt / erkundet / sichtbar), Tarnungs- & Detektor-Mechanik | ✅ **Fertiggestellt** |
-| **Modul 13** | **Skirmish-KI (Allianz & Legion)** (`Nova.AI`) | Nutzenbasierte KI-Entscheidungsschleife (Wirtschaftsaufbau, Basisverteidigung, Angriffs-Squad-Formierung) | ✅ **Fertiggestellt** |
-| **Modul 14** | **RTS-UI & Command-Card** (`Nova.Presentation.UI`) | Minimap-Rendering, Ressourcenanzeige, Einheiten-Mehrfachauswahl (Selection Box), Command-Card (Icons/Hotkeys) | ✅ **Fertiggestellt** |
-| **Modul 15** | **Asset-Integration MS-1** (`Nova.Data`) | Einbindung der CC0-Asset-Bibliotheken (Kenney/Quaternius) für 27 Einheiten & 24 Gebäude | ✅ **Fertiggestellt** |
-
----
-
-## 🔵 Phase 2: MS-2 Alpha (In Arbeit 🚀)
-> **Fokus:** 3. Fraktion (Evolvierte), Doktrinen-System, 3 Maps/Biome und 2–4 Spieler Multiplayer-Relay.
-
-| Modul | Name / Bereich | Geplante Features & Aufgaben | Status |
-|---|---|---|---|
-| **Modul 16** | **3. Fraktion: Die Evolvierten** (`Nova.Simulation.Factions`) | Biologisch-organische Baumechanik (Burrow, Regeneration, Biomasse-Nutzung) | ✅ **Fertiggestellt** |
-| **Modul 17** | **Commander- & Doktrinen-System** (`Nova.Simulation.Commanders`) | Passive & aktive Commander-Fähigkeiten (z. B. Artillerie-Schlag, Sensor-Overdrive) | ✅ **Fertiggestellt** |
-| **Modul 18** | **Multiplayer Command-Relay** (`Nova.Networking`) | UDP-Relay-Server-Client-Anbindung, Synchronisations-Buffer & Desync-Erkennung | ✅ **Fertiggestellt** |
-| **Modul 19** | **Map- & Biom-Erweiterung** (`Nova.Presentation.Maps`) | 3 verifizierte Karten (1v1, 2v2) in 3 Biomen (Wüste, Schnee, Dschungel/Industrie) | ✅ **Fertiggestellt** |
-| **Modul 20** | **VFX- & Teamfarben-Shader Pass** (`Nova.Presentation.Shaders`) | URP-Shader für Fraktions-Teamfarben, Treffereffekte & Aetherium-Glow (B-14) | 🚀 **In Arbeit** |
-
----
-
-## 🟣 Phase 3: MS-3 Beta (Geplant)
-> **Fokus:** Content-Skalierung (12 Maps, 10 Biome), Superwaffen, Sound-Mix & Telemetrie.
-
-| Modul | Name / Bereich | Geplante Features & Aufgaben |
+| Meilenstein | Behaupteter Altstatus | Nachweisbarer Status |
 |---|---|---|
-| **Modul 21** | **Superwaffen-System** (`Nova.Simulation.Superweapons`) | Orbital-Kanone, Nuke & Bio-Katalysator mit Lade-Zählern und globalen Warnungen |
-| **Modul 22** | **Karten- & Biom-Skalierung** (`Nova.Data.Maps`) | Fertigstellung aller 12 Karten & 10 Biome gemäß GDD |
-| **Modul 23** | **Audio-Engine & Sound-Mix** (`Nova.Audio`) | Einbindung Sonniss GDC Sound-Bibliotheken, Sprachausgabe, Kampf- & Umgebungsmusik |
-| **Modul 24** | **Opt-in Telemetrie & Crash-Reporting** (`Nova.Services`) | Anonymisierte Match-Balancing-Telemetrie & automatisiertes Crash-Dump-Handling |
+| MS-0 – Spike | abgeschlossen | **offen – Prototypen vorhanden, Gates nicht bestanden** |
+| MS-1 – MVP | abgeschlossen | **nicht erreicht – kein integriertes spielbares Match** |
+| MS-2 – Alpha | in Arbeit / Module 16–19 fertig | **nicht begonnen – nur isoliertes Scaffolding** |
+| MS-3 – Beta | geplant | pausiert |
+| MS-4 – Release | geplant | pausiert |
 
----
+## Modulstatus
 
-## 🔴 Phase 4: MS-4 Release v1.0 (Geplant)
-> **Fokus:** Singleplayer-Kampagne, Steamworks-Integration, Golden Master.
+| Module | Bereich | Nachweisbarer Stand | Status |
+|---|---|---|---|
+| 1–3 | Core, Pathfinding, Entity/Movement | frühe Managed-Prototypen; Tick-/Determinismus-/Performance-Gates offen | **Prototyp** |
+| 4 | Unity Gameplay Bridge | bindet nur Pathfinding und Movement ein | **unvollständig** |
+| 5 | GameDatabase | Teilregistries; Building/Weapon und weitere D-049-Kategorien unvollständig | **Scaffolding** |
+| 6 | Command Bus | Kernel verwirft fällige Commands statt sie zu dispatchen | **defekt / P0** |
+| 7 | Combat | isolierter Default-Kampf ohne V5-Targeting/FoW-Nachweis | **Scaffolding** |
+| 8 | Hash/Replay | mutierender/unvollständiger Hash; kein Replay-Playback | **defekt** |
+| 9–12 | Economy, Bau, Produktion, Vision | isolierte Teilimplementierungen ohne Match-Integration | **Scaffolding** |
+| 13 | Skirmish-KI | minimale Bau-/Produktionsdemo, kein vollständiges Spielverhalten | **Scaffolding** |
+| 14 | UI | Auswahl-/Koordinaten-Hilfstypen, kein integriertes HUD | **Scaffolding** |
+| 15 | Asset-Integration | Registry-API und Dummy-Test, keine produktiven Content-Assets | **Scaffolding** |
+| 16 | Evolvierte | Biomasse-Regenerationsdemo | **Experiment; kein Alpha-Scope** |
+| 17 | Commander/Doktrinen | aktive Ability-Demo widerspricht D-009 | **nicht freigegeben** |
+| 18 | Relay | Serialisierung und In-Memory-Buffer, kein Netzwerktransport; Test rot | **defekt / kein Relay** |
+| 19 | Maps | generischer Definitionstyp, keine drei Karten | **Scaffolding** |
+| 20 | Shader | paralleler uncommitteter Arbeitsstand, nicht auditiert | **nicht bewertet** |
 
-| Modul | Name / Bereich | Geplante Features & Aufgaben |
-|---|---|---|
-| **Modul 25** | **Singleplayer-Kampagne** (`Nova.Campaign`) | Story-Missionen mit Skript-Events, Zwischensequenzen und Missionszielen |
-| **Modul 26** | **Steamworks- & Platform-Integration** (`Nova.Platform`) | Achievements, Cloud-Saves, Matchmaking-Lobby-Verknüpfung & Golden Master Build |
+## Recovery-Status
+
+Aktiver Scope ist ausschließlich
+[MVPRecoveryPlan G0](production/MVPRecoveryPlan.md): reproduzierbare grüne
+Baseline. Feature- und Alpha-Expansion sind bis zum bestandenen MVP-Gate G5
+gestoppt.
+
+## Offene Punkte
+
+- Q-038: reduzierten MVP-Content-Scope ratifizieren.
+- Q-039: Fixed-Point-/Cross-Plattform-Gate entscheiden.
+- Uncommitteten Shader-Stand separat reviewen.
+
+## Nächste Schritte
+
+1. Roten Netzwerkpaket-Test und Build-Reproduzierbarkeit in G0 beheben.
+2. Code-CI als Merge-Gate aktivieren.
+3. Danach G1 für Command/State/Hash/Replay öffnen.
+
+## Änderungsverlauf
+
+| Version | Datum | Änderung | Autor |
+|---|---|---|---|
+| 1.0.0 | 2026-07-24 | Halluzinierte MS-0-/MVP-/Alpha-Fertigmeldungen durch evidenzbasierten Iststand ersetzt | Lead Technical Director / Producer |

@@ -1,6 +1,6 @@
 # Meilenstein-Planung (Milestones)
 
-**Version:** 1.0.0 | **Status:** sprint-freigegeben | **Verantwortungsbereich:** Producer / Game Director | **Sprint:** 6
+**Version:** 1.1.0 | **Status:** in Recovery-Korrektur – D-055 | **Verantwortungsbereich:** Producer / Game Director | **Sprint:** 7
 
 ## Zweck
 
@@ -15,6 +15,17 @@ Definiert die verbindlichen Entwicklungsmeilensteine (**MS-0 bis MS-4**) für *P
 - GDD & TDD Dokumentation unter [../gamedesign/](../gamedesign/) und [../tech/](../tech/)
 
 ---
+
+## Recovery-Nachweisstatus
+
+| Stufe | Tatsächlicher Status am Stand `460290e` | Führender Nachweis |
+|---|---|---|
+| MS-0 | **offen** | Cross-Plattform-Determinismus und Referenzhardware-/Shader-Gates fehlen |
+| MS-1 MVP | **nicht erreicht** | Keine spielbare Build-Szene und keine integrierte End-to-End-Partie |
+| MS-2 Alpha | **nicht begonnen** | Alpha-Dateien sind Scaffolding, keine abgenommenen Features |
+| MS-3 / MS-4 | **nicht begonnen** | Vorgelagerte Gates nicht bestanden |
+
+Die nachfolgenden Sprint-6-Spezifikationen bleiben als historische Zielbilder erhalten. Sie sind bis Q-038 und zur Recovery-Rebaseline weder Umfangszusage noch Fertigmeldung. Bei Widersprüchen gelten D-009, D-017, D-025, D-033 und D-055.
 
 ## 1. Übersicht der Meilensteine
 
@@ -129,11 +140,15 @@ Definiert die verbindlichen Entwicklungsmeilensteine (**MS-0 bis MS-4**) für *P
 
 ---
 
-## 4. Offene Punkte & Nächste Schritte
+## 4. Offene Punkte
 
-- **Nächste Schritte:**
-  1. [Roadmap.md](Roadmap.md) zur Aufwandsschätzung und zeitlichen Sequenzierung lesen.
-  2. Nach Freigabe von Sprint 6 direkt in **Sprint 7 (Implementierung / MS-0 Spike)** starten.
+- Q-038 muss den tatsächlichen MVP-Scope ratifizieren.
+- Die alten MS-1- bis MS-4-Umfänge sind bis zur Rebaseline suspendiert.
+
+## Nächste Schritte
+
+1. [MVPRecoveryPlan.md](MVPRecoveryPlan.md) ab G0 sequenziell ausführen.
+2. Erst nach bestandenem G5 einen Alpha-Meilenstein neu planen.
 
 ---
 
@@ -142,3 +157,4 @@ Definiert die verbindlichen Entwicklungsmeilensteine (**MS-0 bis MS-4**) für *P
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 1.0.0 | 2026-07-24 | Erstfassung Sprint 6: Meilensteine MS-0 bis MS-4 definiert, Qualitäts-Gates und Feature-Matrix verankert | Producer / Game Director |
+| 1.1.0 | 2026-07-24 | Tatsächlichen Nachweisstatus ergänzt; MS-0/MVP/Alpha durch D-055 zurückgestuft und Zukunftsscope suspendiert | Producer / Game Director |
