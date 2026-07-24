@@ -30,7 +30,7 @@
 
 ---
 
-## 🟡 Phase 1: MS-1 MVP – Minimum Viable Product (In Arbeit 🚀)
+## 🟡 Phase 1: MS-1 MVP – Minimum Viable Product (ABGESCHLOSSEN ✅)
 > **Fokus:** Spielbarer 1v1-Skirmish-Kern mit 2 Fraktionen (Allianz vs. Legion) gegen die KI auf 1 Karte / Biom.
 
 | Modul | Name / Bereich | Geplante Features & Aufgaben | Status |
@@ -41,7 +41,7 @@
 | **Modul 12** | **Fog of War & Sichtweiten-Grid** (`Nova.Simulation.Vision`) | 2D-Sichtraster, Nebel des Krieges (unbekannt / erkundet / sichtbar), Tarnungs- & Detektor-Mechanik | ✅ **Fertiggestellt** |
 | **Modul 13** | **Skirmish-KI (Allianz & Legion)** (`Nova.AI`) | Nutzenbasierte KI-Entscheidungsschleife (Wirtschaftsaufbau, Basisverteidigung, Angriffs-Squad-Formierung) | ✅ **Fertiggestellt** |
 | **Modul 14** | **RTS-UI & Command-Card** (`Nova.Presentation.UI`) | Minimap-Rendering, Ressourcenanzeige, Einheiten-Mehrfachauswahl (Selection Box), Command-Card (Icons/Hotkeys) | ✅ **Fertiggestellt** |
-| **Modul 15** | **Asset-Integration MS-1** (`Nova.Data`) | Einbindung der CC0-Asset-Bibliotheken (Kenney/Quaternius) für 27 Einheiten & 24 Gebäude | 🚀 **In Arbeit** |
+| **Modul 15** | **Asset-Integration MS-1** (`Nova.Data`) | Einbindung der CC0-Asset-Bibliotheken (Kenney/Quaternius) für 27 Einheiten & 24 Gebäude | ✅ **Fertiggestellt** |
 
 ---
 
