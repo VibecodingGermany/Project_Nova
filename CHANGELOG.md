@@ -13,6 +13,19 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 
 ## [Unreleased]
 
+## [0.7.0] – 2026-07-24 · Sprint 6: Produktionsplanung
+
+### Hinzugefügt
+- **Produktionsdokumentation in `docs/production/`:**
+  [Milestones.md](docs/production/Milestones.md) (Meilensteine MS-0 bis MS-4 mit Qualitäts-Gates und Feature-Matrix) und [Roadmap.md](docs/production/Roadmap.md) (Produktions-Roadmap über 445 Personentage Gesamtaufwand, Phasenplan 2026–2028, Adressierung R-16 & R-13).
+- **Sprint-6-Abschlussbericht** [Sprint06_Report.md](docs/production/sprints/Sprint06_Report.md) mit Freigabe von **Sprint 7 (Implementierung)**.
+
+### Geändert
+- `RiskAnalysis.md` (1.6.0): **R-16 (Zeit-/Kapazitätsmodell)** auf „mitigiert" gesenkt.
+- `OpenQuestions.md` (1.8.0): **Q-018 (Preispunkt 29,99–39,99 €)** und **Q-019 (Opt-in Telemetrie)** geschlossen.
+- `SprintPlanning.md` (1.6.0): Sprint 6 **abgeschlossen**, Sprint 7 (Implementierung) **bereit (GO)**.
+- `docs/README.md` (0.7.0) und Root-`README.md` (Status-Board, Wiki-Version 0.7.0) nachgezogen.
+
 ## [0.6.0] – 2026-07-22 · Sprint 5: Asset Audit
 
 ### Hinzugefügt
@@ -146,7 +159,8 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
 - Übernahme der historischen Quelldokumente (`RTS_Game_Design_Outline.md`,
   `RTS_Technisches_Planungsdokument.md`, `RTS_Asset_Pipeline.md`).
 
-[Unreleased]: https://github.com/VibecodingGermany/Project_Nova/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/VibecodingGermany/Project_Nova/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.7.0
 [0.6.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.6.0
 [0.5.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.5.0
 [0.4.0]: https://github.com/VibecodingGermany/Project_Nova/releases/tag/v0.4.0
