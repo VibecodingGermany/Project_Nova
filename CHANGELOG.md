@@ -25,8 +25,9 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
   - **Command Bus & Order System (`Nova.Simulation.Commands`):** Unboxed Command Transport via `CommandEnvelope`, `CommandProcessorSystem` (`ISimSystem` für `Move`, `Stop`, `AttackTarget`).
   - **Combat & Damage Pipeline (`Nova.Simulation.Combat`):** `WeaponDefinition`, `CombatSystem` (`ISimSystem` für Entfernungsprüfungen, Waffenfrequenzen, Schadensberechnungen und Entitäts-Zerstörung).
   - **Lockstep State Hashing, Replay & Visual Debug View (`Nova.Simulation.State`, `Nova.Simulation.Replays`, `Nova.Presentation`):** Bit-exakter FNV-1a 64-Bit `StateHashUtility` zur Multiplayer-Desync-Erkennung, `ReplayBuffer` zur Match-Aufzeichnung & Wiederholung sowie `FlowFieldDebugView` (Scene View Gizmos).
-  - **Headless SimRunner & Tests:** Standalone .NET 8 Konsolen-Executable `tools/Nova.SimRunner`, NUnit-EditMode-Testsuiten (`DeterministicSimTests`, `FlowFieldPathfindingTests`, `MovementSystemTests`, `MovementPerformanceTests`, `MatchRunnerTests`, `GameDatabaseTests`, `CommandSystemTests`, `CombatSystemTests`, `LockstepReplayTests`).
-  - **Modulspezifikationen:** `MovementSystem_Spec.md`, `GameplayBridge_Spec.md`, `GameDatabase_Spec.md`, `CommandSystem_Spec.md`, `CombatSystem_Spec.md` und `LockstepReplay_Spec.md` unter `docs/tech/modules/`.
+  - **Wirtschafts- & Ressourcen-System (`Nova.Simulation.Economy`):** Phase 1 (Modul 9) - `PlayerEconomyState` Struct (16 Bytes, Aetherium-Guthaben & Energieraster), `ResourceHarvestingSystem` (Sammler-Entladung an Raffinerien) und `EnergyGridSystem` (Low-Power-Erkennung & -50 % Produktions-Strafen).
+  - **Headless SimRunner & Tests:** Standalone .NET 8 Konsolen-Executable `tools/Nova.SimRunner`, NUnit-EditMode-Testsuiten (`DeterministicSimTests`, `FlowFieldPathfindingTests`, `MovementSystemTests`, `MovementPerformanceTests`, `MatchRunnerTests`, `GameDatabaseTests`, `CommandSystemTests`, `CombatSystemTests`, `LockstepReplayTests`, `EconomySystemTests`).
+  - **Modulspezifikationen:** `MovementSystem_Spec.md`, `GameplayBridge_Spec.md`, `GameDatabase_Spec.md`, `CommandSystem_Spec.md`, `CombatSystem_Spec.md`, `LockstepReplay_Spec.md` und `EconomySystem_Spec.md` unter `docs/tech/modules/`.
 
 ## [0.7.0] – 2026-07-24 · Sprint 6: Produktionsplanung
 
