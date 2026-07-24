@@ -31,9 +31,17 @@ namespace Nova.SimRunner
             var random = new SimRandom(seed);
             var kernel = new SimulationKernel(random, logger);
 
+            var pathfinding = new Nova.Simulation.Pathfinding.PathfindingSystem(128, 128);
+            kernel.RegisterSystem(pathfinding);
+
             kernel.Start();
 
-            Console.WriteLine($"Running 100 simulation ticks with seed 0x{seed:X}...");
+            // Request flow field to center destination (64, 64)
+            pathfinding.RequestFlowField(new Nova.Simulation.Pathfinding.GridPos2D(64, 64));
+            var dirAtCell = pathfinding.FlowField.GetDirection(60, 64);
+            logger.LogInfo($"FlowVector at (60, 64) -> Destination (64, 64) = {dirAtCell}");
+
+            Console.WriteLine("Running 100 simulation ticks with seed 0xAE70123456789000...");
             for (int i = 0; i < 100; i++)
             {
                 kernel.StepTick();
