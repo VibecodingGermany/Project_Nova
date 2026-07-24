@@ -52,8 +52,8 @@
 |---|---|---|---|
 | **Modul 16** | **3. Fraktion: Die Evolvierten** (`Nova.Simulation.Factions`) | Biologisch-organische Baumechanik (Burrow, Regeneration, Biomasse-Nutzung) | ✅ **Fertiggestellt** |
 | **Modul 17** | **Commander- & Doktrinen-System** (`Nova.Simulation.Commanders`) | Passive & aktive Commander-Fähigkeiten (z. B. Artillerie-Schlag, Sensor-Overdrive) | ✅ **Fertiggestellt** |
-| **Modul 18** | **Multiplayer Command-Relay** (`Nova.Networking`) | UDP-Relay-Server-Client-Anbindung, Synchronisations-Buffer & Desync-Erkennung | 🚀 **In Arbeit** |
-| **Modul 19** | **Map- & Biom-Erweiterung** (`Nova.Presentation.Maps`) | 3 verifizierte Karten (1v1, 2v2) in 3 Biomen (Wüste, Schnee, Dschungel/Industrie) |
+| **Modul 18** | **Multiplayer Command-Relay** (`Nova.Networking`) | UDP-Relay-Server-Client-Anbindung, Synchronisations-Buffer & Desync-Erkennung | ✅ **Fertiggestellt** |
+| **Modul 19** | **Map- & Biom-Erweiterung** (`Nova.Presentation.Maps`) | 3 verifizierte Karten (1v1, 2v2) in 3 Biomen (Wüste, Schnee, Dschungel/Industrie) | 🚀 **In Arbeit** |
 | **Modul 20** | **VFX- & Teamfarben-Shader Pass** (`Nova.Presentation.Shaders`) | URP-Shader für Fraktions-Teamfarben, Treffereffekte & Aetherium-Glow (B-14) |
 
 ---
