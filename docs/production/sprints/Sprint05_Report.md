@@ -1,6 +1,6 @@
 # Sprint-5-Bericht – Asset Audit
 
-**Version:** 1.0.0 | **Status:** Sprint abgeschlossen | **Verantwortungsbereich:** Executive Producer | **Sprint:** 5
+**Version:** 1.1.0 | **Status:** Sprint abgeschlossen | **Verantwortungsbereich:** Executive Producer | **Sprint:** 5
 
 ## Zweck
 
@@ -24,8 +24,9 @@ Verbindlicher Abschlussbericht von Sprint 5 (Asset Audit) gemäß Sprint-Ritual 
 | [Licenses.md](../../assets/Licenses.md) | Lizenz-Register: Lizenzrahmen je Quelle (Seats/Attribution/Weitergabe), verbindliche Lizenz-Regeln, leeres Erwerbs-Ledger |
 | [BuildBacklog.md](../../assets/BuildBacklog.md) | 14 priorisierte Eigenbau-Pakete, Grobsumme ~110–180 PT, kritischer Phase-0-Pfad |
 
-**Eine Entscheidung getroffen** (DecisionLog v1.7.0):
-- **D-053** Asset-Beschaffungsstrategie **B (Multi-Store-Mix mit Synty als Stil-Anker)** ratifiziert; menschliche Fraktionen/Biome/UI-Icons/Basis-Animationen = Kauf, Aetherium + Evolvierte + Fraktions-Signaturen = MODIFY/BUILD; Leitplanken URP-K.O.-Kriterium, keine RTS-Komplett-Frameworks, einheitlicher URP-Material-Standard, Lizenz-Register-Pflicht.
+**Zwei Entscheidungen getroffen** (DecisionLog v1.8.0):
+- **D-053** Asset-Beschaffungsstrategie **B (Multi-Store-Mix)** ratifiziert.
+- **D-054** Asset-Beschaffungsstrategie **B-Zero (0 € Open-Source & KI-Asset-Pipeline)** per Inhaberentscheidung ratifiziert (Q-035 auf 0 € geschlossen); Freigabe aller CC0- und KI-Assets für das öffentliche GitHub-Repository.
 
 **Kanonische Zahlen gegen die historische APL abgeglichen** (Single Source of Truth, D-047): Die überholten Mengen aus [../../../RTS_Asset_Pipeline.md](../../../RTS_Asset_Pipeline.md) wurden gegen die maßgeblichen GDD-Entscheidungen korrigiert (Gebäude 36 statt 54 = D-008; Karten 12 statt 10 = D-017; Elite 3→9 statt 15 = D-015; Neutrale ohne Händler = D-016; Marine gestrichen = D-013). Ein nicht-destruktiver **Korrekturhinweis** an der Spitze der APL verweist auf das AssetRegister als führende Quelle (historisches Quelldokument wird nicht umgeschrieben, [AGENTS.md](../../../AGENTS.md) §3).
 
@@ -92,10 +93,11 @@ Begründung: Alle Sprint-5-Exit-Kriterien sind erfüllt – ein vollständiges A
 ## Nächste Schritte
 
 - Commit/Push (Versionsbump Wiki 0.6.0), SprintPlanning/README/CHANGELOG im Integrationsschritt nachziehen.
-- Nach Freigabe durch den Projektinhaber: Sprint 6 (Produktionsplanung) starten; Q-035/Q-036 entscheiden; BuildBacklog in Roadmap/R-16 überführen.
+- Nach Freigabe durch den Projektinhaber: Sprint 6 (Produktionsplanung) starten; 0 € Open-Source & KI-Pipeline in Roadmap/R-16 überführen.
 
 ## Änderungsverlauf
 
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 1.0.0 | 2026-07-22 | Sprint 5 (Asset Audit) abgeschlossen, GO für Sprint 6 (Produktionsplanung) | Executive Producer |
+| 1.1.0 | 2026-07-24 | Inhaberentscheidung D-054 (0 € Open-Source & KI-Pipeline, Q-035 geschlossen) ergänzt | Executive Producer |

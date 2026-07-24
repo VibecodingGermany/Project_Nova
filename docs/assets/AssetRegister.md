@@ -1,10 +1,10 @@
 # Asset-Register (Asset Audit)
 
-**Version:** 1.0.0 | **Status:** sprint-freigegeben | **Verantwortungsbereich:** Technical Art Director / Lead Environment Artist | **Sprint:** 5
+**Version:** 1.1.0 | **Status:** sprint-freigegeben | **Verantwortungsbereich:** Technical Art Director / Lead Environment Artist / Project Owner | **Sprint:** 5
 
 ## Zweck
 
-Das **verbindliche Asset-Register** von *Project Nova*: pro benötigter Asset-Kategorie die kanonische Bedarfsmenge (mit führendem GDD-Dokument), eine Kandidatenquelle, Lizenz, Kostenschätzung, URP-/Qualitätsbewertung, geschätzter Anpassungsaufwand und die **BUY / MODIFY / BUILD**-Klassifikation nach der Rubrik aus [ProcurementStrategy.md](ProcurementStrategy.md) §3. Dieses Dokument ist das zentrale Sprint-5-Ergebnis (Asset Audit) und die Eingabe für die Produktionsplanung (Sprint 6).
+Das **verbindliche Asset-Register** von *Project Nova*: pro benötigter Asset-Kategorie die kanonische Bedarfsmenge (mit führendem GDD-Dokument), eine Kandidatenquelle, Lizenz, Kostenschätzung (0 € Budget per D-054), URP-/Qualitätsbewertung, geschätzter Anpassungsaufwand und die **BUY / MODIFY / BUILD**-Klassifikation nach der Rubrik aus [ProcurementStrategy.md](ProcurementStrategy.md) §3. Dieses Dokument ist das zentrale Sprint-5-Ergebnis (Asset Audit) und die Eingabe für die Produktionsplanung (Sprint 6).
 
 Die Bedarfsmengen folgen der **Single-Source-of-Truth-Regel** (D-047): jede Zahl verweist auf das führende GDD-Dokument, statt sie hier neu festzulegen. Die historische [../../RTS_Asset_Pipeline.md](../../RTS_Asset_Pipeline.md) (APL) ist eine Wunschliste und wird von diesem Register **abgelöst** (Reconciliation §2).
 
@@ -213,23 +213,23 @@ Führend: [CommanderSystem.md](../gamedesign/CommanderSystem.md) (D-009, reiner 
 | **MODIFY** | Gebäude Allianz/Legion, Fahrzeuge/Luft, Biome, Kristall-Basis, VFX, HUD-Rahmen | Synty-Kitbash + Teamfarben-/LOD-Pass |
 | **BUILD** | **alle Evolvierten**, Aetherium (Geometrie+Shader+VFX), Fraktions-Signaturen, RTS-UI-Layout, Commander-VO/Art | siehe [BuildBacklog.md](BuildBacklog.md) |
 
-**Kostenschätzung Kauf-Anteil (Einschätzung, Strategie B):** Größenordnung **~200–600 USD** für den Kern-Kaufumfang (Synty-Bundles + CC0 + Audio kostenlos + Tools), plus optionale Composer-/VO-Aufträge (Signature-Audio). Die **verbindliche Obergrenze** ist eine Inhaberentscheidung → Q-035. Der dominierende Realaufwand liegt **nicht** im Kaufpreis, sondern im **BUILD/MODIFY-Personalaufwand** (v. a. komplette Evolvierten-Fraktion + Aetherium) – quantifiziert in [BuildBacklog.md](BuildBacklog.md), Eingabe für die Aufwandsschätzung R-16 in Sprint 6.
+**Kostenschätzung Kauf-Anteil (D-054):** **0 €** (Open-Source & KI-Pipeline). Alle Basis-Assets werden über freie CC0-Quellen (Quaternius, Kenney, Sonniss Audio) und KI-Generatoren (Hunyuan3D, Meshy, SD) bezogen. Q-035 ist geschlossen (0 €). Der dominierende Realaufwand liegt im **BUILD/MODIFY-Personalaufwand** der Community (v. a. komplette Evolvierten-Fraktion + Aetherium) – quantifiziert in [BuildBacklog.md](BuildBacklog.md), Eingabe für die Aufwandsschätzung R-16 in Sprint 6.
 
 ## Offene Punkte
 
-- **Kostenspannen sind Einschätzungen (Stand Juli 2026);** Store-Preise rotieren (Sales, Fab-Rotation, Bundle-Fenster). Verbindliche Preise erst zum Beschaffungszeitpunkt (Phase 0/Sprint 7).
 - **Person-Tage-Schätzungen sind grob** und ohne kalibrierten Referenz-Frame (Phase-0-Signature-Asset). Nach dem Phase-0-Bau sind sie in v1.1.0 nachzujustieren (koppelt an R-16).
 - **Terrain-Verfahren** (Unity Terrain vs. Custom Mesh) ist noch keinem TDD zugeordnet ([AssetBudget.md](../tech/AssetBudget.md), Offene Punkte) – beeinflusst Environment-Aufwand.
-- **Q-035** (Budget-Obergrenze), **Q-036** (Seat-Planung), **Q-037** (Bundle-Fenster) offen → [../production/OpenQuestions.md](../production/OpenQuestions.md).
+- **Q-035** (Budget-Obergrenze) ist durch D-054 geschlossen (0 € Budget); Q-036 und Q-037 entfallen durch CC0/KI-Strategie.
 
 ## Nächste Schritte
 
-1. Sprint 6: BUILD/MODIFY-Aufwand aus [BuildBacklog.md](BuildBacklog.md) in die Roadmap/Meilensteine und die Aufwandsschätzung (R-16) übernehmen; Budget-Obergrenze (Q-035) festlegen.
-2. Phase 0: Signature-Asset (Aetherium-Feld) bauen und vermessen → Person-Tage- und Budget-Schätzungen als v1.1.0 kalibrieren.
-3. Laufend: Jeder reale Kauf → [Licenses.md](Licenses.md)-Eintrag + Kauf-Prüfung [AssetBudget.md](../tech/AssetBudget.md) §6; Register-Zeile auf „beschafft" fortschreiben.
+1. Sprint 6: BUILD/MODIFY-Aufwand aus [BuildBacklog.md](BuildBacklog.md) in die Roadmap/Meilensteine und die Aufwandsschätzung (R-16) übernehmen (0 € Asset-Budget).
+2. Phase 0: Signature-Asset (Aetherium-Feld) bauen und vermessen → Person-Tage- und KI-Pipeline-Schätzungen als v1.1.0 kalibrieren.
+3. Laufend: Jeder CC0-/KI-Asset-Import → [Licenses.md](Licenses.md)-Eintrag; Register-Zeile auf „integriert" fortschreiben.
 
 ## Änderungsverlauf
 
 | Version | Datum | Änderung | Autor |
 |---|---|---|---|
 | 1.0.0 | 2026-07-22 | Erstfassung Sprint 5: vollständiges Asset-Register über 14 Kategorien, kanonische GDD-Zahlen (APL-Reconciliation), BUY/MODIFY/BUILD-Klassifikation, Kosten-/Aufwandsschätzungen | Technical Art Director / Lead Environment Artist |
+| 1.1.0 | 2026-07-24 | Update auf D-054 (0 € Open-Source & KI-Pipeline), Q-035 geschlossen (0 € Budget), Kostenschätzung angepasst | Project Owner / Producer |

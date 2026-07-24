@@ -30,6 +30,11 @@ die Versionierung folgt (in der aktuellen Doku-Phase) dem Dokumentationsstand de
   komplette Evolvierten-Fraktion und Fraktions-Signaturen = MODIFY/BUILD. Leitplanken:
   URP-K.O.-Kriterium, keine RTS-Komplett-Frameworks, einheitlicher URP-Material-Standard,
   Lizenz-Register-Pflicht, keine Rohdaten im öffentlichen Repo.
+- **D-054** **0 € Open-Source & KI-Asset-Pipeline (Inhaberentscheidung):** Ratifizierung einer
+  reinen 0 € Open-Source-Beschaffung auf Basis freier CC0-Quellen (Quaternius, Kenney, Sonniss Audio),
+  KI-3D/Textur-Generierung (Hunyuan3D, Meshy, Tripo, SD, Blender AI Addons / MCP Server) und
+  Community-Kitbashing. **Q-035 (Asset-Budget-Obergrenze)** auf 0 € geschlossen. Alle Assets sind
+  für das **öffentliche GitHub-Repository** freigegeben.
 
 ### Geändert
 - `SprintPlanning.md` (1.4.0): Sprint 5 **abgeschlossen**, Sprint 6 (Produktionsplanung) **GO**;

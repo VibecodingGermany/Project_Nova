@@ -1,6 +1,6 @@
 # Sprint-Planung
 
-**Version:** 1.4.0 | **Status:** aktiv | **Verantwortungsbereich:** Executive Producer / Producer | **Sprint:** 5
+**Version:** 1.5.0 | **Status:** aktiv | **Verantwortungsbereich:** Executive Producer / Producer / Project Owner | **Sprint:** 5
 
 ## Zweck
 
@@ -42,7 +42,7 @@ Definiert alle Sprints, ihre Ziele, Deliverables und Exit-Kriterien. Kein Sprint
 
 ## Nächste Schritte
 
-- Sprint 6 starten (Produktionsplanung): MVP/Alpha/Beta/Release-Plan, Roadmap.md, Milestones.md; den BUILD-Backlog-Aufwand (~110–180 PT, [../assets/BuildBacklog.md](../assets/BuildBacklog.md)) in die Aufwandsschätzung (R-16) übernehmen; Q-035 (Budget-Obergrenze) und Q-036 (Seat-Planung) mit dem Projektinhaber entscheiden.
+- Sprint 6 starten (Produktionsplanung): MVP/Alpha/Beta/Release-Plan, Roadmap.md, Milestones.md; 0 € Open-Source & KI-Pipeline (D-054, Q-035 geschlossen) in Roadmap und Aufwandsschätzung (R-16) übernehmen.
 
 ## Änderungsverlauf
 
@@ -53,3 +53,4 @@ Definiert alle Sprints, ihre Ziele, Deliverables und Exit-Kriterien. Kein Sprint
 | 1.2.0 | 2026-07-21 | Sprint 3 als abgeschlossen markiert, Sprint 4 GO | Executive Producer |
 | 1.3.0 | 2026-07-21 | Sprint 4 als abgeschlossen markiert, Sprint 5 (Asset Audit) GO | Executive Producer |
 | 1.4.0 | 2026-07-22 | Sprint 5 (Asset Audit) als abgeschlossen markiert, Sprint 6 (Produktionsplanung) GO | Executive Producer |
+| 1.5.0 | 2026-07-24 | Inhaberentscheidung D-054 (0 € Open-Source & KI-Pipeline, Q-035 geschlossen) in Sprint-6-Vorbereitung eingetragen | Executive Producer |

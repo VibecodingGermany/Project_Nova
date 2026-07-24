@@ -1,6 +1,6 @@
 # Open Questions
 
-**Version:** 1.6.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Executive Producer | **Sprint:** 5
+**Version:** 1.7.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Executive Producer | **Sprint:** 5
 
 ## Zweck
 
@@ -68,14 +68,14 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 
 - Noch offen: Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie-Infrastruktur, Sprint 6).
 - Neu aus dem Sprint-4-Korrekturlauf offen: Q-031 (Fähigkeiten-/Status-Effekt-System, vor Sprint 7), Q-032 (MemoryBudget-Abgleich, vor Phase-0-Spike), Q-033 (V5-Gate Kampf-/KI-Kostenmodell, Phase 0), Q-034 (tote Doku-Verweise). **Klarstellung Sprint 5:** Q-031–Q-034 sind TDD-Authoring-/Doku-Aufgaben, **nicht** Teil des Asset-Audit-Scopes; sie wurden in Sprint 5 nicht bearbeitet und laufen zu ihren fachlichen Ownern weiter (Q-034 auf Sprint 6 präzisiert).
-- Neu aus Sprint 5 (Asset Audit, D-053): Q-035 (Asset-Budget-Obergrenze, Sprint 6, gekoppelt an R-16), Q-036 (Seat-Planung, Sprint 6), Q-037 (Bundle-Kauffenster, Sprint 6/Phase 0) – alle Inhaber-/Beschaffungsentscheidungen, kein Blocker für Sprint 6.
+- Neu aus Sprint 5 (Asset Audit, D-053/D-054): **Q-035 (Asset-Budget-Obergrenze) geschlossen** – 0 € Budget per Inhaberentscheidung (D-054: 0 € Open-Source & KI-Asset-Pipeline); Q-036 (Seat-Planung) und Q-037 (Bundle-Kauffenster) entfallen durch CC0/KI-Strategie.
 - Aus Research hängen vier Pflicht-Validierungen am Phase-0-Spike: Fixed-Point-Determinismus ARM↔x86 (jetzt zusätzlich Q-033-Kostenmodell), URP GPU Resident Drawer, Animator vs. Playables, Pathfinding-CPU-Budget (Managed-Pfad, D-037); Fixed-Point-Migration-Spike-Scope zusätzlich um ORCA/Flow-Field-Evaluierung, Bibliothekswahl und float-Direktfeld-Verbot im GameState erweitert (DecisionLog.md, Offene Punkte).
 - Terminierte Folgepunkte aus dem TDD-Review (keine Blocker): KI-Bedrohungskarten-Auflösung (siehe auch Q-032), Evolvierte-Plan-Tasks, Snapshot-Größenmessung (siehe auch Q-032), Fixed-Point-Bibliothekswahl (Beta), Analyzer-Enforcement (Sprint 7); Windows-Referenzhardware ist mit D-052 geschlossen.
 - Alle Sprint-4-Review-Befunde (~105, davon 9 kritisch): 7 der 9 kritischen durch D-043–D-052 entschieden (Q-021–Q-030), 2 (GDD↔TDD F-02, Architektur-Kohärenz F-2) als Datenmodell-Erweiterung in GameState.md gelöst; verbleibende HOCH/MITTEL-Befunde teils als Q-031–Q-034 registriert, Rest im Korrekturlauf terminiert.
 
 ## Nächste Schritte
 
-- Sprint 6 (Produktionsplanung): Q-035/Q-036/Q-037 (Budget-Obergrenze, Seat-Planung, Bundle-Fenster) mit dem Projektinhaber entscheiden; Q-034 (tote Verweise) mit der offenen TDD-Autorenarbeit sequenzieren.
+- Sprint 6 (Produktionsplanung): 0 € Open-Source & KI-Pipeline in Roadmap übernehmen; Q-034 (tote Verweise) mit der offenen TDD-Autorenarbeit sequenzieren.
 
 ## Änderungsverlauf
 
@@ -88,3 +88,4 @@ Zentrales Register aller offenen Fragen mit Owner-Sprint und Priorität. Eine Fr
 | 1.4.0 | 2026-07-21 | Q-013, Q-014, Q-015, Q-020 formal geschlossen (Sprint 3, D-033–D-038) | Executive Producer |
 | 1.5.0 | 2026-07-21 | Q-021–Q-030 neu und sofort geschlossen (Sprint 4, D-043–D-052); Q-031–Q-034 neu aus Review-Folgearbeit (Ability/Status-System, MemoryBudget-Abgleich, V5-Gate-Kostenmodell, tote Verweise) | Executive Producer |
 | 1.6.0 | 2026-07-22 | Q-035/Q-036/Q-037 neu aus Sprint 5 (Asset-Budget-Obergrenze, Seat-Planung, Bundle-Fenster, D-053); Q-034 als TDD-Authoring präzisiert und auf Sprint 6 umterminiert | Executive Producer |
+| 1.7.0 | 2026-07-24 | Q-035 geschlossen (Asset-Budget-Obergrenze = 0 €, D-054 Inhaberentscheidung) | Executive Producer |
