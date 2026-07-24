@@ -1,6 +1,6 @@
 # Decision Log
 
-**Version:** 1.6.1 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director | **Sprint:** 4
+**Version:** 1.8.0 | **Status:** aktiv (laufend) | **Verantwortungsbereich:** Game Director / Lead Technical Director / Project Owner | **Sprint:** 5
 
 ## Zweck
 
@@ -470,17 +470,34 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 **Entscheidung:** (b) – **Referenz (60-FPS-Ziel): Ryzen 5 5600 / RTX 3060 / 16 GB / NVMe-SSD**; **Minimum (30-FPS-Ziel): Ryzen 3 3100 / GTX 1050 Ti / 8 GB**; **Mac-Baseline: Apple M2** (Entwicklungs- und Qualitätsplattform, D-006).
 **Konsequenzen:** PerformanceBudget.md; Beschaffung in Sprint-6-Planung; Messungen auf Standalone-Builds (nie Editor).
 
+### D-053 | verbindlich | Sprint 5 (Asset-Beschaffungsstrategie)
+
+**Kontext:** Der Asset Audit (Sprint 5) muss eine verbindliche Beschaffungsstrategie ratifizieren; die Entscheidungsvorlage lag als Research-Ergebnis vor ([../research/AssetStore_Landschaft.md](../research/AssetStore_Landschaft.md), „Sprint 5 zu bestätigen").
+**Alternativen:** (a) **Asset Store only (Synty-zentriert)** – scheitert an den biologischen Evolvierten und am Signature-Aetherium, Publisher-Abhängigkeit ohne Preishebel; (b) **Multi-Store-Mix mit Synty als Stil-Anker** (Asset Store + Humble-Bundles + CC0 + Fab/Sketchfab + Sonniss-Audio); (c) **BUILD-first** (nur Tools/Audio kaufen) – gefährdet MVP-Disziplin und Zeitplan durch Eigenbau von ~130+ Modellen ohne Qualitätsvorteil auf RTS-Distanz.
+**Entscheidung:** (b) – **Multi-Store-Mix mit Synty als Stil-Anker.** Menschliche Fraktionen (Allianz/Legion), Biome, UI-Icons und Basis-Animationen werden gekauft; **Aetherium, die komplette Evolvierten-Fraktion und alle Fraktions-Signaturen werden MODIFY/BUILD.** Leitplanken: URP-Kompatibilität als K.O.-Kriterium (Badge + Testprojekt), **keine RTS-Komplett-Frameworks** (Kollision mit D-033/D-035/D-043), einheitlicher URP-Material-Standard mit Teamfarben-Masken (Gegenmittel R-04), Lizenz-Register-Pflicht ([assets/Licenses.md](../assets/Licenses.md)), keine Rohdaten im öffentlichen Repo.
+**Begründung:** Nutzt den dokumentierten Preishebel (Synty-Humble-Bundles ~30 USD statt >600 USD) und CC0 für Prototyping, deckt die menschlichen Fraktionen käuflich ab und reserviert Eigenbau gezielt für das Unverwechselbare. Die nötige Lizenz-/URP-Disziplin institutionalisiert der Audit selbst.
+**Konsequenzen:** [../assets/ProcurementStrategy.md](../assets/ProcurementStrategy.md), [../assets/AssetRegister.md](../assets/AssetRegister.md), [../assets/Licenses.md](../assets/Licenses.md), [../assets/BuildBacklog.md](../assets/BuildBacklog.md); Budget-Obergrenze bleibt Inhaberentscheidung (Q-035); reale Käufe erst ab Phase 0/Sprint 7.
+
+### D-054 | verbindlich | Sprint 5 / Inhaberentscheidung (0 € Open-Source & KI-Asset-Pipeline)
+
+**Kontext:** Auflösung von Q-035 (Asset-Budget-Obergrenze). Project Nova wird als rein organisches Open-Source-Projekt ohne festes Studio-Budget entwickelt (0 € Budget-Vorgabe des Project Owners).
+**Alternativen:** (a) **Kommerzieller Store-Kauf (Multi-Store-Mix, ehemals D-053)** – verworfen, da $0-Budget vorgegeben ist und gekaufte Rohdaten nicht im öffentlichen Open-Source-Repo weitergegeben werden dürfen; (b) **0 € Open-Source & KI-Asset-Pipeline (gewählt)** – Nutzung freier CC0-Bibliotheken (Quaternius, Kenney, Sonniss GDC Audio, Poly Pizza, OpenGameArt), KI-3D-Generierung (Hunyuan3D, Meshy, Tripo3D), KI-Textur-Generierung (SD / Texture Lab / UI-Icons) und Community-Kitbashing in Blender; (c) **100% Eigenbau ohne KI/CC0** – verworfen, da der reine Eigenbau von ~135+ Modellen ohne CC0-Basen und KI-Drafting das Entwicklungs-Tempo stark bremst.
+**Entscheidung:** (b) – **0 € Open-Source & KI-Asset-Pipeline.** Die Beschaffung richtet sich vollständig auf lizenziell freie (CC0/Public Domain) und KI-generierte Assets aus. **Das Asset-Budget beträgt 0 € (Q-035 geschlossen).** Sämtliche Spiel-Assets werden im **öffentlichen GitHub-Repository** mitgeführt und gepflegt (da CC0/KI keine per-Seat- oder Rohdaten-Weitergabeverbote erzwingen).
+**Begründung:** Beschluss des Project Owners. Ermöglicht volle Open-Source-Transparenz, schließt Lizenz- & Seat-Kosten aus und nutzt das Potenzial motivierter Community-Volunteers und moderner KI-Workflow-Tools.
+**Konsequenzen:** [OpenQuestions.md](OpenQuestions.md) Q-035 geschlossen; [ProcurementStrategy.md](../assets/ProcurementStrategy.md) auf Version 1.1.0 angepasst; KI-Drafting & CC0-Quellen in [AssetRegister.md](../assets/AssetRegister.md) verankert.
+
 ---
 
 ## Offene Punkte
 
-- Alle Sprint-4-Review-Befunde (105, davon 9 kritisch): 7 entscheidungsbedürftige kritische Befunde sind durch D-043–D-052 entschieden (Architektur-Kohärenz F-1 & Wartbarkeit F-01 → D-043; GDD↔TDD F-01 → D-047; Multiplayer-Netcode F-01 → D-046; Performance F-1 → D-044; Performance F-2 → D-045; Skalierung F-1 → D-048). Die verbleibenden 2 kritischen Befunde sind **keine** Entscheidungsfragen, sondern reine Datenmodell-Lücken zu bereits getroffenen Entscheidungen und wurden ohne eigene D-Nummer als Doku-Erweiterung in GameState.md gelöst/terminiert: GDD↔TDD F-02 (Status-Effekt-/Fähigkeiten-System ohne technisches Zuhause) und Architektur-Kohärenz F-2 (fehlende State-Felder für Capture/Keim/Mutterkristall-Ausbaustufe/Elite-Zähler/Superwaffen-Cooldown/Neutrale Lager, jeweils Ergänzung zu D-011/D-015/D-016/D-022/D-023). HOCH/MITTEL im Korrekturlauf zu dokumentieren bzw. zu terminieren.
+- Alle Sprint-4-Review-Befunde (105, davon 9 kritisch): 7 entscheidungsbedürftige kritische Befunde sind durch D-043–D-052 entschieden.
 - Q-018 (Preispunkt, Sprint 6), Q-019 (Telemetrie, Sprint 6) bleiben offen.
 - Fixed-Point-Migration (Beta): Phase-0-Spike-Scope erweitert (Fixed-Point-Pfad für ORCA/Flow-Field evaluieren, Bibliothekswahl, float-Direktfelder im GameState verbieten) – Review F-04 MP.
+- Sprint 5 (Asset Audit): D-053/D-054 ratifiziert; **Budget-Obergrenze ist mit 0 € geschlossen (Q-035, D-054)**; Seat-Planung (Q-036) entfällt/gegenstandslos; Bundle-Fenster-Monitoring (Q-037) entfällt zugunsten CC0/KI-Pipeline.
 
 ## Nächste Schritte
 
-- Korrekturlauf Sprint 4: D-043–D-052 und alle kritischen/hohen Review-Befunde in die TDD-/GDD-Dokumente einarbeiten; danach Sprint-4-Abschlussbericht und Commit/Push (Versionsbump 0.5.0).
+- Sprint 6 (Produktionsplanung): 0 € Open-Source & KI-Pipeline in Roadmap und Aufwandsschätzung (R-16) übernehmen; BUILD-Backlog-Aufwand ([../assets/BuildBacklog.md](../assets/BuildBacklog.md)) als Community/KI-Kitbashing-Aufwand planen.
 
 ## Änderungsverlauf
 
@@ -496,3 +513,5 @@ Zentrales, unveränderliches Protokoll aller Architektur- und Design-Entscheidun
 | 1.5.0 | 2026-07-21 | D-037 bis D-042: TDD-Review-Entscheidungen (Burst/Managed-Doppelstruktur, Disconnect-Regel, Audio-Backend, Renderer/Licht, Sentry, Sim-Budget-Klärungen) | Lead Technical Director |
 | 1.6.0 | 2026-07-21 | D-043 bis D-052: Architecture-Review-Entscheidungen (Assembly-Topologie, V5-Gate, Managed-first, MP-Trust-Anchor, Reichweiten-Harmonisierung, Skalierungs-Deckel, CI-Realismus, Branching, Quantum-Fallback gestrichen, Referenzhardware) | Lead Technical Director |
 | 1.6.1 | 2026-07-21 | Korrektur „Offene Punkte": Kritisch-Zähler auf 9 (statt 10) berichtigt; präzisiert, dass F-02 (GDD↔TDD) und F-2 (Architektur-Kohärenz) als Doku-Erweiterung in GameState.md gelöst wurden statt durch D-043–D-052, da reine Datenmodell-Ergänzungen ohne eigenen Entscheidungsbedarf | Lead Technical Director |
+| 1.7.0 | 2026-07-22 | D-053: Asset-Beschaffungsstrategie B (Multi-Store-Mix mit Synty als Stil-Anker) ratifiziert – Sprint 5 (Asset Audit) | Producer / Lead Technical Director |
+| 1.8.0 | 2026-07-24 | D-054: 0 € Open-Source & KI-Asset-Pipeline (Inhaberentscheidung, Q-035 geschlossen) | Project Owner / Producer |

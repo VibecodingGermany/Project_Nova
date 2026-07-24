@@ -1,5 +1,13 @@
 # RTS Asset Pipeline
 
+> **Korrekturhinweis (Sprint 5, Asset Audit):** Dieses Dokument ist die *historische
+> Asset-Wunschliste* und wird **nicht** mehr gepflegt. Führende Quelle für Bedarfsmengen,
+> Lizenzen, Kosten und die BUY/MODIFY/BUILD-Klassifikation ist ab Sprint 5 das
+> [Asset-Register](docs/assets/AssetRegister.md). Überholte Mengen hier wurden gegen die
+> GDD-Entscheidungen abgeglichen: Gebäude **36** statt 54 (D-008), Karten **12** statt 10
+> (D-017), Spezial-/Elite **3→9** statt 15 (D-015), Neutrale **ohne Händler** (D-016),
+> **Marine (Paket 07) gestrichen** (D-013). Details: [AssetRegister.md §2](docs/assets/AssetRegister.md).
+
 # Paket 01 -- Environment
 
 -   10 Biome
